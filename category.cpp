@@ -17,9 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Nome-Programma.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "payee.h"
+#include "category.h"
 
-Payee::Payee()
+Category::Category()
 {
 
 }

@@ -17,9 +17,48 @@
  * You should have received a copy of the GNU General Public License
  * along with Nome-Programma.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef TRANSACTION_H
+#define TRANSACTION_H
+
+#include <QtGlobal>
+#include <QString>
+#include <QDate>
+
+#include "account.h"
 #include "payee.h"
+#include "category.h"
+#include "workorder.h"
+#include "user.h"
 
-Payee::Payee()
+class Transaction
 {
+public:
+    Transaction();
 
-}
+private:
+    quint32   mId;
+
+    Account   mAccountFrom;
+    Account   mAccountTo;
+
+    Payee     mPayee;
+
+    Type      mType;
+
+    QDate     mDate;
+    float     mAmount;
+
+    WorkOrder mWorkOrder;
+
+    // TODO: Subcategory
+
+    bool      mChecked;
+
+    User      mUserDo;
+    User      mUserLog;
+    QDate     mLogDate;
+
+    QString   mNote;
+};
+
+#endif // TRANSACTION_H

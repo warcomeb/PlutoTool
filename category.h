@@ -17,9 +17,31 @@
  * You should have received a copy of the GNU General Public License
  * along with Nome-Programma.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "payee.h"
+#ifndef CATEGORY_H
+#define CATEGORY_H
 
-Payee::Payee()
+#include <QtGlobal>
+#include <QString>
+#include <QList>
+
+enum Type
 {
+    TYPE_INPUT,
+    TYPE_OUTPUT,
+    TYPE_NEUTRAL,
+};
 
-}
+class Category
+{
+public:
+    Category();
+
+private:
+    quint32        mId;
+    QString        mName;
+    QString        mDescription;
+    Type           mType;
+    QList<QString> mSubCategory;
+};
+
+#endif // CATEGORY_H

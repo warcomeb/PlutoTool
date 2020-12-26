@@ -15,9 +15,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        account.cpp \
+        accounttype.cpp \
+        category.cpp \
         main.cpp \
+        payee.cpp \
+        payeetype.cpp \
         plutotool.cpp \
-        utils/wlog.cpp
+        transaction.cpp \
+        user.cpp \
+        utils/wlog.cpp \
+        workorder.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -25,6 +33,14 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    account.h \
+    accounttype.h \
+    category.h \
     metadata.h \
+    payee.h \
+    payeetype.h \
     plutotool.h \
-    utils/wlog.h
+    transaction.h \
+    user.h \
+    utils/wlog.h \
+    workorder.h

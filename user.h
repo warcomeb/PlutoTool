@@ -17,9 +17,23 @@
  * You should have received a copy of the GNU General Public License
  * along with Nome-Programma.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "payee.h"
+#ifndef USER_H
+#define USER_H
 
-Payee::Payee()
+#include <QtGlobal>
+#include <QString>
+
+class User
 {
+public:
+    User();
 
-}
+private:
+    quint32 mId;
+    QString mCode;
+
+    QString mName;
+    QString mSurname;
+};
+
+#endif // USER_H

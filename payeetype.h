@@ -17,9 +17,21 @@
  * You should have received a copy of the GNU General Public License
  * along with Nome-Programma.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "payee.h"
+#ifndef PAYEETYPE_H
+#define PAYEETYPE_H
 
-Payee::Payee()
+#include <QtGlobal>
+#include <QString>
+
+class PayeeType
 {
+public:
+    PayeeType();
 
-}
+private:
+    quint32 mId;
+    QString mName;
+    QString mDescription;
+};
+
+#endif // PAYEETYPE_H
