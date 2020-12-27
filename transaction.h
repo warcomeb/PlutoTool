@@ -54,8 +54,8 @@ private:
 
     bool      mChecked;
 
-    User      mUserDo;
-    User      mUserLog;
+    //User      mUserDo;
+    //User      mUserLog;
     QDate     mLogDate;
 
     QString   mNote;

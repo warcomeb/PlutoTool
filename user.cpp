@@ -19,7 +19,35 @@
  */
 #include "user.h"
 
-User::User()
+User::User(QString name, QString surname):
+    mName(name),
+    mSurname(surname)
 {
 
+}
+
+QString User::name (void)
+{
+    return mName;
+}
+
+QString User::surname (void)
+{
+    return mSurname;
+}
+
+void User::setId (quint32 id)
+{
+    mId = id;
+    mCode = QString("U%1").arg(id, 5, 10, QLatin1Char('0'));
+}
+
+quint32 User::id (void)
+{
+    return mId;
+}
+
+QString User::code (void)
+{
+    return mCode;
 }

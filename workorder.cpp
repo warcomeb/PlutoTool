@@ -19,7 +19,41 @@
  */
 #include "workorder.h"
 
-WorkOrder::WorkOrder()
+WorkOrder::WorkOrder ()
+{
+}
+
+WorkOrder::WorkOrder (QString name, QDate start, QDate end):
+    mName(name),
+    mStart(start),
+    mEnd(end)
 {
 
+}
+
+WorkOrder::WorkOrder (QString name, QString description, QDate start, QDate end):
+    mDescription(description)
+{
+    WorkOrder(name,start,end);
+}
+
+QString WorkOrder::name (void)
+{
+    return mName;
+}
+
+void WorkOrder::setId (quint32 id)
+{
+    mId = id;
+    mCode = QString("W%1").arg(id, 5, 10, QLatin1Char('0'));
+}
+
+quint32 WorkOrder::id (void)
+{
+    return mId;
+}
+
+QString WorkOrder::code (void)
+{
+    return mCode;
 }

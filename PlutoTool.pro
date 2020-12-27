@@ -36,6 +36,7 @@ HEADERS += \
     account.h \
     accounttype.h \
     category.h \
+    config.h \
     metadata.h \
     payee.h \
     payeetype.h \

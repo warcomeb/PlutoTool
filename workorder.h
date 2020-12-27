@@ -27,7 +27,16 @@
 class WorkOrder
 {
 public:
-    WorkOrder();
+    WorkOrder ();
+    WorkOrder (QString name, QDate start, QDate end);
+    WorkOrder (QString name, QString description, QDate start, QDate end);
+
+    QString name (void);
+
+    void setId (quint32 id);
+    quint32 id (void);
+
+    QString code (void);
 
 private:
     quint32 mId;

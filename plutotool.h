@@ -21,11 +21,31 @@
 #ifndef PLUTOTOOL_H
 #define PLUTOTOOL_H
 
+#include <QMap>
+#include <QtGlobal>
+
+#include "config.h"
+
+#include "user.h"
+#include "workorder.h"
 
 class PlutoTool
 {
 public:
-    PlutoTool();
+    PlutoTool (Config config);
+
+private:
+    void executeCommand (void);
+
+    User createUser (quint32 id);
+
+    Config mConfig;
+
+    QMap<quint32,User> mUsers;
+    quint32            mUserNextId;
+
+    QMap<quint32,WorkOrder> mWorkOrders;
+    quint32                 mWorkOrderNextId;
 };
 
 #endif // PLUTOTOOL_H

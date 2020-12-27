@@ -24,6 +24,7 @@
 
 #include "metadata.h"
 #include "plutotool.h"
+#include "config.h"
 
 enum CLIParseResult
 {
@@ -33,16 +34,50 @@ enum CLIParseResult
     CLI_PARSE_RESULT_HELP,
 };
 
-CLIParseResult parseCommandLine (QCommandLineParser &parser,/* Config *config, */QString *errorMessage)
+Command getCommand (QString cmd)
+{
+    if ((cmd == "list") || (cmd == "LIST"))
+    {
+        return COMMAND_LIST;
+    }
+    else if ((cmd == "init") || (cmd == "INIT"))
+    {
+        return COMMAND_INIT;
+    }
+    return COMMAND_ERROR;
+}
+
+CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QString *errorMessage)
 {
     const QCommandLineOption helpOption = parser.addHelpOption();
     const QCommandLineOption versionOption = parser.addVersionOption();
+
+    parser.addPositionalArgument("command", QCoreApplication::translate("main", "The command that must be executed."));
+    parser.addPositionalArgument("database", QCoreApplication::translate("main", "The Pluto database in JSON format."));
 
     if (!parser.parse(QCoreApplication::arguments()))
     {
         *errorMessage = parser.errorText();
         return CLI_PARSE_RESULT_ERROR;
     }
+
+    const QStringList positionalArguments = parser.positionalArguments();
+    if (positionalArguments.isEmpty())
+    {
+        *errorMessage = "Error: Argument 'command' and 'database' missing.";
+        return CLI_PARSE_RESULT_ERROR;
+    }
+
+    if (positionalArguments.size() != 2)
+    {
+        *errorMessage = "Wrong arguments number specified.";
+        return CLI_PARSE_RESULT_ERROR;
+    }
+
+    config->cmd = getCommand(positionalArguments.at(0));
+
+    // Save database file name
+    config->database = positionalArguments.at(1);
 
     if (parser.isSet(helpOption))
     {
@@ -67,9 +102,10 @@ int main (int argc, char *argv[])
 
     QCommandLineParser parser;
     QString errorMessage;
-
+    Config config;
     parser.setApplicationDescription(QCoreApplication::translate("main",PROJECT_DESCRIPTION));
-    switch (parseCommandLine(parser/*,&config*/,&errorMessage))
+
+    switch (parseCommandLine(parser,&config,&errorMessage))
     {
     case CLI_PARSE_RESULT_HELP:
         parser.showHelp();
@@ -91,6 +127,6 @@ int main (int argc, char *argv[])
         return 1;
     }
 
-    pluto = new PlutoTool();
+    pluto = new PlutoTool(config);
     return 0;
 }

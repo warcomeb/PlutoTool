@@ -6,11 +6,11 @@
 /*!
  * \brief The BOM_Format enum
  */
-enum BOMFormat
+enum Command
 {
-    BOM_FORMAT_JSON,
-    BOM_FORMAT_HTML,
-    BOM_FORMAT_CSV,
+    COMMAND_LIST,
+    COMMAND_INIT,
+    COMMAND_ERROR,
 };
 
 /*!
@@ -18,35 +18,9 @@ enum BOMFormat
  */
 struct Config
 {
-    QString path;
+    QString database;
 
-    QString schematic;
-
-    // Parse component model
-    bool onlyDefault;
-
-    /*!
-     * \brief boardName
-     */
-    QString boardName;
-
-    /*!
-     * \brief outputModel
-     */
-    QString outputModel;
-
-    /*!
-     * \brief styleFile
-     */
-    QString styleFile;
-
-    QString outputFile;
-    BOMFormat format;
-
-    /*!
-     * \brief verboseLevel
-     */
-    quint8 verboseLevel;
+    Command cmd;
 };
 
 
