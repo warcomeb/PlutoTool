@@ -23,10 +23,22 @@
 #include <QtGlobal>
 #include <QString>
 
+#include <QJsonObject>
+
 class AccountType
 {
 public:
-    AccountType();
+    AccountType ();
+    AccountType (QString name);
+    AccountType (QString name, quint32 id);
+
+    QString name (void);
+    QString description (void);
+
+    void setId (quint32 id);
+    quint32 id (void);
+
+    void write (QJsonObject &json) const;
 
 private:
     quint32 mId;

@@ -23,6 +23,8 @@
 #include <QtGlobal>
 #include <QString>
 
+#include <QJsonObject>
+
 class User
 {
 public:
@@ -30,11 +32,14 @@ public:
 
     QString name (void);
     QString surname (void);
+    QString username (void);
 
     void setId (quint32 id);
     quint32 id (void);
 
     QString code (void);
+
+    void write (QJsonObject &json) const;
 
 private:
     quint32 mId;
@@ -42,6 +47,8 @@ private:
 
     QString mName;
     QString mSurname;
+
+    QString mUsername;
 };
 
 #endif // USER_H

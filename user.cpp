@@ -23,7 +23,7 @@ User::User(QString name, QString surname):
     mName(name),
     mSurname(surname)
 {
-
+    mUsername = mName.toLower() + "." + mSurname.toLower();
 }
 
 QString User::name (void)
@@ -34,6 +34,11 @@ QString User::name (void)
 QString User::surname (void)
 {
     return mSurname;
+}
+
+QString User::username (void)
+{
+    return mUsername;
 }
 
 void User::setId (quint32 id)
@@ -50,4 +55,17 @@ quint32 User::id (void)
 QString User::code (void)
 {
     return mCode;
+}
+
+void User::write (QJsonObject &json) const
+{
+    QJsonObject o;
+    // Save name...
+    o["Id"]       = QString::number(mId);
+    o["Code"]     = mCode;
+    o["Name"]     = mName;
+    o["Surname"]  = mSurname;
+    o["Username"] = mUsername;
+
+    json.insert("User", o);
 }

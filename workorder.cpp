@@ -37,6 +37,13 @@ WorkOrder::WorkOrder (QString name, QString description, QDate start, QDate end)
     WorkOrder(name,start,end);
 }
 
+WorkOrder::WorkOrder (QString name, QString description, QDate start, QDate end, quint32 id):
+    mDescription(description)
+{
+    WorkOrder(name,start,end);
+    setId(id);
+}
+
 QString WorkOrder::name (void)
 {
     return mName;

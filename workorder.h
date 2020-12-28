@@ -30,6 +30,7 @@ public:
     WorkOrder ();
     WorkOrder (QString name, QDate start, QDate end);
     WorkOrder (QString name, QString description, QDate start, QDate end);
+    WorkOrder (QString name, QString description, QDate start, QDate end, quint32 id);
 
     QString name (void);
 

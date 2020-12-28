@@ -19,7 +19,52 @@
  */
 #include "accounttype.h"
 
-AccountType::AccountType()
+AccountType::AccountType ()
 {
 
+}
+
+AccountType::AccountType (QString name):
+    mName(name),
+    mDescription("")
+{
+    setId(0); // It's not a valid ID!
+}
+
+AccountType::AccountType (QString name, quint32 id):
+    mName(name),
+    mDescription("")
+{
+    setId(id);
+}
+
+QString AccountType::name (void)
+{
+    return mName;
+}
+
+QString AccountType::description (void)
+{
+    return mDescription;
+}
+
+void AccountType::setId (quint32 id)
+{
+    mId = id;
+}
+
+quint32 AccountType::id (void)
+{
+    return mId;
+}
+
+void AccountType::write (QJsonObject &json) const
+{
+    QJsonObject o;
+
+    o["Id"]          = QString::number(mId);
+    o["Name"]        = mName;
+    o["Description"] = mDescription;
+
+    json.insert("AccountType", o);
 }
