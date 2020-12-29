@@ -23,6 +23,7 @@
 #include <QtGlobal>
 #include <QString>
 #include <QDate>
+#include <QJsonObject>
 
 class WorkOrder
 {
@@ -38,6 +39,8 @@ public:
     quint32 id (void);
 
     QString code (void);
+
+    void write (QJsonObject &json) const;
 
 private:
     quint32 mId;

@@ -23,3 +23,48 @@ PayeeType::PayeeType()
 {
 
 }
+
+PayeeType::PayeeType (QString name):
+    mName(name),
+    mDescription("")
+{
+    setId(0); // It's not a valid ID!
+}
+
+PayeeType::PayeeType (QString name, quint32 id):
+    mName(name),
+    mDescription("")
+{
+    setId(id);
+}
+
+QString PayeeType::name (void)
+{
+    return mName;
+}
+
+QString PayeeType::description (void)
+{
+    return mDescription;
+}
+
+void PayeeType::setId (quint32 id)
+{
+    mId = id;
+}
+
+quint32 PayeeType::id (void)
+{
+    return mId;
+}
+
+void PayeeType::write (QJsonObject &json) const
+{
+    QJsonObject o;
+
+    o["Id"]          = QString::number(mId);
+    o["Name"]        = mName;
+    o["Description"] = mDescription;
+
+    json.insert("PayeeType", o);
+}

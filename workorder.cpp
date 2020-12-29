@@ -21,6 +21,11 @@
 
 WorkOrder::WorkOrder ()
 {
+    mName  = QString("Undefined");
+    mStart = QDate(2020,1,1);
+    mEnd   = QDate(2099,12,31);
+    mDescription = QString("");
+    setId(0); // Not valid Id!
 }
 
 WorkOrder::WorkOrder (QString name, QDate start, QDate end):
@@ -28,19 +33,25 @@ WorkOrder::WorkOrder (QString name, QDate start, QDate end):
     mStart(start),
     mEnd(end)
 {
-
+    mDescription = "";
+    setId(0); // Not valid Id!
 }
 
 WorkOrder::WorkOrder (QString name, QString description, QDate start, QDate end):
-    mDescription(description)
+    mName(name),
+    mDescription(description),
+    mStart(start),
+    mEnd(end)
 {
-    WorkOrder(name,start,end);
+    setId(0); // Not valid Id!
 }
 
 WorkOrder::WorkOrder (QString name, QString description, QDate start, QDate end, quint32 id):
-    mDescription(description)
+    mName(name),
+    mDescription(description),
+    mStart(start),
+    mEnd(end)
 {
-    WorkOrder(name,start,end);
     setId(id);
 }
 

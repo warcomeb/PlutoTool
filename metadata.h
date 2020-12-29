@@ -21,8 +21,12 @@
 #ifndef METADATA_H
 #define METADATA_H
 
-#define PROJECT_NAME        "PlutoTool"
-#define PROJECT_VERSION     "1.0.0"
-#define PROJECT_DESCRIPTION "Pluto - Family Cash Tool"
+#define PROJECT_NAME          "PlutoTool"
+#define PROJECT_VERSION       "1.0.0"
+#define PROJECT_DESCRIPTION   "Pluto - Family Cash Tool"
 
+#define LOG_VIP_INFORMATION          0
+#define LOG_IMPORTANT_INFORMATION    1
+#define LOG_MEDIUM_INFORMATION       2
+#define LOG_NOTIMPORTANT_INFORMATION 3
 #endif // METADATA_H

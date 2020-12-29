@@ -22,13 +22,24 @@
 
 #include <QtGlobal>
 #include <QString>
+#include <QJsonObject>
 
 #include "payeetype.h"
 
 class Payee
 {
 public:
-    Payee();
+    Payee ();
+    Payee (QString name);
+
+    QString name (void);
+
+    void setId (quint32 id);
+    quint32 id (void);
+
+    QString code (void);
+
+    void write (QJsonObject &json) const;
 
 private:
     quint32   mId;

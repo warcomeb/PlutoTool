@@ -21,5 +21,44 @@
 
 Payee::Payee()
 {
+    mName = QString("Undefined");
+    setId(0); // Not valid Id!
+    mEmail = QString("-");
+    mPhoneNumber = QString("-");
+    mStreet = QString("-");
+    mCity = QString("-");
+    mState = QString("-");
+    mCountry = QString("-");
+    mPostalCode = QString("-");
+    mVATID = QString("-");
+    mNIN = QString("-");
+    mActive = true;
+    mNote = QString("-");
+}
 
+Payee::Payee(QString name):
+    mName(name)
+{
+    setId(0); // Not valid Id!
+}
+
+QString Payee::name (void)
+{
+    return mName;
+}
+
+void Payee::setId (quint32 id)
+{
+    mId = id;
+    mCode = QString("P%1").arg(id, 5, 10, QLatin1Char('0'));
+}
+
+quint32 Payee::id (void)
+{
+    return mId;
+}
+
+QString Payee::code (void)
+{
+    return mCode;
 }
