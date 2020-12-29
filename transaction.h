@@ -41,7 +41,7 @@ private:
     Account   mAccountFrom;
     Account   mAccountTo;
 
-    Payee     mPayee;
+//    Payee     mPayee;
 
     Type      mType;
 

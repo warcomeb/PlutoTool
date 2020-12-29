@@ -162,6 +162,12 @@ void PlutoTool::executeCommand (void)
         mPayeeTypeNextId = 1;
         createDefaultPayeeType();
 
+        log.log(QString("Create default payee..."),LOG_MEDIUM_INFORMATION);
+        mPayeeNextId = 1;
+        Payee p = Payee(mPayeeTypes[1]);
+        p.setId(mPayeeNextId++);
+        mPayees.insert(p.id(),p);
+        log.log(QString("Payee %1 (%2) has been added!").arg(p.name()).arg(p.code()),LOG_MEDIUM_INFORMATION);
 
 
         log.log(QString("Create default category..."),1);
@@ -215,6 +221,18 @@ void PlutoTool::writePayeeTypes (QJsonObject &json) const
     json["PayeeTypesNextId"] = QString::number(mPayeeTypeNextId);
 }
 
+void PlutoTool::writePayees (QJsonObject &json) const
+{
+    QJsonArray refs;
+    foreach (Payee p, mPayees)
+    {
+        QJsonObject o;
+        p.write(o);
+        refs.push_back(o);
+    }
+    json["Payees"] = refs;
+    json["PayeesNextId"] = QString::number(mPayeeNextId);
+}
 
 bool PlutoTool::save (void)
 {
@@ -240,6 +258,9 @@ bool PlutoTool::save (void)
 
     log.log(QString("Save database: write payees type information..."),2);
     writePayeeTypes(obj);
+
+    log.log(QString("Save database: write payees information..."),LOG_MEDIUM_INFORMATION);
+    writePayees(obj);
 
     QJsonDocument doc(obj);
 

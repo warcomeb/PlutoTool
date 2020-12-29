@@ -53,7 +53,7 @@ void PayeeType::setId (quint32 id)
     mId = id;
 }
 
-quint32 PayeeType::id (void)
+quint32 PayeeType::id (void) const
 {
     return mId;
 }

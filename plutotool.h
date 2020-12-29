@@ -29,6 +29,7 @@
 #include "user.h"
 #include "workorder.h"
 #include "accounttype.h"
+#include "payee.h"
 #include "payeetype.h"
 
 class PlutoTool
@@ -43,6 +44,7 @@ private:
     void writeUsers (QJsonObject &json) const;
     void writeAccountTypes (QJsonObject &json) const;
     void writePayeeTypes (QJsonObject &json) const;
+    void writePayees (QJsonObject &json) const;
 
     User createUser (quint32 id);
     void createDefaultAccountType (void);
@@ -61,6 +63,9 @@ private:
 
     QMap<quint32,PayeeType>   mPayeeTypes;
     quint32                   mPayeeTypeNextId;
+
+    QMap<quint32,Payee>       mPayees;
+    quint32                   mPayeeNextId;
 };
 
 #endif // PLUTOTOOL_H

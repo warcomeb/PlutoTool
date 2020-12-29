@@ -29,8 +29,10 @@
 class Payee
 {
 public:
-    Payee ();
-    Payee (QString name);
+    Payee (PayeeType type);
+    Payee (QString name, PayeeType type);
+
+    void defaultParams (void);
 
     QString name (void);
 
@@ -42,23 +44,23 @@ public:
     void write (QJsonObject &json) const;
 
 private:
-    quint32   mId;
-    QString   mCode;
-    QString   mName;
-    PayeeType mType;
-    QString   mEmail;
-    QString   mPhoneNumber;
+    quint32    mId;
+    QString    mCode;
+    QString    mName;
+    PayeeType  mType;
+    QString    mEmail;
+    QString    mPhoneNumber;
     // Address section
-    QString   mStreet;
-    QString   mCity;
-    QString   mState;
-    QString   mCountry;
-    QString   mPostalCode;
+    QString    mStreet;
+    QString    mCity;
+    QString    mState;
+    QString    mCountry;
+    QString    mPostalCode;
     // Personal/Company code
-    QString   mVATID;
-    QString   mNIN;
-    bool      mActive;
-    QString   mNote;
+    QString    mVATID;
+    QString    mNIN;
+    bool       mActive;
+    QString    mNote;
 };
 
 #endif // PAYEE_H

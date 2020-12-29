@@ -19,10 +19,24 @@
  */
 #include "payee.h"
 
-Payee::Payee()
+Payee::Payee (PayeeType type):
+    mType(type)
 {
     mName = QString("Undefined");
     setId(0); // Not valid Id!
+    defaultParams();
+}
+
+Payee::Payee (QString name, PayeeType type):
+    mName(name),
+    mType(type)
+{
+    setId(0); // Not valid Id!
+    defaultParams();
+}
+
+void Payee::defaultParams (void)
+{
     mEmail = QString("-");
     mPhoneNumber = QString("-");
     mStreet = QString("-");
@@ -34,12 +48,6 @@ Payee::Payee()
     mNIN = QString("-");
     mActive = true;
     mNote = QString("-");
-}
-
-Payee::Payee(QString name):
-    mName(name)
-{
-    setId(0); // Not valid Id!
 }
 
 QString Payee::name (void)
@@ -61,4 +69,16 @@ quint32 Payee::id (void)
 QString Payee::code (void)
 {
     return mCode;
+}
+
+void Payee::write (QJsonObject &json) const
+{
+    QJsonObject o;
+
+    o["Id"]          = (int)mId;
+    o["Code"]        = mCode;
+    o["Name"]        = mName;
+    o["PayeeTypeId"] = (int)mType.id();
+
+    json.insert("Payee", o);
 }
