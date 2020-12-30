@@ -28,7 +28,17 @@
 class Account
 {
 public:
-    Account();
+    Account (QString name, QString number, AccountType type, bool active);
+    Account (QString name, QString number, AccountType type, quint32 id, bool active);
+
+    QString name (void);
+
+    void setId (quint32 id);
+    quint32 id (void) const;
+
+    QString code (void);
+
+    void write (QJsonObject &json) const;
 
 private:
     quint32     mId;

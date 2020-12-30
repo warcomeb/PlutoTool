@@ -158,6 +158,8 @@ void PlutoTool::executeCommand (void)
         mAccountTypeNextId = 1;
         createDefaultAccountType();
 
+        mAccountNextId = 1;
+
         log.log(QString("Create default payee type..."),LOG_MEDIUM_INFORMATION);
         mPayeeTypeNextId = 1;
         createDefaultPayeeType();
@@ -169,6 +171,7 @@ void PlutoTool::executeCommand (void)
         mPayees.insert(p.id(),p);
         log.log(QString("Payee %1 (%2) has been added!").arg(p.name()).arg(p.code()),LOG_MEDIUM_INFORMATION);
 
+        mTransactionNextId = 1;
 
         log.log(QString("Create default category..."),1);
 
@@ -208,6 +211,32 @@ void PlutoTool::writeAccountTypes (QJsonObject &json) const
     json["AccountTypesNextId"] = QString::number(mAccountTypeNextId);
 }
 
+void PlutoTool::writeAccounts (QJsonObject &json) const
+{
+    QJsonArray refs;
+    foreach (Account a, mAccounts)
+    {
+        QJsonObject o;
+        a.write(o);
+        refs.push_back(o);
+    }
+    json["Accounts"] = refs;
+    json["AccountNextId"] = QString::number(mAccountNextId);
+}
+
+void PlutoTool::writeTransactions (QJsonObject &json) const
+{
+    QJsonArray refs;
+    foreach (Transaction t, mTransactions)
+    {
+        QJsonObject o;
+        t.write(o);
+        refs.push_back(o);
+    }
+    json["Transaction"] = refs;
+    json["TransactionNextId"] = QString::number(mTransactionNextId);
+}
+
 void PlutoTool::writePayeeTypes (QJsonObject &json) const
 {
     QJsonArray refs;
@@ -234,6 +263,19 @@ void PlutoTool::writePayees (QJsonObject &json) const
     json["PayeesNextId"] = QString::number(mPayeeNextId);
 }
 
+void PlutoTool::writeWorkOrders (QJsonObject &json) const
+{
+    QJsonArray refs;
+    foreach (WorkOrder p, mWorkOrders)
+    {
+        QJsonObject o;
+        p.write(o);
+        refs.push_back(o);
+    }
+    json["WorkOrders"] = refs;
+    json["WorkOrderNextId"] = QString::number(mWorkOrderNextId);
+}
+
 bool PlutoTool::save (void)
 {
     WLog& log = WLog::instance();
@@ -250,17 +292,26 @@ bool PlutoTool::save (void)
 
     QJsonObject obj;
 
-    log.log(QString("Save database: write users information..."),2);
+    log.log(QString("Save database: write users information..."),LOG_MEDIUM_INFORMATION);
     writeUsers(obj);
 
-    log.log(QString("Save database: write accounts type information..."),2);
+    log.log(QString("Save database: write accounts type information..."),LOG_MEDIUM_INFORMATION);
     writeAccountTypes(obj);
 
-    log.log(QString("Save database: write payees type information..."),2);
+    log.log(QString("Save database: write accounts information..."),LOG_MEDIUM_INFORMATION);
+    writeAccounts(obj);
+
+    log.log(QString("Save database: write payees type information..."),LOG_MEDIUM_INFORMATION);
     writePayeeTypes(obj);
 
     log.log(QString("Save database: write payees information..."),LOG_MEDIUM_INFORMATION);
     writePayees(obj);
+
+    log.log(QString("Save database: write work orders information..."),LOG_MEDIUM_INFORMATION);
+    writeWorkOrders(obj);
+
+    log.log(QString("Save database: write transactions information..."),LOG_MEDIUM_INFORMATION);
+    writeTransactions(obj);
 
     QJsonDocument doc(obj);
 

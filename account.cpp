@@ -19,7 +19,53 @@
  */
 #include "account.h"
 
-Account::Account()
+Account::Account (QString name, QString number, AccountType type, bool active = false):
+    mName(name),
+    mNumber(number),
+    mType(type),
+    mActive(active),
+    mNote("")
 {
+    setId(0); // Not valid Id!
+}
 
+Account::Account (QString name, QString number, AccountType type, quint32 id, bool active = false):
+    mName(name),
+    mNumber(number),
+    mType(type),
+    mActive(active),
+    mNote("")
+{
+    setId(id);
+}
+
+QString Account::name (void)
+{
+    return mName;
+}
+
+void Account::setId (quint32 id)
+{
+    mId = id;
+    mCode = QString("A%1").arg(id, 5, 10, QLatin1Char('0'));
+}
+
+quint32 Account::id (void) const
+{
+    return mId;
+}
+
+void Account::write (QJsonObject &json) const
+{
+    QJsonObject o;
+
+    o["Id"]          = (int)mId;
+    o["Code"]        = mCode;
+    o["Name"]        = mName;
+    o["Number"]      = mNumber;
+    o["AccountType"] = (int)mType.id();
+    o["Active"]      = mActive;
+    o["Note"]        = mNote;
+
+    json.insert("Account", o);
 }

@@ -61,7 +61,7 @@ void Payee::setId (quint32 id)
     mCode = QString("P%1").arg(id, 5, 10, QLatin1Char('0'));
 }
 
-quint32 Payee::id (void)
+quint32 Payee::id (void) const
 {
     return mId;
 }
@@ -75,10 +75,10 @@ void Payee::write (QJsonObject &json) const
 {
     QJsonObject o;
 
-    o["Id"]          = (int)mId;
-    o["Code"]        = mCode;
-    o["Name"]        = mName;
-    o["PayeeTypeId"] = (int)mType.id();
+    o["Id"]        = (int)mId;
+    o["Code"]      = mCode;
+    o["Name"]      = mName;
+    o["PayeeType"] = (int)mType.id();
 
     json.insert("Payee", o);
 }

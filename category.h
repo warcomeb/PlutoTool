@@ -24,13 +24,6 @@
 #include <QString>
 #include <QList>
 
-enum Type
-{
-    TYPE_INPUT,
-    TYPE_OUTPUT,
-    TYPE_NEUTRAL,
-};
-
 class Category
 {
 public:
@@ -40,7 +33,7 @@ private:
     quint32        mId;
     QString        mName;
     QString        mDescription;
-    Type           mType;
+//    Type           mType;
     QList<QString> mSubCategory;
 };
 

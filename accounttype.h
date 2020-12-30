@@ -36,7 +36,7 @@ public:
     QString description (void);
 
     void setId (quint32 id);
-    quint32 id (void);
+    quint32 id (void) const;
 
     void write (QJsonObject &json) const;
 

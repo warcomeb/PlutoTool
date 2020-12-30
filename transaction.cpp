@@ -19,7 +19,40 @@
  */
 #include "transaction.h"
 
-Transaction::Transaction()
+Transaction::Transaction (Account from, Account to, Payee payee, QDate date, float amount, Type type):
+    mAccountFrom(from),
+    mAccountTo(to),
+    mPayee(payee),
+    mType(type),
+    mDate(date),
+    mAmount(amount)
 {
 
+}
+
+void Transaction::setId (quint32 id)
+{
+    mId = id;
+}
+
+quint32 Transaction::id (void)
+{
+    return mId;
+}
+
+void Transaction::write (QJsonObject &json) const
+{
+    QJsonObject o;
+
+    o["Id"]          = (int)mId;
+    o["AccountFrom"] = (int)mAccountFrom.id();
+    o["AccountTo"]   = (int)mAccountTo.id();
+    o["Payee"]       = (int)mPayee.id();
+    o["Amount"]      = mAmount;
+    o["Type"]        = mType;
+    o["Date"]        = mDate.toString("yyyy-MM-dd");
+    o["Checked"]     = mChecked;
+    o["Note"]        = mNote;
+
+    json.insert("Account", o);
 }

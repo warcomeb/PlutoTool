@@ -61,7 +61,7 @@ void User::write (QJsonObject &json) const
 {
     QJsonObject o;
     // Save name...
-    o["Id"]       = QString::number(mId);
+    o["Id"]       = (int)mId;
     o["Code"]     = mCode;
     o["Name"]     = mName;
     o["Surname"]  = mSurname;

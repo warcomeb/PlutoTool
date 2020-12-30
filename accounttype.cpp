@@ -53,7 +53,7 @@ void AccountType::setId (quint32 id)
     mId = id;
 }
 
-quint32 AccountType::id (void)
+quint32 AccountType::id (void) const
 {
     return mId;
 }
@@ -62,7 +62,7 @@ void AccountType::write (QJsonObject &json) const
 {
     QJsonObject o;
 
-    o["Id"]          = QString::number(mId);
+    o["Id"]          = (int)mId;
     o["Name"]        = mName;
     o["Description"] = mDescription;
 

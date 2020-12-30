@@ -75,3 +75,17 @@ QString WorkOrder::code (void)
 {
     return mCode;
 }
+
+void WorkOrder::write (QJsonObject &json) const
+{
+    QJsonObject o;
+    // Save name...
+    o["Id"]          = (int)mId;
+    o["Code"]        = mCode;
+    o["Name"]        = mName;
+    o["Start"]       = mStart.toString("yyyy-MM-dd");
+    o["End"]         = mEnd.toString("yyyy-MM-dd");
+    o["Description"] = mDescription;
+
+    json.insert("WorkOrder", o);
+}

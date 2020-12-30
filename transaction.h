@@ -33,7 +33,20 @@
 class Transaction
 {
 public:
-    Transaction();
+
+    enum Type
+    {
+        TYPE_INPUT   = 'i',
+        TYPE_OUTPUT  = 'o',
+        TYPE_NEUTRAL = 'n',
+    };
+
+    Transaction (Account from, Account to, Payee payee, QDate date, float amount, Type type);
+
+    void setId (quint32 id);
+    quint32 id (void);
+
+    void write (QJsonObject &json) const;
 
 private:
     quint32   mId;
@@ -41,7 +54,7 @@ private:
     Account   mAccountFrom;
     Account   mAccountTo;
 
-//    Payee     mPayee;
+    Payee     mPayee;
 
     Type      mType;
 

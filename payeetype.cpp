@@ -62,7 +62,7 @@ void PayeeType::write (QJsonObject &json) const
 {
     QJsonObject o;
 
-    o["Id"]          = QString::number(mId);
+    o["Id"]          = (int)mId;
     o["Name"]        = mName;
     o["Description"] = mDescription;
 
