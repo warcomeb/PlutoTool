@@ -19,13 +19,22 @@
  */
 #include "transaction.h"
 
-Transaction::Transaction (Account from, Account to, Payee payee, QDate date, float amount, Type type):
+Transaction::Transaction (Account from,
+                          Account to,
+                          Payee payee,
+                          QDate date,
+                          float amount,
+                          Category category,
+                          Type type,
+                          WorkOrder workorder):
     mAccountFrom(from),
     mAccountTo(to),
     mPayee(payee),
     mType(type),
     mDate(date),
-    mAmount(amount)
+    mAmount(amount),
+    mWorkOrder(workorder),
+    mCategory(category)
 {
 
 }
@@ -50,6 +59,8 @@ void Transaction::write (QJsonObject &json) const
     o["Payee"]       = (int)mPayee.id();
     o["Amount"]      = mAmount;
     o["Type"]        = mType;
+    o["Category"]    = (int)mCategory.id();
+    o["WorkOrder"]   = (int)mWorkOrder.id();
     o["Date"]        = mDate.toString("yyyy-MM-dd");
     o["Checked"]     = mChecked;
     o["Note"]        = mNote;

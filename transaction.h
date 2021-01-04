@@ -41,7 +41,14 @@ public:
         TYPE_NEUTRAL = 'n',
     };
 
-    Transaction (Account from, Account to, Payee payee, QDate date, float amount, Type type);
+    Transaction (Account from,
+                 Account to,
+                 Payee payee,
+                 QDate date,
+                 float amount,
+                 Category category,
+                 Type type,
+                 WorkOrder workorder);
 
     void setId (quint32 id);
     quint32 id (void);
@@ -63,7 +70,7 @@ private:
 
     WorkOrder mWorkOrder;
 
-    // TODO: Subcategory
+    Category  mCategory;
 
     bool      mChecked;
 

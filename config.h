@@ -10,6 +10,7 @@ enum Command
 {
     COMMAND_LIST,
     COMMAND_INIT,
+    COMMAND_ADD_TRANSACTION,
     COMMAND_ERROR,
 };
 

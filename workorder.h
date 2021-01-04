@@ -36,7 +36,7 @@ public:
     QString name (void);
 
     void setId (quint32 id);
-    quint32 id (void);
+    quint32 id (void) const;
 
     QString code (void);
 

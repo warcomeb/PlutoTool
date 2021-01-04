@@ -44,6 +44,10 @@ Command getCommand (QString cmd)
     {
         return COMMAND_INIT;
     }
+    else if ((cmd == "add-transaction") || (cmd == "ADD-TRANSACTION"))
+    {
+        return COMMAND_ADD_TRANSACTION;
+    }
     return COMMAND_ERROR;
 }
 

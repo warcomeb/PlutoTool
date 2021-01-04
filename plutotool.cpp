@@ -60,6 +60,11 @@ User PlutoTool::createUser (quint32 id)
     return u;
 }
 
+Transaction PlutoTool::createTransaction (quint32 id)
+{
+
+}
+
 void PlutoTool::createDefaultAccountType (void)
 {
     WLog& log = WLog::instance();
@@ -225,6 +230,7 @@ void PlutoTool::executeCommand (void)
         cout << "\r\nCommand list:\r\n";
         cout << "  LIST: this command," << endl;
         cout << "  INIT: initialize new database" << endl;
+        cout << "  ADD-TRANSACTION: Add new transaction" << endl;
     }
     else if (mConfig.cmd == COMMAND_INIT)
     {
@@ -290,11 +296,58 @@ void PlutoTool::executeCommand (void)
         log.log(QString("Save database..."),LOG_IMPORTANT_INFORMATION);
         save(&data);
         log.log(QString("Save database END!"),LOG_IMPORTANT_INFORMATION);
+    }
+    else if (mConfig.cmd == COMMAND_ADD_TRANSACTION)
+    {
+        cout << "%%%%%%%%%% COMMAND ADD TRANSACTION %%%%%%%%%%" << endl;
 
+        log.log(QString("Check database file: open file..."),LOG_IMPORTANT_INFORMATION);
+        QFile data(mConfig.database);
+        if (!data.exists())
+        {
+            log.log(QString("The database doesn't exist!"),LOG_VIP_INFORMATION);
+            return;
+        }
+
+        if (!data.open(QIODevice::ReadWrite))
+        {
+            //TODO: message
+            log.log(QString("FAIL open database file!"),LOG_VIP_INFORMATION);
+            return;
+        }
+
+        // Read current database status...
+        log.log(QString("Read database..."),LOG_IMPORTANT_INFORMATION);
+        read(&data);
+        // Create transaction
+        Transaction t = createTransaction(mTransactionNextId++);
+        mTransactions.insert(t.id(),t);
+        log.log(QString("Transaction %1 has been added!").arg(t.id()),LOG_MEDIUM_INFORMATION);
+        // Save the new database...
+        log.log(QString("Save database..."),LOG_IMPORTANT_INFORMATION);
+        save(&data);
+        log.log(QString("Save database END!"),LOG_IMPORTANT_INFORMATION);
     }
     else if (mConfig.cmd == COMMAND_ERROR)
     {
         cout << "\r\nCommand NOT FOUND!" << endl;
+    }
+}
+
+void PlutoTool::readUsers (const QJsonObject &json)
+{
+    QJsonArray refs = json["Users"].toArray();
+    for (int userIndex = 0; userIndex < refs.size(); ++userIndex)
+    {
+        QJsonObject userObject = refs[userIndex].toObject();
+        User u;
+        u.read(userObject);
+        mUsers.insert(u.id(),u);
+    }
+
+    if (json.contains("UserNextId"))
+    {
+        mUserNextId = json["UserNextId"].toInt();
     }
 }
 
@@ -400,6 +453,21 @@ void PlutoTool::writeWorkOrders (QJsonObject &json) const
     }
     json["WorkOrders"] = refs;
     json["WorkOrderNextId"] = QString::number(mWorkOrderNextId);
+}
+
+bool PlutoTool::read (QFile* file)
+{
+    WLog& log = WLog::instance();
+
+    QByteArray saveData = file->readAll();
+
+    QJsonDocument loadDoc = QJsonDocument::fromJson(saveData);
+    QJsonObject obj = loadDoc.object();
+
+    log.log(QString("Read database: users information..."),LOG_MEDIUM_INFORMATION);
+    readUsers(obj);
+
+    return true;
 }
 
 bool PlutoTool::save (QFile* file)

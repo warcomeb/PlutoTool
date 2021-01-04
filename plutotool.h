@@ -43,7 +43,11 @@ public:
 
 private:
     void executeCommand (void);
+
     bool save (QFile *file);
+    bool read (QFile* file);
+
+    void readUsers (const QJsonObject &json);
 
     void writeUsers (QJsonObject &json) const;
     void writeAccountTypes (QJsonObject &json) const;
@@ -55,6 +59,8 @@ private:
     void writeCategories (QJsonObject &json) const;
 
     User createUser (quint32 id);
+    Transaction createTransaction (quint32 id);
+
     void createDefaultAccountType (void);
     void createDefaultPayeeType (void);
     void createDefaultCategory (void);

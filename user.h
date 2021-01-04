@@ -28,6 +28,7 @@
 class User
 {
 public:
+    User ();
     User (QString name, QString surname);
     User (QString name, QString surname, quint32 id);
 
@@ -41,6 +42,7 @@ public:
     QString code (void);
 
     void write (QJsonObject &json) const;
+    void read (const QJsonObject &json);
 
 private:
     quint32 mId;

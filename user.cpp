@@ -19,7 +19,15 @@
  */
 #include "user.h"
 
-User::User(QString name, QString surname):
+User::User ():
+    mName(""),
+    mSurname("")
+{
+    mUsername = "";
+    setId(0);
+}
+
+User::User (QString name, QString surname):
     mName(name),
     mSurname(surname)
 {
@@ -27,7 +35,7 @@ User::User(QString name, QString surname):
     setId(0);
 }
 
-User::User(QString name, QString surname, quint32 id):
+User::User (QString name, QString surname, quint32 id):
     mName(name),
     mSurname(surname)
 {
@@ -77,4 +85,32 @@ void User::write (QJsonObject &json) const
     o["Username"] = mUsername;
 
     json.insert("User", o);
+}
+
+void User::read (const QJsonObject &json)
+{
+    if (json.contains("Code") && json["Code"].isString())
+    {
+        mName = json["Code"].toString();
+    }
+
+    if (json.contains("Name") && json["Name"].isString())
+    {
+        mName = json["Name"].toString();
+    }
+
+    if (json.contains("Surname") && json["Surname"].isString())
+    {
+        mName = json["Surname"].toString();
+    }
+
+    if (json.contains("Username") && json["Username"].isString())
+    {
+        mName = json["Username"].toString();
+    }
+
+    if (json.contains("Id") && json["Id"].isDouble())
+    {
+        mId = json["level"].toInt();
+    }
 }

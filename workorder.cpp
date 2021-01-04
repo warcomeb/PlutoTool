@@ -66,7 +66,7 @@ void WorkOrder::setId (quint32 id)
     mCode = QString("W%1").arg(id, 5, 10, QLatin1Char('0'));
 }
 
-quint32 WorkOrder::id (void)
+quint32 WorkOrder::id (void) const
 {
     return mId;
 }
