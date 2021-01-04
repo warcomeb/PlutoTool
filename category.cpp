@@ -71,7 +71,7 @@ void Category::write (QJsonObject &json) const
 
     o["Id"]          = (int)mId;
     o["Name"]        = mName;
-    o["SubName"]     = mName;
+    o["SubName"]     = mSubName;
     o["Description"] = mDescription;
 
     json.insert("Category", o);

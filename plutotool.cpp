@@ -132,51 +132,88 @@ void PlutoTool::createDefaultCategory (void)
 
     Category c = Category("Undefined","Undefined",mCategoryNextId++);
     mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),1);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
 
     c = Category("Transfer","",mCategoryNextId++);
     mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),1);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
 
     c = Category("Income","Salary",mCategoryNextId++);
     mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),1);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
 
     c = Category("Income","Refunds",mCategoryNextId++);
     mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),1);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
 
     c = Category("Income","Gift",mCategoryNextId++);
     mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),1);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
 
     c = Category("Bills","Electricity",mCategoryNextId++);
     mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),1);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
 
     c = Category("Bills","Gas",mCategoryNextId++);
     mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),1);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
 
     c = Category("Bills","Internet",mCategoryNextId++);
     mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),1);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
 
     c = Category("Bills","Water",mCategoryNextId++);
     mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),1);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
 
     c = Category("Bills","Garbage",mCategoryNextId++);
     mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),1);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
 
     c = Category("Bills","PayTV",mCategoryNextId++); // Netflix, Disney+
     mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),1);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
 
     c = Category("Home Needs","Domestic Worker",mCategoryNextId++);
     mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),1);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
+
+    // ---------- Automobile
+    c = Category("Automobile","Parking",mCategoryNextId++);
+    mCategories.insert(c.id(),c);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
+
+    c = Category("Automobile","Maintenance",mCategoryNextId++);
+    mCategories.insert(c.id(),c);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
+
+    c = Category("Automobile","Fuel",mCategoryNextId++);
+    mCategories.insert(c.id(),c);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
+
+    c = Category("Automobile","Car Insurance",mCategoryNextId++);
+    mCategories.insert(c.id(),c);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
+
+    c = Category("Automobile","Highway",mCategoryNextId++);
+    mCategories.insert(c.id(),c);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
+
+    c = Category("Automobile","Car Tax",mCategoryNextId++);
+    mCategories.insert(c.id(),c);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
+
+    c = Category("Automobile","Car Buy",mCategoryNextId++);
+    mCategories.insert(c.id(),c);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
+
+    c = Category("Automobile","Car Rent",mCategoryNextId++);
+    mCategories.insert(c.id(),c);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
+
+    c = Category("Automobile","Penalty",mCategoryNextId++);
+    mCategories.insert(c.id(),c);
+    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
 }
 
 void PlutoTool::executeCommand (void)
