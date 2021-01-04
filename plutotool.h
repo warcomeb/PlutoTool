@@ -23,6 +23,7 @@
 
 #include <QMap>
 #include <QtGlobal>
+#include <QFile>
 
 #include "config.h"
 
@@ -33,6 +34,7 @@
 #include "payee.h"
 #include "payeetype.h"
 #include "transaction.h"
+#include "category.h"
 
 class PlutoTool
 {
@@ -41,7 +43,7 @@ public:
 
 private:
     void executeCommand (void);
-    bool save (void);
+    bool save (QFile *file);
 
     void writeUsers (QJsonObject &json) const;
     void writeAccountTypes (QJsonObject &json) const;
@@ -50,15 +52,20 @@ private:
     void writePayees (QJsonObject &json) const;
     void writeWorkOrders (QJsonObject &json) const;
     void writeTransactions (QJsonObject &json) const;
+    void writeCategories (QJsonObject &json) const;
 
     User createUser (quint32 id);
     void createDefaultAccountType (void);
     void createDefaultPayeeType (void);
+    void createDefaultCategory (void);
 
     Config                    mConfig;
 
     QMap<quint32,User>        mUsers;
     quint32                   mUserNextId;
+
+    QMap<quint32,Category>    mCategories;
+    quint32                   mCategoryNextId;
 
     QMap<quint32,WorkOrder>   mWorkOrders;
     quint32                   mWorkOrderNextId;

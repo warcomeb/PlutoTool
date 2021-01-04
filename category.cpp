@@ -19,7 +19,61 @@
  */
 #include "category.h"
 
-Category::Category()
+Category::Category ()
 {
-
+    mName    = "Undefined";
+    mSubName = "Undefined";
+    setId(0); // Invalid Id
 }
+
+Category::Category (QString name, QString subName):
+    mName(name),
+    mSubName(subName)
+{
+    setId(0); // Invalid Id
+}
+
+Category::Category (QString name, QString subName, quint32 id):
+    mName(name),
+    mSubName(subName)
+{
+    setId(id);
+}
+
+QString Category::name (void)
+{
+    return mName;
+}
+
+QString Category::subName (void)
+{
+    return mSubName;
+}
+
+QString Category::description (void)
+{
+    return mDescription;
+}
+
+void Category::setId (quint32 id)
+{
+    mId = id;
+}
+
+quint32 Category::id (void) const
+{
+    return mId;
+}
+
+void Category::write (QJsonObject &json) const
+{
+    QJsonObject o;
+
+    o["Id"]          = (int)mId;
+    o["Name"]        = mName;
+    o["SubName"]     = mName;
+    o["Description"] = mDescription;
+
+    json.insert("Category", o);
+}
+

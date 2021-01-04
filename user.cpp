@@ -24,6 +24,15 @@ User::User(QString name, QString surname):
     mSurname(surname)
 {
     mUsername = mName.toLower() + "." + mSurname.toLower();
+    setId(0);
+}
+
+User::User(QString name, QString surname, quint32 id):
+    mName(name),
+    mSurname(surname)
+{
+    mUsername = mName.toLower() + "." + mSurname.toLower();
+    setId(id);
 }
 
 QString User::name (void)

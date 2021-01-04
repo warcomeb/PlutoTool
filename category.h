@@ -22,19 +22,32 @@
 
 #include <QtGlobal>
 #include <QString>
-#include <QList>
+
+#include <QJsonObject>
 
 class Category
 {
 public:
-    Category();
+    Category ();
+    Category (QString name, QString subName);
+    Category (QString name, QString subName, quint32 id);
+
+    QString name (void);
+    QString subName (void);
+    QString description (void);
+
+    void setId (quint32 id);
+    quint32 id (void) const;
+
+    void write (QJsonObject &json) const;
+
+    QString toString (void);
 
 private:
-    quint32        mId;
-    QString        mName;
-    QString        mDescription;
-//    Type           mType;
-    QList<QString> mSubCategory;
+    quint32 mId;
+    QString mName;
+    QString mSubName;
+    QString mDescription;
 };
 
 #endif // CATEGORY_H

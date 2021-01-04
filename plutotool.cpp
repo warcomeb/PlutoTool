@@ -56,8 +56,7 @@ User PlutoTool::createUser (quint32 id)
     cout << "Insert Surname: ";
     getline(cin,surname);
 
-    User u = User(QString(name.c_str()),QString(surname.c_str()));
-    u.setId(id);
+    User u = User(QString(name.c_str()),QString(surname.c_str()),id);
     return u;
 }
 
@@ -127,6 +126,15 @@ void PlutoTool::createDefaultPayeeType (void)
     log.log(QString("Payee Type %1 has been added!").arg(p.name()),1);
 }
 
+void PlutoTool::createDefaultCategory (void)
+{
+    WLog& log = WLog::instance();
+
+    Category c = Category("Undefined","Undefined",mCategoryNextId++);
+    mCategories.insert(c.id(),c);
+    log.log(QString("Category %1/%2 has been added!").arg(c.name()).arg(c.subName()),1);
+}
+
 void PlutoTool::executeCommand (void)
 {
     WLog& log = WLog::instance();
@@ -141,11 +149,36 @@ void PlutoTool::executeCommand (void)
     {
         cout << "%%%%%%%%%% COMMAND INIT %%%%%%%%%%" << endl;
 
+        log.log(QString("Check database file: open file..."),LOG_IMPORTANT_INFORMATION);
+        QFile data(mConfig.database);
+        if (data.exists())
+        {
+            string reply;
+            cout << "The database file just exists, would you replace? (y/n)" << endl;
+            getline(cin,reply);
+            if (reply == "n")
+            {
+                log.log(QString("FAIL open database file!"),LOG_VIP_INFORMATION);
+                return;
+            }
+        }
+
+        if (!data.open(QIODevice::WriteOnly))
+        {
+            //TODO: message
+            log.log(QString("FAIL open database file!"),LOG_VIP_INFORMATION);
+            return;
+        }
+
         log.log(QString("Create first user..."),LOG_IMPORTANT_INFORMATION);
         mUserNextId = 1;
         User u = createUser(mUserNextId++);
         mUsers.insert(u.id(),u);
         log.log(QString("User %1 %2 (%3) has been added!").arg(u.name()).arg(u.surname()).arg(u.code()),LOG_MEDIUM_INFORMATION);
+
+        log.log(QString("Create default categories..."),LOG_MEDIUM_INFORMATION);
+        mCategoryNextId = 1;
+        createDefaultCategory();
 
         log.log(QString("Create default workorder..."),LOG_MEDIUM_INFORMATION);
         mWorkOrderNextId = 1;
@@ -173,10 +206,9 @@ void PlutoTool::executeCommand (void)
 
         mTransactionNextId = 1;
 
-        log.log(QString("Create default category..."),1);
-
-        log.log(QString("Save database!"),1);
-        save();
+        log.log(QString("Save database..."),LOG_IMPORTANT_INFORMATION);
+        save(&data);
+        log.log(QString("Save database END!"),LOG_IMPORTANT_INFORMATION);
 
     }
     else if (mConfig.cmd == COMMAND_ERROR)
@@ -196,6 +228,19 @@ void PlutoTool::writeUsers (QJsonObject &json) const
     }
     json["Users"] = refs;
     json["UserNextId"] = QString::number(mUserNextId);
+}
+
+void PlutoTool::writeCategories (QJsonObject &json) const
+{
+    QJsonArray refs;
+    foreach (Category c, mCategories)
+    {
+        QJsonObject o;
+        c.write(o);
+        refs.push_back(o);
+    }
+    json["Categories"] = refs;
+    json["CategoryNextId"] = QString::number(mCategoryNextId);
 }
 
 void PlutoTool::writeAccountTypes (QJsonObject &json) const
@@ -276,24 +321,17 @@ void PlutoTool::writeWorkOrders (QJsonObject &json) const
     json["WorkOrderNextId"] = QString::number(mWorkOrderNextId);
 }
 
-bool PlutoTool::save (void)
+bool PlutoTool::save (QFile* file)
 {
     WLog& log = WLog::instance();
-
-    log.log(QString("Save database: open file..."),1);
-    QFile o(mConfig.database);
-    if (!o.open(QIODevice::WriteOnly))
-    {
-        //TODO: message
-        log.log(QString("Save database: FAIL open file..."),1);
-        return false;
-    }
-    log.log(QString("Save database: file opened!"),1);
 
     QJsonObject obj;
 
     log.log(QString("Save database: write users information..."),LOG_MEDIUM_INFORMATION);
     writeUsers(obj);
+
+    log.log(QString("Save database: write categories information..."),LOG_MEDIUM_INFORMATION);
+    writeCategories(obj);
 
     log.log(QString("Save database: write accounts type information..."),LOG_MEDIUM_INFORMATION);
     writeAccountTypes(obj);
@@ -315,6 +353,6 @@ bool PlutoTool::save (void)
 
     QJsonDocument doc(obj);
 
-    o.write(doc.toJson());
+    file->write(doc.toJson());
     return true;
 }

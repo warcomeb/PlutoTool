@@ -28,7 +28,8 @@
 class User
 {
 public:
-    User(QString name, QString surname);
+    User (QString name, QString surname);
+    User (QString name, QString surname, quint32 id);
 
     QString name (void);
     QString surname (void);
