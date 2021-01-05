@@ -341,11 +341,12 @@ void PlutoTool::readUsers (const QJsonObject &json)
     {
         QJsonObject userObject = refs[userIndex].toObject();
         User u;
-        u.read(userObject);
+        u.read(userObject["User"].toObject());
         mUsers.insert(u.id(),u);
     }
 
-    if (json.contains("UserNextId"))
+    QJsonValue::Type my = json["UserNextId"].type();
+    if (json.contains("UserNextId") && json["UserNextId"].isDouble())
     {
         mUserNextId = json["UserNextId"].toInt();
     }
@@ -361,7 +362,7 @@ void PlutoTool::writeUsers (QJsonObject &json) const
         refs.push_back(o);
     }
     json["Users"] = refs;
-    json["UserNextId"] = QString::number(mUserNextId);
+    json["UserNextId"] = (int)mUserNextId;
 }
 
 void PlutoTool::writeCategories (QJsonObject &json) const
@@ -374,7 +375,7 @@ void PlutoTool::writeCategories (QJsonObject &json) const
         refs.push_back(o);
     }
     json["Categories"] = refs;
-    json["CategoryNextId"] = QString::number(mCategoryNextId);
+    json["CategoryNextId"] = (int)mCategoryNextId;
 }
 
 void PlutoTool::writeAccountTypes (QJsonObject &json) const
@@ -387,7 +388,7 @@ void PlutoTool::writeAccountTypes (QJsonObject &json) const
         refs.push_back(o);
     }
     json["AccountTypes"] = refs;
-    json["AccountTypesNextId"] = QString::number(mAccountTypeNextId);
+    json["AccountTypesNextId"] = (int)mAccountTypeNextId;
 }
 
 void PlutoTool::writeAccounts (QJsonObject &json) const
@@ -400,7 +401,7 @@ void PlutoTool::writeAccounts (QJsonObject &json) const
         refs.push_back(o);
     }
     json["Accounts"] = refs;
-    json["AccountNextId"] = QString::number(mAccountNextId);
+    json["AccountNextId"] = (int)mAccountNextId;
 }
 
 void PlutoTool::writeTransactions (QJsonObject &json) const
@@ -413,7 +414,7 @@ void PlutoTool::writeTransactions (QJsonObject &json) const
         refs.push_back(o);
     }
     json["Transaction"] = refs;
-    json["TransactionNextId"] = QString::number(mTransactionNextId);
+    json["TransactionNextId"] = (int)mTransactionNextId;
 }
 
 void PlutoTool::writePayeeTypes (QJsonObject &json) const
@@ -426,7 +427,7 @@ void PlutoTool::writePayeeTypes (QJsonObject &json) const
         refs.push_back(o);
     }
     json["PayeeTypes"] = refs;
-    json["PayeeTypesNextId"] = QString::number(mPayeeTypeNextId);
+    json["PayeeTypesNextId"] = (int)mPayeeTypeNextId;
 }
 
 void PlutoTool::writePayees (QJsonObject &json) const
@@ -439,7 +440,7 @@ void PlutoTool::writePayees (QJsonObject &json) const
         refs.push_back(o);
     }
     json["Payees"] = refs;
-    json["PayeesNextId"] = QString::number(mPayeeNextId);
+    json["PayeesNextId"] = (int)mPayeeNextId;
 }
 
 void PlutoTool::writeWorkOrders (QJsonObject &json) const
@@ -452,7 +453,7 @@ void PlutoTool::writeWorkOrders (QJsonObject &json) const
         refs.push_back(o);
     }
     json["WorkOrders"] = refs;
-    json["WorkOrderNextId"] = QString::number(mWorkOrderNextId);
+    json["WorkOrderNextId"] = (int)mWorkOrderNextId;
 }
 
 bool PlutoTool::read (QFile* file)
