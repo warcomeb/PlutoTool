@@ -54,6 +54,7 @@ public:
     quint32 id (void);
 
     void write (QJsonObject &json) const;
+    void read (const QJsonObject &json);
 
 private:
     quint32   mId;

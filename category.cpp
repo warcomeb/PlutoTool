@@ -77,3 +77,25 @@ void Category::write (QJsonObject &json) const
     json.insert("Category", o);
 }
 
+void Category::read (const QJsonObject &json)
+{
+    if (json.contains("Name") && json["Name"].isString())
+    {
+        mName = json["Name"].toString();
+    }
+
+    if (json.contains("SubName") && json["SubName"].isString())
+    {
+        mSubName = json["SubName"].toString();
+    }
+
+    if (json.contains("Description") && json["Description"].isString())
+    {
+        mDescription = json["Description"].toString();
+    }
+
+    if (json.contains("Id") && json["Id"].isDouble())
+    {
+        mId = json["Id"].toInt();
+    }
+}

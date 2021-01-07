@@ -345,11 +345,117 @@ void PlutoTool::readUsers (const QJsonObject &json)
         mUsers.insert(u.id(),u);
     }
 
-    QJsonValue::Type my = json["UserNextId"].type();
     if (json.contains("UserNextId") && json["UserNextId"].isDouble())
     {
         mUserNextId = json["UserNextId"].toInt();
     }
+}
+
+void PlutoTool::readCategories (const QJsonObject &json)
+{
+    QJsonArray refs = json["Categories"].toArray();
+    for (int index = 0; index < refs.size(); ++index)
+    {
+        QJsonObject userObject = refs[index].toObject();
+        Category c;
+        c.read(userObject["Category"].toObject());
+        mCategories.insert(c.id(),c);
+    }
+
+    if (json.contains("CategoryNextId") && json["CategoryNextId"].isDouble())
+    {
+        mCategoryNextId = json["CategoryNextId"].toInt();
+    }
+}
+
+void PlutoTool::readAccountTypes (const QJsonObject &json)
+{
+    QJsonArray refs = json["AccountTypes"].toArray();
+    for (int index = 0; index < refs.size(); ++index)
+    {
+        QJsonObject userObject = refs[index].toObject();
+        AccountType at;
+        at.read(userObject["AccountType"].toObject());
+        mAccountTypes.insert(at.id(),at);
+    }
+
+    if (json.contains("AccountTypesNextId") && json["AccountTypesNextId"].isDouble())
+    {
+        mAccountTypeNextId = json["AccountTypesNextId"].toInt();
+    }
+}
+
+void PlutoTool::readAccounts (const QJsonObject &json)
+{
+    QJsonArray refs = json["Accounts"].toArray();
+    for (int index = 0; index < refs.size(); ++index)
+    {
+        QJsonObject userObject = refs[index].toObject();
+        Account a;
+        a.read(userObject["Account"].toObject(),mAccountTypes);
+        mAccounts.insert(a.id(),a);
+    }
+
+    if (json.contains("AccountNextId") && json["AccountNextId"].isDouble())
+    {
+        mAccountNextId = json["AccountNextId"].toInt();
+    }
+}
+
+void PlutoTool::readPayeeTypes (const QJsonObject &json)
+{
+    QJsonArray refs = json["PayeeTypes"].toArray();
+    for (int index = 0; index < refs.size(); ++index)
+    {
+        QJsonObject userObject = refs[index].toObject();
+        PayeeType pt;
+        pt.read(userObject["PayeeType"].toObject());
+        mPayeeTypes.insert(pt.id(),pt);
+    }
+
+    if (json.contains("PayeeTypesNextId") && json["PayeeTypesNextId"].isDouble())
+    {
+        mPayeeTypeNextId = json["PayeeTypesNextId"].toInt();
+    }
+}
+
+void PlutoTool::readPayees (const QJsonObject &json)
+{
+    QJsonArray refs = json["Payees"].toArray();
+    for (int index = 0; index < refs.size(); ++index)
+    {
+        QJsonObject userObject = refs[index].toObject();
+        Payee p;
+        p.read(userObject["Payee"].toObject(),mPayeeTypes);
+        mPayees.insert(p.id(),p);
+    }
+
+    if (json.contains("PayeesNextId") && json["PayeesNextId"].isDouble())
+    {
+        mPayeeNextId = json["PayeesNextId"].toInt();
+    }
+}
+
+void PlutoTool::readWorkOrders (const QJsonObject &json)
+{
+    QJsonArray refs = json["WorkOrders"].toArray();
+    for (int index = 0; index < refs.size(); ++index)
+    {
+        QJsonObject userObject = refs[index].toObject();
+        WorkOrder w;
+        w.read(userObject["WorkOrder"].toObject());
+        mWorkOrders.insert(w.id(),w);
+    }
+
+    if (json.contains("WorkOrderNextId") && json["WorkOrderNextId"].isDouble())
+    {
+        mWorkOrderNextId = json["WorkOrderNextId"].toInt();
+    }
+}
+
+void PlutoTool::readTransactions (const QJsonObject &json)
+{
+
 }
 
 void PlutoTool::writeUsers (QJsonObject &json) const
@@ -467,6 +573,9 @@ bool PlutoTool::read (QFile* file)
 
     log.log(QString("Read database: users information..."),LOG_MEDIUM_INFORMATION);
     readUsers(obj);
+
+    log.log(QString("Read database: categories information..."),LOG_MEDIUM_INFORMATION);
+    readCategories(obj);
 
     return true;
 }

@@ -41,6 +41,7 @@ public:
     QString code (void);
 
     void write (QJsonObject &json) const;
+    void read (const QJsonObject &json);
 
 private:
     quint32 mId;

@@ -48,15 +48,22 @@ private:
     bool read (QFile* file);
 
     void readUsers (const QJsonObject &json);
+    void readCategories (const QJsonObject &json);
+    void readAccountTypes (const QJsonObject &json);
+    void readAccounts (const QJsonObject &json);
+    void readPayeeTypes (const QJsonObject &json);
+    void readPayees (const QJsonObject &json);
+    void readWorkOrders (const QJsonObject &json);
+    void readTransactions (const QJsonObject &json);
 
     void writeUsers (QJsonObject &json) const;
+    void writeCategories (QJsonObject &json) const;
     void writeAccountTypes (QJsonObject &json) const;
     void writeAccounts (QJsonObject &json) const;
     void writePayeeTypes (QJsonObject &json) const;
     void writePayees (QJsonObject &json) const;
     void writeWorkOrders (QJsonObject &json) const;
     void writeTransactions (QJsonObject &json) const;
-    void writeCategories (QJsonObject &json) const;
 
     User createUser (quint32 id);
     Transaction createTransaction (quint32 id);

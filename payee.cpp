@@ -19,6 +19,14 @@
  */
 #include "payee.h"
 
+Payee::Payee ():
+    mType(NULL)
+{
+    mName = QString("Undefined");
+    setId(0); // Not valid Id!
+    defaultParams();
+}
+
 Payee::Payee (PayeeType type):
     mType(type)
 {
@@ -80,5 +88,32 @@ void Payee::write (QJsonObject &json) const
     o["Name"]      = mName;
     o["PayeeType"] = (int)mType.id();
 
+    // FIXME
+
     json.insert("Payee", o);
+}
+
+void Payee::read (const QJsonObject &json, QMap<quint32,PayeeType> types)
+{
+    if (json.contains("Code") && json["Code"].isString())
+    {
+        mCode = json["Code"].toString();
+    }
+
+    if (json.contains("Name") && json["Name"].isString())
+    {
+        mName = json["Name"].toString();
+    }
+
+    if (json.contains("PayeeType") && json["PayeeType"].isDouble())
+    {
+        mType = types[json["PayeeType"].toInt()];
+    }
+
+    if (json.contains("Id") && json["Id"].isDouble())
+    {
+        mId = json["Id"].toInt();
+    }
+
+    // FIXME
 }

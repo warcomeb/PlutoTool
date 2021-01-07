@@ -40,6 +40,7 @@ public:
     quint32 id (void) const;
 
     void write (QJsonObject &json) const;
+    void read (const QJsonObject &json);
 
     QString toString (void);
 

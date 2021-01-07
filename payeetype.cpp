@@ -68,3 +68,21 @@ void PayeeType::write (QJsonObject &json) const
 
     json.insert("PayeeType", o);
 }
+
+void PayeeType::read (const QJsonObject &json)
+{
+    if (json.contains("Name") && json["Name"].isString())
+    {
+        mName = json["Name"].toString();
+    }
+
+    if (json.contains("Description") && json["Description"].isString())
+    {
+        mDescription = json["Description"].toString();
+    }
+
+    if (json.contains("Id") && json["Id"].isDouble())
+    {
+        mId = json["Id"].toInt();
+    }
+}

@@ -19,6 +19,16 @@
  */
 #include "account.h"
 
+Account::Account ():
+    mName(""),
+    mNumber(""),
+    mType(NULL),
+    mActive(false),
+    mNote("")
+{
+    setId(0); // Not valid Id!
+}
+
 Account::Account (QString name, QString number, AccountType type, bool active = false):
     mName(name),
     mNumber(number),
@@ -68,4 +78,42 @@ void Account::write (QJsonObject &json) const
     o["Note"]        = mNote;
 
     json.insert("Account", o);
+}
+
+void Account::read (const QJsonObject &json, QMap<quint32,AccountType> types)
+{
+    if (json.contains("Code") && json["Code"].isString())
+    {
+        mCode = json["Code"].toString();
+    }
+
+    if (json.contains("Name") && json["Name"].isString())
+    {
+        mName = json["Name"].toString();
+    }
+
+    if (json.contains("Number") && json["Number"].isString())
+    {
+        mNumber = json["Number"].toString();
+    }
+
+    if (json.contains("AccountType") && json["AccountType"].isDouble())
+    {
+        mType = types[json["AccountType"].toInt()];
+    }
+
+    if (json.contains("Note") && json["Note"].isString())
+    {
+        mNote = json["Note"].toString();
+    }
+
+    if (json.contains("Active") && json["Active"].isBool())
+    {
+        mActive = json["Active"].toBool();
+    }
+
+    if (json.contains("Id") && json["Id"].isDouble())
+    {
+        mId = json["Id"].toInt();
+    }
 }

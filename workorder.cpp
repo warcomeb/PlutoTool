@@ -89,3 +89,36 @@ void WorkOrder::write (QJsonObject &json) const
 
     json.insert("WorkOrder", o);
 }
+
+void WorkOrder::read (const QJsonObject &json)
+{
+    if (json.contains("Code") && json["Code"].isString())
+    {
+        mCode = json["Code"].toString();
+    }
+
+    if (json.contains("Name") && json["Name"].isString())
+    {
+        mName = json["Name"].toString();
+    }
+
+    if (json.contains("Start") && json["Start"].isString())
+    {
+        mStart = QDate::fromString(json["Start"].toString(),"yyyy-MM-dd");
+    }
+
+    if (json.contains("End") && json["End"].isString())
+    {
+        mEnd = QDate::fromString(json["End"].toString(),"yyyy-MM-dd");
+    }
+
+    if (json.contains("Description") && json["Description"].isString())
+    {
+        mDescription = json["Description"].toString();
+    }
+
+    if (json.contains("Id") && json["Id"].isDouble())
+    {
+        mId = json["Id"].toInt();
+    }
+}

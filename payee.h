@@ -29,6 +29,7 @@
 class Payee
 {
 public:
+    Payee ();
     Payee (PayeeType type);
     Payee (QString name, PayeeType type);
 
@@ -42,6 +43,7 @@ public:
     QString code (void);
 
     void write (QJsonObject &json) const;
+    void read (const QJsonObject &json, QMap<quint32,PayeeType> types);
 
 private:
     quint32    mId;
