@@ -57,6 +57,23 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
     const QCommandLineOption helpOption = parser.addHelpOption();
     const QCommandLineOption versionOption = parser.addVersionOption();
 
+    const QCommandLineOption replaceOption(QStringList() << "r" << "replace",
+            QCoreApplication::translate("main", "Replace the current database whether just exist"));
+    parser.addOption(replaceOption);
+
+    const QCommandLineOption uNameOption(QStringList() << "un" << "user-name",
+            QCoreApplication::translate("main", "The <name> of the user to be added"),
+            QCoreApplication::translate("main", "name"));
+    parser.addOption(uNameOption);
+    const QCommandLineOption uSurnameOption(QStringList() << "us" << "user-surname",
+            QCoreApplication::translate("main", "The <surname> of the user to be added"),
+            QCoreApplication::translate("main", "surname"));
+    parser.addOption(uSurnameOption);
+    const QCommandLineOption uUsernameOption(QStringList() << "uu" << "user-username",
+            QCoreApplication::translate("main", "The <username> of the user that operate"),
+            QCoreApplication::translate("main", "username"));
+    parser.addOption(uUsernameOption);
+
     parser.addPositionalArgument("command", QCoreApplication::translate("main", "The command that must be executed."));
     parser.addPositionalArgument("database", QCoreApplication::translate("main", "The Pluto database in JSON format."));
 
@@ -65,6 +82,35 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
         *errorMessage = parser.errorText();
         return CLI_PARSE_RESULT_ERROR;
     }
+
+    // USER options -----------------------------------------------------------
+    if (parser.isSet(uNameOption))
+    {
+        config->uName = parser.value(uNameOption);
+    }
+    else
+    {
+        config->uName = QString::Null();
+    }
+
+    if (parser.isSet(uSurnameOption))
+    {
+        config->uSurname = parser.value(uSurnameOption);
+    }
+    else
+    {
+        config->uSurname = QString::Null();
+    }
+
+    if (parser.isSet(uUsernameOption))
+    {
+        config->uUsername = parser.value(uUsernameOption);
+    }
+    else
+    {
+        config->uUsername = QString::Null();
+    }
+    // ----------------------------------------------------------- USER options
 
     const QStringList positionalArguments = parser.positionalArguments();
     if (positionalArguments.isEmpty())

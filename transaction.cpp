@@ -19,6 +19,19 @@
  */
 #include "transaction.h"
 
+Transaction::Transaction ():
+    mAccountFrom(),
+    mAccountTo(),
+    mPayee(),
+    mType(),
+    mDate(),
+    mAmount(0.0),
+    mWorkOrder(),
+    mCategory()
+{
+
+}
+
 Transaction::Transaction (Account from,
                           Account to,
                           Payee payee,
@@ -66,4 +79,66 @@ void Transaction::write (QJsonObject &json) const
     o["Note"]        = mNote;
 
     json.insert("Account", o);
+}
+
+void Transaction::read (const QJsonObject &json,
+                        QMap<quint32,Account> accounts,
+                        QMap<quint32,Payee> payees,
+                        QMap<quint32,Category> categories,
+                        QMap<quint32,WorkOrder> workorders)
+{
+    if (json.contains("Id") && json["Id"].isDouble())
+    {
+        mId = json["Id"].toInt();
+    }
+
+    if (json.contains("AccountFrom") && json["AccountFrom"].isDouble())
+    {
+        mAccountFrom = accounts[json["AccountFrom"].toInt()];
+    }
+
+    if (json.contains("AccountTo") && json["AccountTo"].isDouble())
+    {
+        mAccountTo = accounts[json["AccountTo"].toInt()];
+    }
+
+    if (json.contains("Payee") && json["Payee"].isDouble())
+    {
+        mPayee = payees[json["Payee"].toInt()];
+    }
+
+    if (json.contains("Amount") && json["Amount"].isDouble())
+    {
+        mAmount = json["Amount"].toDouble();
+    }
+
+    if (json.contains("Type") && json["Type"].isDouble())
+    {
+        mType = (Transaction::Type)json["Type"].toInt();
+    }
+
+    if (json.contains("Category") && json["Category"].isDouble())
+    {
+        mCategory = categories[json["Category"].toInt()];
+    }
+
+    if (json.contains("WorkOrder") && json["WorkOrder"].isDouble())
+    {
+        mWorkOrder = workorders[json["WorkOrder"].toInt()];
+    }
+
+    if (json.contains("Date") && json["Date"].isString())
+    {
+        mDate = QDate::fromString(json["Date"].toString(),"yyyy-MM-dd");
+    }
+
+    if (json.contains("Note") && json["Note"].isString())
+    {
+        mNote = json["Note"].toString();
+    }
+
+    if (json.contains("Checked") && json["Checked"].isBool())
+    {
+        mChecked = json["Checked"].toBool();
+    }
 }

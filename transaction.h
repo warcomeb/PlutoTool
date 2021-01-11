@@ -41,6 +41,7 @@ public:
         TYPE_NEUTRAL = 'n',
     };
 
+    Transaction ();
     Transaction (Account from,
                  Account to,
                  Payee payee,
@@ -54,7 +55,11 @@ public:
     quint32 id (void);
 
     void write (QJsonObject &json) const;
-    void read (const QJsonObject &json);
+    void read (const QJsonObject &json,
+               QMap<quint32,Account> accounts,
+               QMap<quint32,Payee> payees,
+               QMap<quint32,Category> categories,
+               QMap<quint32,WorkOrder> workorders);
 
 private:
     quint32   mId;

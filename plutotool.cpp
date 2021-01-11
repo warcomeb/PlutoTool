@@ -47,19 +47,6 @@ PlutoTool::PlutoTool(Config config):
     executeCommand();
 }
 
-User PlutoTool::createUser (quint32 id)
-{
-    string name, surname;
-    cout << "Adding new user:" << endl;
-    cout << "Insert name: ";
-    getline(cin,name);
-    cout << "Insert Surname: ";
-    getline(cin,surname);
-
-    User u = User(QString(name.c_str()),QString(surname.c_str()),id);
-    return u;
-}
-
 Transaction PlutoTool::createTransaction (quint32 id)
 {
 
@@ -258,8 +245,12 @@ void PlutoTool::executeCommand (void)
         }
 
         log.log(QString("Create first user..."),LOG_IMPORTANT_INFORMATION);
+        if (mConfig.uName.isNull() || mConfig.uSurname.isNull())
+        {
+            // Exit!
+        }
         mUserNextId = 1;
-        User u = createUser(mUserNextId++);
+        User u(mConfig.uName,mConfig.uSurname,mUserNextId++);
         mUsers.insert(u.id(),u);
         log.log(QString("User %1 %2 (%3) has been added!").arg(u.name()).arg(u.surname()).arg(u.code()),LOG_MEDIUM_INFORMATION);
 
@@ -455,7 +446,19 @@ void PlutoTool::readWorkOrders (const QJsonObject &json)
 
 void PlutoTool::readTransactions (const QJsonObject &json)
 {
+    QJsonArray refs = json["Transactions"].toArray();
+    for (int index = 0; index < refs.size(); ++index)
+    {
+        QJsonObject userObject = refs[index].toObject();
+        Transaction t;
+        t.read(userObject["Transaction"].toObject(),mAccounts,mPayees,mCategories,mWorkOrders);
+        mTransactions.insert(t.id(),t);
+    }
 
+    if (json.contains("TransactionNextId") && json["TransactionNextId"].isDouble())
+    {
+        mTransactionNextId = json["TransactionNextId"].toInt();
+    }
 }
 
 void PlutoTool::writeUsers (QJsonObject &json) const
@@ -576,6 +579,24 @@ bool PlutoTool::read (QFile* file)
 
     log.log(QString("Read database: categories information..."),LOG_MEDIUM_INFORMATION);
     readCategories(obj);
+
+    log.log(QString("Read database: accounts type information..."),LOG_MEDIUM_INFORMATION);
+    readAccountTypes(obj);
+
+    log.log(QString("Read database: accounts information..."),LOG_MEDIUM_INFORMATION);
+    readAccounts(obj);
+
+    log.log(QString("Read database: payees type information..."),LOG_MEDIUM_INFORMATION);
+    readPayeeTypes(obj);
+
+    log.log(QString("Read database: payees information..."),LOG_MEDIUM_INFORMATION);
+    readPayees(obj);
+
+    log.log(QString("Read database: work orders information..."),LOG_MEDIUM_INFORMATION);
+    readWorkOrders(obj);
+
+    log.log(QString("Read database: transactions information..."),LOG_MEDIUM_INFORMATION);
+    readTransactions(obj);
 
     return true;
 }

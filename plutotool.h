@@ -65,7 +65,6 @@ private:
     void writeWorkOrders (QJsonObject &json) const;
     void writeTransactions (QJsonObject &json) const;
 
-    User createUser (quint32 id);
     Transaction createTransaction (quint32 id);
 
     void createDefaultAccountType (void);

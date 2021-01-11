@@ -22,6 +22,11 @@ struct Config
     QString database;
 
     Command cmd;
+
+    // User parameters
+    QString uName;
+    QString uSurname;
+    QString uUsername;
 };
 
 
