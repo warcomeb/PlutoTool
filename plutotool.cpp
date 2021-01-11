@@ -227,12 +227,9 @@ void PlutoTool::executeCommand (void)
         QFile data(mConfig.database);
         if (data.exists())
         {
-            string reply;
-            cout << "The database file just exists, would you replace? (y/n)" << endl;
-            getline(cin,reply);
-            if (reply == "n")
+            if (mConfig.replace == false)
             {
-                log.log(QString("FAIL open database file!"),LOG_VIP_INFORMATION);
+                log.log(QString("Database just exist, FAIL open database file!"),LOG_VIP_INFORMATION);
                 return;
             }
         }

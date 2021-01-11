@@ -20,6 +20,7 @@ enum Command
 struct Config
 {
     QString database;
+    bool replace;
 
     Command cmd;
 

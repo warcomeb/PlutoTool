@@ -83,6 +83,15 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
         return CLI_PARSE_RESULT_ERROR;
     }
 
+    if (parser.isSet(replaceOption))
+    {
+        config->replace = true;
+    }
+    else
+    {
+        config->replace = false;
+    }
+
     // USER options -----------------------------------------------------------
     if (parser.isSet(uNameOption))
     {
