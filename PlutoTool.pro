@@ -22,6 +22,7 @@ SOURCES += \
         payee.cpp \
         payeetype.cpp \
         plutotool.cpp \
+        plutotoolreport.cpp \
         transaction.cpp \
         user.cpp \
         utils/wlog.cpp \
@@ -41,6 +42,7 @@ HEADERS += \
     payee.h \
     payeetype.h \
     plutotool.h \
+    plutotoolreport.h \
     transaction.h \
     user.h \
     utils/wlog.h \

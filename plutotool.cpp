@@ -28,6 +28,8 @@
 #include <stdio.h>
 using namespace std;
 
+#include "plutotoolreport.h"
+
 #include <QString>
 #include <QDate>
 #include <QFile>
@@ -45,6 +47,33 @@ PlutoTool::PlutoTool(Config config):
     log.setVerboseLevel(2);
 
     executeCommand();
+}
+
+User PlutoTool::createUser (quint32 id)
+{
+//    string name, surname;
+//    cout << "Adding new user:" << endl;
+//    cout << "Insert name: ";
+//    getline(cin,name);
+//    cout << "Insert Surname: ";
+//    getline(cin,surname);
+
+//    User u = User(QString(name.c_str()),QString(surname.c_str()),id);
+//    return u;
+}
+
+bool PlutoTool::createAccount (quint32 id, Account& a)
+{
+    if ((!mConfig.aName.isNull()) && (!mConfig.aName.isNull()) && (mConfig.aType > 0))
+    {
+        if (mAccountTypes.contains(mConfig.aType))
+        {
+            Account my(mConfig.aName,mConfig.aNumber,mAccountTypes[mConfig.aType],id,true);
+            a = my;
+            return true;
+        }
+    }
+    return false;
 }
 
 Transaction PlutoTool::createTransaction (quint32 id)
@@ -217,7 +246,9 @@ void PlutoTool::executeCommand (void)
         cout << "\r\nCommand list:\r\n";
         cout << "  LIST: this command," << endl;
         cout << "  INIT: initialize new database" << endl;
+        cout << "  ADD-ACCOUNT: Add new account" << endl;
         cout << "  ADD-TRANSACTION: Add new transaction" << endl;
+        cout << "  GET-ACCOUNT: List of all accounts" << endl;
     }
     else if (mConfig.cmd == COMMAND_INIT)
     {
@@ -315,6 +346,60 @@ void PlutoTool::executeCommand (void)
         log.log(QString("Save database..."),LOG_IMPORTANT_INFORMATION);
         save(&data);
         log.log(QString("Save database END!"),LOG_IMPORTANT_INFORMATION);
+    }
+    else if (mConfig.cmd == COMMAND_ADD_ACCOUNT)
+    {
+        cout << "%%%%%%%%%% COMMAND ADD ACCOUNT %%%%%%%%%%" << endl;
+
+        log.log(QString("Check database file: open file..."),LOG_IMPORTANT_INFORMATION);
+        QFile data(mConfig.database);
+        if (openDatabaseFile(data,QIODevice::ReadOnly) == false) return; // FAIL!
+
+        // Read current database status...
+        log.log(QString("Read database..."),LOG_IMPORTANT_INFORMATION);
+        read(&data);
+        closeDatabaseFile(data);
+
+        // Create transaction
+        Account a;
+        if (!createAccount(mAccountNextId++,a))
+        {
+            log.log(QString(PLUTOTOOL_ACCOUNT_FAIL_ADD_NEW_),LOG_VIP_INFORMATION);
+            return;
+        }
+        mAccounts.insert(a.id(),a);
+        log.log(QString("Account %1 has been added!").arg(a.id()),LOG_MEDIUM_INFORMATION);
+
+        // Save the new database...
+        log.log(QString("Save database..."),LOG_IMPORTANT_INFORMATION);
+        if (openDatabaseFile(data,QIODevice::WriteOnly) == false) return; // FAIL!
+        save(&data);
+        closeDatabaseFile(data);
+        log.log(QString("Save database END!"),LOG_IMPORTANT_INFORMATION);
+    }
+    else if (mConfig.cmd == COMMAND_GET_ACCOUNTS)
+    {
+        cout << "%%%%%%%%%% COMMAND GET ACCOUNTS %%%%%%%%%%" << endl;
+
+        log.log(QString("Check database file: open file..."),LOG_IMPORTANT_INFORMATION);
+        QFile data(mConfig.database);
+        if (!data.exists())
+        {
+            log.log(QString("The database doesn't exist!"),LOG_VIP_INFORMATION);
+            return;
+        }
+
+        if (!data.open(QIODevice::ReadOnly))
+        {
+            //TODO: message
+            log.log(QString("FAIL open database file!"),LOG_VIP_INFORMATION);
+            return;
+        }
+
+        // Read current database status...
+        log.log(QString("Read database..."),LOG_IMPORTANT_INFORMATION);
+        read(&data);
+        // TODO
     }
     else if (mConfig.cmd == COMMAND_ERROR)
     {
@@ -632,4 +717,47 @@ bool PlutoTool::save (QFile* file)
 
     file->write(doc.toJson());
     return true;
+}
+
+bool PlutoTool::openDatabaseFile (QFile& db, QIODevice::OpenMode flags, bool checkReplace)
+{
+    WLog& log = WLog::instance();
+    if (flags == QIODevice::ReadOnly)
+    {
+        if (!db.exists())
+        {
+            log.log(QString(PLUTOTOOL_DATABASE_DOESNT_EXIST_),LOG_VIP_INFORMATION);
+            return false;
+        }
+    }
+    else if (flags == QIODevice::WriteOnly)
+    {
+        if (db.exists() && (checkReplace == true))
+        {
+            if (mConfig.replace == false)
+            {
+                log.log(QString(PLUTOTOOL_DATABASE_JUST_EXIST_),LOG_VIP_INFORMATION);
+                return false;
+            }
+        }
+    }
+    else
+    {
+        return false;
+    }
+
+    if (!db.open(flags))
+    {
+        log.log(QString(PLUTOTOOL_DATABASE_CANT_OPEN_),LOG_VIP_INFORMATION);
+        return false;
+    }
+    return true;
+}
+
+bool PlutoTool::closeDatabaseFile (QFile& db)
+{
+    if (db.isOpen())
+    {
+        db.close();
+    }
 }

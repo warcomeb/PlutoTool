@@ -47,6 +47,9 @@ private:
     bool save (QFile *file);
     bool read (QFile* file);
 
+    bool openDatabaseFile (QFile& db, QIODevice::OpenMode flags, bool checkReplace = false);
+    bool closeDatabaseFile (QFile& db);
+
     void readUsers (const QJsonObject &json);
     void readCategories (const QJsonObject &json);
     void readAccountTypes (const QJsonObject &json);
@@ -65,7 +68,10 @@ private:
     void writeWorkOrders (QJsonObject &json) const;
     void writeTransactions (QJsonObject &json) const;
 
+    User createUser (quint32 id);
     Transaction createTransaction (quint32 id);
+    bool createAccount (quint32 id, Account& a);
+//    Account createAccount (quint32 id);
 
     void createDefaultAccountType (void);
     void createDefaultPayeeType (void);

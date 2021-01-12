@@ -49,6 +49,14 @@ Command getCommand (QString cmd)
     {
         return COMMAND_ADD_TRANSACTION;
     }
+    else if ((cmd == "add-account") || (cmd == "ADD-ACCOUNT"))
+    {
+        return COMMAND_ADD_ACCOUNT;
+    }
+    else if ((cmd == "get-accounts") || (cmd == "GET-ACCOUNTS"))
+    {
+        return COMMAND_GET_ACCOUNTS;
+    }
     return COMMAND_ERROR;
 }
 
@@ -73,6 +81,23 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
             QCoreApplication::translate("main", "The <username> of the user that operate"),
             QCoreApplication::translate("main", "username"));
     parser.addOption(uUsernameOption);
+
+    const QCommandLineOption aNameOption(QStringList() << "an" << "account-name",
+            QCoreApplication::translate("main", "The <name> of the account to be added"),
+            QCoreApplication::translate("main", "name"));
+    parser.addOption(aNameOption);
+    const QCommandLineOption aNumberOption(QStringList() << "au" << "account-number",
+            QCoreApplication::translate("main", "The <number> of the account to be added"),
+            QCoreApplication::translate("main", "number"));
+    parser.addOption(aNumberOption);
+    const QCommandLineOption aTypeOption(QStringList() << "at" << "account-type",
+            QCoreApplication::translate("main", "The <type> of the account to be added"),
+            QCoreApplication::translate("main", "type"));
+    parser.addOption(aTypeOption);
+    const QCommandLineOption aNoteOption(QStringList() << "ae" << "account-note",
+            QCoreApplication::translate("main", "The <note> of the account to be added"),
+            QCoreApplication::translate("main", "note"));
+    parser.addOption(aNoteOption);
 
     parser.addPositionalArgument("command", QCoreApplication::translate("main", "The command that must be executed."));
     parser.addPositionalArgument("database", QCoreApplication::translate("main", "The Pluto database in JSON format."));
@@ -120,6 +145,52 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
         config->uUsername = QString::Null();
     }
     // ----------------------------------------------------------- USER options
+
+    // ACCOUNT options --------------------------------------------------------
+    if (parser.isSet(aNameOption))
+    {
+        config->aName = parser.value(aNameOption);
+    }
+    else
+    {
+        config->aName = QString::Null();
+    }
+
+    if (parser.isSet(aNumberOption))
+    {
+        config->aNumber = parser.value(aNumberOption);
+    }
+    else
+    {
+        config->aNumber = QString::Null();
+    }
+
+    if (parser.isSet(aNoteOption))
+    {
+        config->aNote = parser.value(aNoteOption);
+    }
+    else
+    {
+        config->aNote = QString::Null();
+    }
+
+    if (parser.isSet(aTypeOption))
+    {
+        const QString type = parser.value(aTypeOption);
+        bool conversionValue = false;
+        const qint32 typeValue = type.toUInt(&conversionValue);
+        if ((typeValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'at' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->aType = (quint32)typeValue;
+    }
+    else
+    {
+        config->aType = 0;
+    }
+    // -------------------------------------------------------- ACCOUNT options
 
     const QStringList positionalArguments = parser.positionalArguments();
     if (positionalArguments.isEmpty())

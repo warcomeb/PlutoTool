@@ -10,7 +10,12 @@ enum Command
 {
     COMMAND_LIST,
     COMMAND_INIT,
+    COMMAND_ADD_ACCOUNT,
     COMMAND_ADD_TRANSACTION,
+    COMMAND_GET_ACCOUNTS,
+    COMMAND_GET_PAYEES,
+    COMMADN_GET_CATEGORIES,
+    COMMADN_GET_WORKORDERS,
     COMMAND_ERROR,
 };
 
@@ -28,6 +33,12 @@ struct Config
     QString uName;
     QString uSurname;
     QString uUsername;
+
+    // Account parameters
+    QString aName;
+    QString aNumber;
+    QString aNote;
+    quint32 aType;
 };
 
 
