@@ -39,6 +39,17 @@ struct Config
     QString aNumber;
     QString aNote;
     quint32 aType;
+
+    // Transaction parameters
+    quint32 tAccountFrom;
+    quint32 tAccountTo;
+    quint32 tPayee;
+    quint32 tCategory;
+    quint32 tType;
+    quint32 tWorkorder;
+    float   tAmount;
+    QString tDate;
+    QString tNote;
 };
 
 

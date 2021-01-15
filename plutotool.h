@@ -48,7 +48,7 @@ private:
     bool read (QFile* file);
 
     bool openDatabaseFile (QFile& db, QIODevice::OpenMode flags, bool checkReplace = false);
-    bool closeDatabaseFile (QFile& db);
+    void closeDatabaseFile (QFile& db);
 
     void readUsers (const QJsonObject &json);
     void readCategories (const QJsonObject &json);
@@ -69,7 +69,7 @@ private:
     void writeTransactions (QJsonObject &json) const;
 
     User createUser (quint32 id);
-    Transaction createTransaction (quint32 id);
+    bool createTransaction (quint32 id, Transaction& t);
     bool createAccount (quint32 id, Account& a);
 //    Account createAccount (quint32 id);
 

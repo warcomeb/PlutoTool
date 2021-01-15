@@ -99,6 +99,39 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
             QCoreApplication::translate("main", "note"));
     parser.addOption(aNoteOption);
 
+    const QCommandLineOption tAccountFromOption(QStringList() << "tf" << "transaction-accountfrom",
+            QCoreApplication::translate("main", "The <id> number of the account where money comes from"),
+            QCoreApplication::translate("main", "id"));
+    parser.addOption(tAccountFromOption);
+    const QCommandLineOption tAccountToOption(QStringList() << "tt" << "transaction-accountto",
+            QCoreApplication::translate("main", "The <id> number of the account where money will go"),
+            QCoreApplication::translate("main", "id"));
+    parser.addOption(tAccountToOption);
+    const QCommandLineOption tPayeeOption(QStringList() << "tp" << "transaction-payee",
+            QCoreApplication::translate("main", "The <id> of the selected payee"),
+            QCoreApplication::translate("main", "id"));
+    parser.addOption(tPayeeOption);
+    const QCommandLineOption tAmountOption(QStringList() << "ta" << "transaction-amount",
+            QCoreApplication::translate("main", "The <ampount> of transaction"),
+            QCoreApplication::translate("main", "amount"));
+    parser.addOption(tAmountOption);
+    const QCommandLineOption tTypeOption(QStringList() << "ty" << "transaction-type",
+            QCoreApplication::translate("main", "The <type> of transaction: i input, o output, n neutral"),
+            QCoreApplication::translate("main", "type"));
+    parser.addOption(tTypeOption);
+    const QCommandLineOption tCategoryOption(QStringList() << "tc" << "transaction-category",
+            QCoreApplication::translate("main", "The <id> of transaction category"),
+            QCoreApplication::translate("main", "id"));
+    parser.addOption(tCategoryOption);
+    const QCommandLineOption tDateOption(QStringList() << "td" << "transaction-date",
+            QCoreApplication::translate("main", "The <date> of transaction, format is YYYY-MM-DD"),
+            QCoreApplication::translate("main", "date"));
+    parser.addOption(tDateOption);
+    const QCommandLineOption tWorkorderOption(QStringList() << "tw" << "transaction-workorder",
+            QCoreApplication::translate("main", "The workorder <id> to which to associate the transaction"),
+            QCoreApplication::translate("main", "id"));
+    parser.addOption(tWorkorderOption);
+
     parser.addPositionalArgument("command", QCoreApplication::translate("main", "The command that must be executed."));
     parser.addPositionalArgument("database", QCoreApplication::translate("main", "The Pluto database in JSON format."));
 
@@ -145,6 +178,148 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
         config->uUsername = QString::Null();
     }
     // ----------------------------------------------------------- USER options
+
+    // TRANSACTION options ----------------------------------------------------
+    if (parser.isSet(tAccountToOption))
+    {
+        const QString aTo = parser.value(tAccountToOption);
+        bool conversionValue = false;
+        const qint32 aToValue = aTo.toUInt(&conversionValue);
+        if ((aToValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'tt' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->tAccountTo = (quint32)aToValue;
+    }
+    else
+    {
+        config->tAccountTo = 0;
+    }
+
+    if (parser.isSet(tAccountFromOption))
+    {
+        const QString aFrom = parser.value(tAccountFromOption);
+        bool conversionValue = false;
+        const qint32 aFromValue = aFrom.toUInt(&conversionValue);
+        if ((aFromValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'tf' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->tAccountFrom = (quint32)aFromValue;
+    }
+    else
+    {
+        config->tAccountFrom = 0;
+    }
+
+    if (parser.isSet(tPayeeOption))
+    {
+        const QString p = parser.value(tPayeeOption);
+        bool conversionValue = false;
+        const qint32 pValue = p.toUInt(&conversionValue);
+        if ((pValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'tp' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->tPayee = (quint32)pValue;
+    }
+    else
+    {
+        config->tPayee = 0;
+    }
+
+    if (parser.isSet(tWorkorderOption))
+    {
+        const QString w = parser.value(tWorkorderOption);
+        bool conversionValue = false;
+        const qint32 wValue = w.toUInt(&conversionValue);
+        if ((wValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'tw' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->tWorkorder = (quint32)wValue;
+    }
+    else
+    {
+        config->tWorkorder = 0;
+    }
+
+    if (parser.isSet(tCategoryOption))
+    {
+        const QString c = parser.value(tCategoryOption);
+        bool conversionValue = false;
+        const qint32 cValue = c.toUInt(&conversionValue);
+        if ((cValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'tc' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->tCategory = (quint32)cValue;
+    }
+    else
+    {
+        config->tCategory = 0;
+    }
+
+    if (parser.isSet(tAmountOption))
+    {
+        const QString amount = parser.value(tAmountOption);
+        bool conversionValue = false;
+        const float amountValue = amount.toFloat(&conversionValue);
+        if ((amountValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'ta' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->tAmount = (quint32)amountValue;
+    }
+    else
+    {
+        config->tAmount = 0.0f;
+    }
+
+    if (parser.isSet(tTypeOption))
+    {
+        const QString t = parser.value(tTypeOption);
+        if (t.length() == 1)
+        {
+            char c = t.at(0).toLatin1();
+            if ((c == Transaction::TYPE_INPUT)  ||
+                (c == Transaction::TYPE_OUTPUT) ||
+                (c == Transaction::TYPE_NEUTRAL))
+            {
+                config->tType = c;
+            }
+            else
+            {
+                *errorMessage = "Error: Option 'ty' is not valid.";
+                return CLI_PARSE_RESULT_ERROR;
+            }
+        }
+        else
+        {
+            *errorMessage = "Error: Option 'ty' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+    }
+    else
+    {
+        config->tType = Transaction::TYPE_ERROR;
+    }
+
+    if (parser.isSet(tDateOption))
+    {
+        config->tDate = parser.value(tDateOption);
+    }
+    else
+    {
+        config->tDate = QString::Null();
+    }
+    // ---------------------------------------------------- TRANSACTION options
 
     // ACCOUNT options --------------------------------------------------------
     if (parser.isSet(aNameOption))

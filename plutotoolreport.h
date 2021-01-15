@@ -49,4 +49,8 @@ PLUTOTOOL_DEFINE_MESSAGE(PLUTOTOOL_ACCOUNT_FAIL_ADD_NEW_,
                          0x02001,
                          "[02001] Fail add new account, wrong params.")
 
+PLUTOTOOL_DEFINE_MESSAGE(PLUTOTOOL_TRANSACTION_FAIL_ADD_NEW_,
+                         0x03001,
+                         "[03001] Fail add new transaction, wrong params.")
+
 #endif // PLUTOTOOLREPORT_H

@@ -76,9 +76,116 @@ bool PlutoTool::createAccount (quint32 id, Account& a)
     return false;
 }
 
-Transaction PlutoTool::createTransaction (quint32 id)
+bool PlutoTool::createTransaction (quint32 id, Transaction& t)
 {
+    // Check if all values are valid
+    if ((mConfig.tAmount != 0.0f) &&
+        (mConfig.tType != Transaction::TYPE_ERROR) &&
+        (((mConfig.tType == Transaction::TYPE_INPUT) && (mConfig.tAccountTo > 0)) ||
+         ((mConfig.tType == Transaction::TYPE_OUTPUT) && (mConfig.tAccountFrom > 0)) ||
+         ((mConfig.tType == Transaction::TYPE_NEUTRAL) && (mConfig.tAccountTo > 0) && (mConfig.tAccountFrom > 0))) &&
+        /*(mConfig.tPayee > 0) &&*/ (mConfig.tType > 0) && /*(mConfig.tWorkorder > 0) &&*/ (mConfig.tCategory > 0))
+    {
+        Account   aTo;
+        Account   aFrom;
+        Payee     p;
+        WorkOrder w;
+        Category  c;
+        QDate     d;
 
+        if ((mConfig.tType != Transaction::TYPE_INPUT)  &&
+            (mConfig.tType != Transaction::TYPE_OUTPUT) &&
+            (mConfig.tType != Transaction::TYPE_NEUTRAL))
+        {
+            return false;
+        }
+
+        if (mConfig.tAccountTo > 0)
+        {
+            if (mAccounts.contains(mConfig.tAccountTo))
+            {
+                aTo = mAccounts[mConfig.tAccountTo];
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        if (mConfig.tAccountFrom > 0)
+        {
+            if (mAccounts.contains(mConfig.tAccountFrom))
+            {
+                aFrom = mAccounts[mConfig.tAccountFrom];
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // Category
+        if (mConfig.tCategory > 0)
+        {
+            if (mCategories.contains(mConfig.tCategory))
+            {
+                c = mCategories[mConfig.tCategory];
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        if (mConfig.tDate.isNull())
+        {
+            d = QDate::currentDate();
+        }
+        else
+        {
+            d = QDate::fromString(mConfig.tDate,"yyyy-MM-dd");
+        }
+
+        if (mConfig.tPayee > 0)
+        {
+            if (mPayees.contains(mConfig.tPayee))
+            {
+                p = mPayees[mConfig.tPayee];
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            p = mPayees[1]; // Undefined
+        }
+
+        // WorkOrder
+        if (mConfig.tWorkorder > 0)
+        {
+            if (mWorkOrders.contains(mConfig.tWorkorder))
+            {
+                w = mWorkOrders[mConfig.tWorkorder];
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            w = mWorkOrders[1]; // Undefined
+        }
+
+        // Create object!
+        Transaction my(aFrom,aTo,p,d,mConfig.tAmount,c,(Transaction::Type)mConfig.tType,w);
+        my.setId(id);
+        t = my;
+        return true;
+    }
+    return false;
 }
 
 void PlutoTool::createDefaultAccountType (void)
@@ -322,29 +429,28 @@ void PlutoTool::executeCommand (void)
 
         log.log(QString("Check database file: open file..."),LOG_IMPORTANT_INFORMATION);
         QFile data(mConfig.database);
-        if (!data.exists())
-        {
-            log.log(QString("The database doesn't exist!"),LOG_VIP_INFORMATION);
-            return;
-        }
-
-        if (!data.open(QIODevice::ReadWrite))
-        {
-            //TODO: message
-            log.log(QString("FAIL open database file!"),LOG_VIP_INFORMATION);
-            return;
-        }
+        if (openDatabaseFile(data,QIODevice::ReadOnly) == false) return; // FAIL!
 
         // Read current database status...
         log.log(QString("Read database..."),LOG_IMPORTANT_INFORMATION);
         read(&data);
+        closeDatabaseFile(data);
+
         // Create transaction
-        Transaction t = createTransaction(mTransactionNextId++);
+        Transaction t;
+        if (!createTransaction(mTransactionNextId++,t))
+        {
+            log.log(QString(PLUTOTOOL_TRANSACTION_FAIL_ADD_NEW_),LOG_VIP_INFORMATION);
+            return;
+        }
         mTransactions.insert(t.id(),t);
         log.log(QString("Transaction %1 has been added!").arg(t.id()),LOG_MEDIUM_INFORMATION);
+
         // Save the new database...
         log.log(QString("Save database..."),LOG_IMPORTANT_INFORMATION);
+        if (openDatabaseFile(data,QIODevice::WriteOnly) == false) return; // FAIL!
         save(&data);
+        closeDatabaseFile(data);
         log.log(QString("Save database END!"),LOG_IMPORTANT_INFORMATION);
     }
     else if (mConfig.cmd == COMMAND_ADD_ACCOUNT)
@@ -360,7 +466,7 @@ void PlutoTool::executeCommand (void)
         read(&data);
         closeDatabaseFile(data);
 
-        // Create transaction
+        // Create accout
         Account a;
         if (!createAccount(mAccountNextId++,a))
         {
@@ -604,7 +710,7 @@ void PlutoTool::writeTransactions (QJsonObject &json) const
         t.write(o);
         refs.push_back(o);
     }
-    json["Transaction"] = refs;
+    json["Transactions"] = refs;
     json["TransactionNextId"] = (int)mTransactionNextId;
 }
 
@@ -754,7 +860,7 @@ bool PlutoTool::openDatabaseFile (QFile& db, QIODevice::OpenMode flags, bool che
     return true;
 }
 
-bool PlutoTool::closeDatabaseFile (QFile& db)
+void PlutoTool::closeDatabaseFile (QFile& db)
 {
     if (db.isOpen())
     {

@@ -78,7 +78,7 @@ void Transaction::write (QJsonObject &json) const
     o["Checked"]     = mChecked;
     o["Note"]        = mNote;
 
-    json.insert("Account", o);
+    json.insert("Transaction", o);
 }
 
 void Transaction::read (const QJsonObject &json,

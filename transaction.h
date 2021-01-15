@@ -36,6 +36,7 @@ public:
 
     enum Type
     {
+        TYPE_ERROR   = '\0',
         TYPE_INPUT   = 'i',
         TYPE_OUTPUT  = 'o',
         TYPE_NEUTRAL = 'n',
