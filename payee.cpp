@@ -43,6 +43,14 @@ Payee::Payee (QString name, PayeeType type):
     defaultParams();
 }
 
+Payee::Payee (QString name, PayeeType type, quint32 id):
+    mName(name),
+    mType(type)
+{
+    setId(id);
+    defaultParams();
+}
+
 void Payee::defaultParams (void)
 {
     mEmail = QString("-");

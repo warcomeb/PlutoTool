@@ -33,7 +33,9 @@ public:
     PayeeType (QString name, quint32 id);
 
     QString name (void);
+
     QString description (void);
+    void setDescription (QString desc);
 
     void setId (quint32 id);
     quint32 id (void) const;

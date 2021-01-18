@@ -11,6 +11,10 @@ enum Command
     COMMAND_LIST,
     COMMAND_INIT,
     COMMAND_ADD_ACCOUNT,
+    COMMAND_ADD_PAYEE,
+    COMMAND_ADD_PAYEETYPE,
+    COMMAND_ADD_CATEGORY,
+    COMMAND_ADD_WORKORDER,
     COMMAND_ADD_TRANSACTION,
     COMMAND_GET_ACCOUNTS,
     COMMAND_GET_PAYEES,
@@ -39,6 +43,14 @@ struct Config
     QString aNumber;
     QString aNote;
     quint32 aType;
+
+    // Payee parameters
+    QString pName;
+    quint32 pType;
+
+    // PayeeType parameters
+    QString ptName;
+    QString ptDescription;
 
     // Transaction parameters
     quint32 tAccountFrom;

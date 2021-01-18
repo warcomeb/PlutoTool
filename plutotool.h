@@ -71,7 +71,8 @@ private:
     User createUser (quint32 id);
     bool createTransaction (quint32 id, Transaction& t);
     bool createAccount (quint32 id, Account& a);
-//    Account createAccount (quint32 id);
+    bool createPayee (quint32 id, Payee& p);
+    bool createPayeeType (quint32 id, PayeeType& pt);
 
     void createDefaultAccountType (void);
     void createDefaultPayeeType (void);

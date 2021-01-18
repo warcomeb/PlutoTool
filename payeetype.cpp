@@ -43,6 +43,11 @@ QString PayeeType::name (void)
     return mName;
 }
 
+void PayeeType::setDescription (QString desc)
+{
+    mDescription = desc;
+}
+
 QString PayeeType::description (void)
 {
     return mDescription;

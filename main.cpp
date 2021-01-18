@@ -132,6 +132,24 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
             QCoreApplication::translate("main", "id"));
     parser.addOption(tWorkorderOption);
 
+    const QCommandLineOption pNameOption(QStringList() << "pn" << "payee-name",
+            QCoreApplication::translate("main", "The <name> of the payee to be added"),
+            QCoreApplication::translate("main", "name"));
+    parser.addOption(pNameOption);
+    const QCommandLineOption pTypeOption(QStringList() << "pt" << "payee-type",
+            QCoreApplication::translate("main", "The <type> of the payee to be added"),
+            QCoreApplication::translate("main", "type"));
+    parser.addOption(pTypeOption);
+
+    const QCommandLineOption ptNameOption(QStringList() << "ptn" << "payeetype-name",
+            QCoreApplication::translate("main", "The <name> of the payee type to be added"),
+            QCoreApplication::translate("main", "name"));
+    parser.addOption(ptNameOption);
+    const QCommandLineOption ptDescriptionOption(QStringList() << "ptd" << "payeetype-desc",
+            QCoreApplication::translate("main", "The <description> of the payee type to be added"),
+            QCoreApplication::translate("main", "description"));
+    parser.addOption(ptDescriptionOption);
+
     parser.addPositionalArgument("command", QCoreApplication::translate("main", "The command that must be executed."));
     parser.addPositionalArgument("database", QCoreApplication::translate("main", "The Pluto database in JSON format."));
 
@@ -178,6 +196,55 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
         config->uUsername = QString::Null();
     }
     // ----------------------------------------------------------- USER options
+
+    // PAYEE options ----------------------------------------------------------
+    if (parser.isSet(pNameOption))
+    {
+        config->pName = parser.value(pNameOption);
+    }
+    else
+    {
+        config->pName = QString::Null();
+    }
+
+    if (parser.isSet(pTypeOption))
+    {
+        const QString type = parser.value(pTypeOption);
+        bool conversionValue = false;
+        const qint32 typeValue = type.toUInt(&conversionValue);
+        if ((typeValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'pt' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->pType = (quint32)typeValue;
+    }
+    else
+    {
+        config->pType = 0;
+    }
+    // ---------------------------------------------------------- PAYEE options
+
+    // PAYEE TYPE options -----------------------------------------------------
+    if (parser.isSet(ptNameOption))
+    {
+        config->ptName = parser.value(ptNameOption);
+    }
+    else
+    {
+        config->ptName = QString::Null();
+    }
+
+    if (parser.isSet(ptDescriptionOption))
+    {
+        config->ptDescription = parser.value(ptDescriptionOption);
+    }
+    else
+    {
+        config->ptDescription = QString::Null();
+    }
+    // ----------------------------------------------------- PAYEE TYPE options
+
 
     // TRANSACTION options ----------------------------------------------------
     if (parser.isSet(tAccountToOption))

@@ -53,4 +53,12 @@ PLUTOTOOL_DEFINE_MESSAGE(PLUTOTOOL_TRANSACTION_FAIL_ADD_NEW_,
                          0x03001,
                          "[03001] Fail add new transaction, wrong params.")
 
+PLUTOTOOL_DEFINE_MESSAGE(PLUTOTOOL_PAYEE_FAIL_ADD_NEW_,
+                         0x04001,
+                         "[04001] Fail add new payee, wrong params.")
+
+PLUTOTOOL_DEFINE_MESSAGE(PLUTOTOOL_PAYEETYPE_FAIL_ADD_NEW_,
+                         0x05001,
+                         "[05001] Fail add new payee type, wrong params.")
+
 #endif // PLUTOTOOLREPORT_H

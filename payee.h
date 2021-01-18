@@ -32,6 +32,7 @@ public:
     Payee ();
     Payee (PayeeType type);
     Payee (QString name, PayeeType type);
+    Payee (QString name, PayeeType type, quint32 id);
 
     void defaultParams (void);
 
