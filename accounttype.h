@@ -33,6 +33,8 @@ public:
     AccountType (QString name, quint32 id);
 
     QString name (void);
+
+    void setDescription (QString desc);
     QString description (void);
 
     void setId (quint32 id);

@@ -26,13 +26,6 @@
    extern const char id[];
 #endif
 
-/* List of codes associated at each class/file.
- *
- * 01 - PlutoTool
- * 02 - Account
- * 03 - ...
- */
-
 PLUTOTOOL_DEFINE_MESSAGE(PLUTOTOOL_DATABASE_DOESNT_EXIST_,
                          0x01001,
                          "[01001] The database doesn\'t exist!")
@@ -60,5 +53,17 @@ PLUTOTOOL_DEFINE_MESSAGE(PLUTOTOOL_PAYEE_FAIL_ADD_NEW_,
 PLUTOTOOL_DEFINE_MESSAGE(PLUTOTOOL_PAYEETYPE_FAIL_ADD_NEW_,
                          0x05001,
                          "[05001] Fail add new payee type, wrong params.")
+
+PLUTOTOOL_DEFINE_MESSAGE(PLUTOTOOL_ACCOUNTTYPE_FAIL_ADD_NEW_,
+                         0x06001,
+                         "[06001] Fail add new account type, wrong params.")
+
+PLUTOTOOL_DEFINE_MESSAGE(PLUTOTOOL_USER_FAIL_ADD_NEW_,
+                         0x07001,
+                         "[07001] Fail add new user, wrong params.")
+
+PLUTOTOOL_DEFINE_MESSAGE(PLUTOTOOL_WORKORDER_FAIL_ADD_NEW_,
+                         0x08001,
+                         "[08001] Fail add new workorder, wrong params.")
 
 #endif // PLUTOTOOLREPORT_H

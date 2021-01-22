@@ -43,6 +43,11 @@ QString AccountType::name (void)
     return mName;
 }
 
+void AccountType::setDescription (QString desc)
+{
+    mDescription = desc;
+}
+
 QString AccountType::description (void)
 {
     return mDescription;

@@ -30,8 +30,8 @@ class WorkOrder
 public:
     WorkOrder ();
     WorkOrder (QString name, QDate start, QDate end);
-    WorkOrder (QString name, QString description, QDate start, QDate end);
-    WorkOrder (QString name, QString description, QDate start, QDate end, quint32 id);
+//    WorkOrder (QString name, QDate start, QDate end);
+    WorkOrder (QString name, QDate start, QDate end, quint32 id);
 
     QString name (void);
 
@@ -39,6 +39,8 @@ public:
     quint32 id (void) const;
 
     QString code (void);
+
+    void setDescription (QString desc);
 
     void write (QJsonObject &json) const;
     void read (const QJsonObject &json);

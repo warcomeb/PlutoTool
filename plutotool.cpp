@@ -38,7 +38,7 @@ using namespace std;
 #include <QJsonDocument>
 #include <QJsonArray>
 
-PlutoTool::PlutoTool(Config config):
+PlutoTool::PlutoTool (Config config):
     mConfig(config)
 {
     WLog& log = WLog::instance();
@@ -49,17 +49,15 @@ PlutoTool::PlutoTool(Config config):
     executeCommand();
 }
 
-User PlutoTool::createUser (quint32 id)
+bool PlutoTool::createUser (quint32 id, User& u)
 {
-//    string name, surname;
-//    cout << "Adding new user:" << endl;
-//    cout << "Insert name: ";
-//    getline(cin,name);
-//    cout << "Insert Surname: ";
-//    getline(cin,surname);
-
-//    User u = User(QString(name.c_str()),QString(surname.c_str()),id);
-//    return u;
+    if ((!mConfig.uName.isNull()) && (!mConfig.uSurname.isNull()))
+    {
+        User my(mConfig.uName,mConfig.uSurname,id);
+        u = my;
+        return true;
+    }
+    return false;
 }
 
 bool PlutoTool::createAccount (quint32 id, Account& a)
@@ -72,6 +70,22 @@ bool PlutoTool::createAccount (quint32 id, Account& a)
             a = my;
             return true;
         }
+    }
+    return false;
+}
+
+bool PlutoTool::createAccountType (quint32 id, AccountType& at)
+{
+    if (!mConfig.atName.isNull())
+    {
+        AccountType my(mConfig.atName,id);
+        at = my;
+
+        if (!mConfig.atDescription.isNull())
+        {
+            at.setDescription(mConfig.atDescription);
+        }
+        return true;
     }
     return false;
 }
@@ -100,6 +114,38 @@ bool PlutoTool::createPayeeType (quint32 id, PayeeType& pt)
         if (!mConfig.ptDescription.isNull())
         {
             pt.setDescription(mConfig.ptDescription);
+        }
+        return true;
+    }
+    return false;
+}
+
+bool PlutoTool::createWorkOrder (quint32 id, WorkOrder& w)
+{
+    if (!mConfig.wName.isNull() && !mConfig.wEnd.isNull())
+    {
+        QDate dStart;
+        QDate dEnd;
+
+        dEnd = QDate::fromString(mConfig.wEnd,"yyyy-MM-dd");
+        if (!dEnd.isValid()) return false;
+
+        if (mConfig.wStart.isNull())
+        {
+            dStart = QDate::currentDate();
+        }
+        else
+        {
+            dStart = QDate::fromString(mConfig.wStart,"yyyy-MM-dd");
+            if (!dStart.isValid()) return false;
+        }
+
+        WorkOrder my(mConfig.wName,dStart,dEnd,id);
+        w = my;
+
+        if (!mConfig.wDescription.isNull())
+        {
+            w.setDescription(mConfig.wDescription);
         }
         return true;
     }
@@ -174,6 +220,7 @@ bool PlutoTool::createTransaction (quint32 id, Transaction& t)
         else
         {
             d = QDate::fromString(mConfig.tDate,"yyyy-MM-dd");
+            if (!d.isValid()) return false;
         }
 
         if (mConfig.tPayee > 0)
@@ -415,7 +462,8 @@ void PlutoTool::executeCommand (void)
             // Exit!
         }
         mUserNextId = 1;
-        User u(mConfig.uName,mConfig.uSurname,mUserNextId++);
+        User u;
+        createUser(mUserNextId,u);
         mUsers.insert(u.id(),u);
         log.log(QString("User %1 %2 (%3) has been added!").arg(u.name()).arg(u.surname()).arg(u.code()),LOG_MEDIUM_INFORMATION);
 
@@ -451,6 +499,36 @@ void PlutoTool::executeCommand (void)
 
         log.log(QString("Save database..."),LOG_IMPORTANT_INFORMATION);
         save(&data);
+        log.log(QString("Save database END!"),LOG_IMPORTANT_INFORMATION);
+    }
+    else if (mConfig.cmd == COMMAND_ADD_USER)
+    {
+        cout << "%%%%%%%%%% COMMAND ADD USER %%%%%%%%%%" << endl;
+
+        log.log(QString("Check database file: open file..."),LOG_IMPORTANT_INFORMATION);
+        QFile data(mConfig.database);
+        if (openDatabaseFile(data,QIODevice::ReadOnly) == false) return; // FAIL!
+
+        // Read current database status...
+        log.log(QString("Read database..."),LOG_IMPORTANT_INFORMATION);
+        read(&data);
+        closeDatabaseFile(data);
+
+        // Create user
+        User u;
+        if (!createUser(mUserNextId++,u))
+        {
+            log.log(QString(PLUTOTOOL_USER_FAIL_ADD_NEW_),LOG_VIP_INFORMATION);
+            return;
+        }
+        mUsers.insert(u.id(),u);
+        log.log(QString("User %1 %2 (%3) has been added!").arg(u.name()).arg(u.surname()).arg(u.code()),LOG_MEDIUM_INFORMATION);
+
+        // Save the new database....
+        log.log(QString("Save database..."),LOG_IMPORTANT_INFORMATION);
+        if (openDatabaseFile(data,QIODevice::WriteOnly) == false) return; // FAIL!
+        save(&data);
+        closeDatabaseFile(data);
         log.log(QString("Save database END!"),LOG_IMPORTANT_INFORMATION);
     }
     else if (mConfig.cmd == COMMAND_ADD_TRANSACTION)
@@ -513,6 +591,36 @@ void PlutoTool::executeCommand (void)
         closeDatabaseFile(data);
         log.log(QString("Save database END!"),LOG_IMPORTANT_INFORMATION);
     }
+    else if (mConfig.cmd == COMMAND_ADD_ACCOUNTTYPE)
+    {
+        cout << "%%%%%%%%%% COMMAND ADD ACCOUNT TYPE %%%%%%%%%%" << endl;
+
+        log.log(QString("Check database file: open file..."),LOG_IMPORTANT_INFORMATION);
+        QFile data(mConfig.database);
+        if (openDatabaseFile(data,QIODevice::ReadOnly) == false) return; // FAIL!
+
+        // Read current database status...
+        log.log(QString("Read database..."),LOG_IMPORTANT_INFORMATION);
+        read(&data);
+        closeDatabaseFile(data);
+
+        // Create payee
+        AccountType at;
+        if (!createAccountType(mAccountTypeNextId++,at))
+        {
+            log.log(QString(PLUTOTOOL_ACCOUNTTYPE_FAIL_ADD_NEW_),LOG_VIP_INFORMATION);
+            return;
+        }
+        mAccountTypes.insert(at.id(),at);
+        log.log(QString("Account Type %1 has been added!").arg(at.id()),LOG_MEDIUM_INFORMATION);
+
+        // Save the new database....
+        log.log(QString("Save database..."),LOG_IMPORTANT_INFORMATION);
+        if (openDatabaseFile(data,QIODevice::WriteOnly) == false) return; // FAIL!
+        save(&data);
+        closeDatabaseFile(data);
+        log.log(QString("Save database END!"),LOG_IMPORTANT_INFORMATION);
+    }
     else if (mConfig.cmd == COMMAND_ADD_PAYEE)
     {
         cout << "%%%%%%%%%% COMMAND ADD PAYEE %%%%%%%%%%" << endl;
@@ -565,6 +673,36 @@ void PlutoTool::executeCommand (void)
         }
         mPayeeTypes.insert(pt.id(),pt);
         log.log(QString("Payee Type %1 has been added!").arg(pt.id()),LOG_MEDIUM_INFORMATION);
+
+        // Save the new database....
+        log.log(QString("Save database..."),LOG_IMPORTANT_INFORMATION);
+        if (openDatabaseFile(data,QIODevice::WriteOnly) == false) return; // FAIL!
+        save(&data);
+        closeDatabaseFile(data);
+        log.log(QString("Save database END!"),LOG_IMPORTANT_INFORMATION);
+    }
+    else if (mConfig.cmd == COMMAND_ADD_WORKORDER)
+    {
+        cout << "%%%%%%%%%% COMMAND ADD WORKORDER %%%%%%%%%%" << endl;
+
+        log.log(QString("Check database file: open file..."),LOG_IMPORTANT_INFORMATION);
+        QFile data(mConfig.database);
+        if (openDatabaseFile(data,QIODevice::ReadOnly) == false) return; // FAIL!
+
+        // Read current database status...
+        log.log(QString("Read database..."),LOG_IMPORTANT_INFORMATION);
+        read(&data);
+        closeDatabaseFile(data);
+
+        // Create workorder
+        WorkOrder w;
+        if (!createWorkOrder(mWorkOrderNextId++,w))
+        {
+            log.log(QString(PLUTOTOOL_WORKORDER_FAIL_ADD_NEW_),LOG_VIP_INFORMATION);
+            return;
+        }
+        mWorkOrders.insert(w.id(),w);
+        log.log(QString("WorkOrder %1 has been added!").arg(w.id()),LOG_MEDIUM_INFORMATION);
 
         // Save the new database....
         log.log(QString("Save database..."),LOG_IMPORTANT_INFORMATION);

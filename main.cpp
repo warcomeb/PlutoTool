@@ -53,6 +53,26 @@ Command getCommand (QString cmd)
     {
         return COMMAND_ADD_ACCOUNT;
     }
+    else if ((cmd == "add-user") || (cmd == "ADD-USER"))
+    {
+        return COMMAND_ADD_USER;
+    }
+    else if ((cmd == "add-accounttype") || (cmd == "ADD-ACCOUNTTYPE"))
+    {
+        return COMMAND_ADD_ACCOUNTTYPE;
+    }
+    else if ((cmd == "add-payee") || (cmd == "ADD-PAYEE"))
+    {
+        return COMMAND_ADD_PAYEE;
+    }
+    else if ((cmd == "add-payeetype") || (cmd == "ADD-PAYEETYPE"))
+    {
+        return COMMAND_ADD_PAYEETYPE;
+    }
+    else if ((cmd == "add-workorder") || (cmd == "ADD-WORKORDER"))
+    {
+        return COMMAND_ADD_WORKORDER;
+    }
     else if ((cmd == "get-accounts") || (cmd == "GET-ACCOUNTS"))
     {
         return COMMAND_GET_ACCOUNTS;
@@ -98,6 +118,15 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
             QCoreApplication::translate("main", "The <note> of the account to be added"),
             QCoreApplication::translate("main", "note"));
     parser.addOption(aNoteOption);
+
+    const QCommandLineOption atNameOption(QStringList() << "atn" << "accounttype-name",
+            QCoreApplication::translate("main", "The <name> of the account type to be added"),
+            QCoreApplication::translate("main", "name"));
+    parser.addOption(atNameOption);
+    const QCommandLineOption atDescriptionOption(QStringList() << "atd" << "accounttype-desc",
+            QCoreApplication::translate("main", "The <description> of the account type to be added"),
+            QCoreApplication::translate("main", "description"));
+    parser.addOption(atDescriptionOption);
 
     const QCommandLineOption tAccountFromOption(QStringList() << "tf" << "transaction-accountfrom",
             QCoreApplication::translate("main", "The <id> number of the account where money comes from"),
@@ -149,6 +178,23 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
             QCoreApplication::translate("main", "The <description> of the payee type to be added"),
             QCoreApplication::translate("main", "description"));
     parser.addOption(ptDescriptionOption);
+
+    const QCommandLineOption wNameOption(QStringList() << "wn" << "workorder-name",
+            QCoreApplication::translate("main", "The <name> of the workorder to be added"),
+            QCoreApplication::translate("main", "name"));
+    parser.addOption(wNameOption);
+    const QCommandLineOption wDescriptionOption(QStringList() << "wd" << "workorder-desc",
+            QCoreApplication::translate("main", "The <description> of the payee type to be added"),
+            QCoreApplication::translate("main", "description"));
+    parser.addOption(wDescriptionOption);
+    const QCommandLineOption wStartDateOption(QStringList() << "ws" << "workorder-start",
+            QCoreApplication::translate("main", "The start <date> of workorder, format is YYYY-MM-DD"),
+            QCoreApplication::translate("main", "date"));
+    parser.addOption(wStartDateOption);
+    const QCommandLineOption wEndDateOption(QStringList() << "we" << "workorder-end",
+            QCoreApplication::translate("main", "The end <date> of workorder, format is YYYY-MM-DD"),
+            QCoreApplication::translate("main", "date"));
+    parser.addOption(wEndDateOption);
 
     parser.addPositionalArgument("command", QCoreApplication::translate("main", "The command that must be executed."));
     parser.addPositionalArgument("database", QCoreApplication::translate("main", "The Pluto database in JSON format."));
@@ -433,6 +479,64 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
         config->aType = 0;
     }
     // -------------------------------------------------------- ACCOUNT options
+
+    // ACCOUNT TYPE options ---------------------------------------------------
+    if (parser.isSet(atNameOption))
+    {
+        config->atName = parser.value(atNameOption);
+    }
+    else
+    {
+        config->atName = QString::Null();
+    }
+
+    if (parser.isSet(atDescriptionOption))
+    {
+        config->atDescription = parser.value(atDescriptionOption);
+    }
+    else
+    {
+        config->atDescription = QString::Null();
+    }
+    // -------------------------------------------------- ACCOUNT TYPE options
+
+    // WORKORDER options -----------------------------------------------------
+    if (parser.isSet(wNameOption))
+    {
+        config->wName = parser.value(wNameOption);
+    }
+    else
+    {
+        config->wName = QString::Null();
+    }
+
+    if (parser.isSet(wDescriptionOption))
+    {
+        config->wDescription = parser.value(wDescriptionOption);
+    }
+    else
+    {
+        config->wDescription = QString::Null();
+    }
+
+    if (parser.isSet(wStartDateOption))
+    {
+        config->wStart = parser.value(wStartDateOption);
+    }
+    else
+    {
+        config->wStart = QString::Null();
+    }
+
+    if (parser.isSet(wEndDateOption))
+    {
+        config->wEnd = parser.value(wEndDateOption);
+    }
+    else
+    {
+        config->wEnd = QString::Null();
+    }
+    // ----------------------------------------------------- WORKORDER options
 
     const QStringList positionalArguments = parser.positionalArguments();
     if (positionalArguments.isEmpty())

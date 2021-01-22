@@ -37,18 +37,18 @@ WorkOrder::WorkOrder (QString name, QDate start, QDate end):
     setId(0); // Not valid Id!
 }
 
-WorkOrder::WorkOrder (QString name, QString description, QDate start, QDate end):
-    mName(name),
-    mDescription(description),
-    mStart(start),
-    mEnd(end)
-{
-    setId(0); // Not valid Id!
-}
+//WorkOrder::WorkOrder (QString name, QString description, QDate start, QDate end):
+//    mName(name),
+//    mDescription(description),
+//    mStart(start),
+//    mEnd(end)
+//{
+//    setId(0); // Not valid Id!
+//}
 
-WorkOrder::WorkOrder (QString name, QString description, QDate start, QDate end, quint32 id):
+WorkOrder::WorkOrder (QString name, QDate start, QDate end, quint32 id):
     mName(name),
-    mDescription(description),
+    mDescription(""),
     mStart(start),
     mEnd(end)
 {
@@ -74,6 +74,11 @@ quint32 WorkOrder::id (void) const
 QString WorkOrder::code (void)
 {
     return mCode;
+}
+
+void WorkOrder::setDescription (QString desc)
+{
+    mDescription = desc;
 }
 
 void WorkOrder::write (QJsonObject &json) const

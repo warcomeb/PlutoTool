@@ -68,11 +68,13 @@ private:
     void writeWorkOrders (QJsonObject &json) const;
     void writeTransactions (QJsonObject &json) const;
 
-    User createUser (quint32 id);
+    bool createUser (quint32 id, User &u);
     bool createTransaction (quint32 id, Transaction& t);
     bool createAccount (quint32 id, Account& a);
+    bool createAccountType (quint32 id, AccountType& at);
     bool createPayee (quint32 id, Payee& p);
     bool createPayeeType (quint32 id, PayeeType& pt);
+    bool createWorkOrder (quint32 id, WorkOrder& w);
 
     void createDefaultAccountType (void);
     void createDefaultPayeeType (void);
