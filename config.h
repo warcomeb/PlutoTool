@@ -19,6 +19,7 @@ enum Command
     COMMAND_ADD_CATEGORY,
     COMMAND_ADD_WORKORDER,
     COMMAND_ADD_TRANSACTION,
+    COMMAND_ADD_SCHEDULED,
 
     COMMAND_GET_ACCOUNTS,
     COMMAND_GET_PAYEES,
@@ -71,6 +72,15 @@ struct Config
     float   tAmount;
     QString tDate;
     QString tNote;
+
+    // Scheduled parameters
+    quint32 sPayee;
+    quint32 sCategory;
+    quint32 sWorkorder;
+    float   sAmount;
+    QString sDeadline;
+    QString sNote;
+    bool    sPaid;
 
     // WorkOrder parameters
     QString wName;

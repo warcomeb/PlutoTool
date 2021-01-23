@@ -66,4 +66,8 @@ PLUTOTOOL_DEFINE_MESSAGE(PLUTOTOOL_WORKORDER_FAIL_ADD_NEW_,
                          0x08001,
                          "[08001] Fail add new workorder, wrong params.")
 
+PLUTOTOOL_DEFINE_MESSAGE(PLUTOTOOL_SCHEDULED_FAIL_ADD_NEW_,
+                         0x09001,
+                         "[09001] Fail add new scheduled, wrong params.")
+
 #endif // PLUTOTOOLREPORT_H

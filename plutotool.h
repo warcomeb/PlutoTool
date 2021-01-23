@@ -35,6 +35,7 @@
 #include "payeetype.h"
 #include "transaction.h"
 #include "category.h"
+#include "scheduled.h"
 
 class PlutoTool
 {
@@ -58,6 +59,7 @@ private:
     void readPayees (const QJsonObject &json);
     void readWorkOrders (const QJsonObject &json);
     void readTransactions (const QJsonObject &json);
+    void readScheduled (const QJsonObject &json);
 
     void writeUsers (QJsonObject &json) const;
     void writeCategories (QJsonObject &json) const;
@@ -67,6 +69,7 @@ private:
     void writePayees (QJsonObject &json) const;
     void writeWorkOrders (QJsonObject &json) const;
     void writeTransactions (QJsonObject &json) const;
+    void writeScheduled (QJsonObject &json) const;
 
     bool createUser (quint32 id, User &u);
     bool createTransaction (quint32 id, Transaction& t);
@@ -75,6 +78,7 @@ private:
     bool createPayee (quint32 id, Payee& p);
     bool createPayeeType (quint32 id, PayeeType& pt);
     bool createWorkOrder (quint32 id, WorkOrder& w);
+    bool createScheduled (quint32 id, Scheduled& s);
 
     void createDefaultAccountType (void);
     void createDefaultPayeeType (void);
@@ -105,6 +109,9 @@ private:
 
     QMap<quint32,Transaction> mTransactions;
     quint32                   mTransactionNextId;
+
+    QMap<quint32,Scheduled>   mScheduled;
+    quint32                   mScheduledNextId;
 };
 
 #endif // PLUTOTOOL_H
