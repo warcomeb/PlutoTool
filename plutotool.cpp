@@ -94,7 +94,7 @@ bool PlutoTool::createPayee (quint32 id, Payee& p)
 {
     if ((!mConfig.pName.isNull()) && (mConfig.pType > 0))
     {
-        if (mPayeeTypes.contains(mConfig.aType))
+        if (mPayeeTypes.contains(mConfig.pType))
         {
             Payee my(mConfig.pName,mPayeeTypes[mConfig.pType],id);
             p = my;
@@ -270,31 +270,27 @@ bool PlutoTool::createScheduled (quint32 id, Scheduled &s)
     // Check if all values are valid
     if ((mConfig.sAmount != 0.0f) &&
         (mConfig.sPayee > 0) &&
-        (mConfig.sDeadline > 0) &&
-        (mConfig.tCategory > 0))
+        (!mConfig.sDeadline.isNull()) &&
+        (mConfig.sCategory > 0))
     {
         Payee     p;
         WorkOrder w;
         Category  c;
         QDate     d;
 
-        if (mCategories.contains(mConfig.tCategory))
+        if (mCategories.contains(mConfig.sCategory))
         {
-            c = mCategories[mConfig.tCategory];
+            c = mCategories[mConfig.sCategory];
         }
         else
         {
             return false;
         }
 
-        if (mConfig.sDeadline.isNull())
+        d = QDate::fromString(mConfig.sDeadline,"yyyy-MM-dd");
+        if (!d.isValid())
         {
-            d = QDate::currentDate();
-        }
-        else
-        {
-            d = QDate::fromString(mConfig.sDeadline,"yyyy-MM-dd");
-            if (!d.isValid()) return false;
+            return false;
         }
 
         if (mPayees.contains(mConfig.sPayee))
@@ -307,9 +303,9 @@ bool PlutoTool::createScheduled (quint32 id, Scheduled &s)
         }
 
         // WorkOrder
-        if (mWorkOrders.contains(mConfig.tWorkorder))
+        if (mWorkOrders.contains(mConfig.sWorkorder))
         {
-            w = mWorkOrders[mConfig.tWorkorder];
+            w = mWorkOrders[mConfig.sWorkorder];
         }
         else
         {
@@ -317,7 +313,7 @@ bool PlutoTool::createScheduled (quint32 id, Scheduled &s)
         }
 
         // Create object!
-        Scheduled my(p,d,mConfig.tAmount,w,c);
+        Scheduled my(p,d,mConfig.sAmount,w,c);
         my.setId(id);
         s = my;
         return true;
@@ -1127,6 +1123,9 @@ bool PlutoTool::read (QFile* file)
     log.log(QString("Read database: transactions information..."),LOG_MEDIUM_INFORMATION);
     readTransactions(obj);
 
+    log.log(QString("Read database: scheduled information..."),LOG_MEDIUM_INFORMATION);
+    readScheduled(obj);
+
     return true;
 }
 
@@ -1159,6 +1158,9 @@ bool PlutoTool::save (QFile* file)
 
     log.log(QString("Save database: write transactions information..."),LOG_MEDIUM_INFORMATION);
     writeTransactions(obj);
+
+    log.log(QString("Save database: write scheduled information..."),LOG_MEDIUM_INFORMATION);
+    writeScheduled(obj);
 
     QJsonDocument doc(obj);
 

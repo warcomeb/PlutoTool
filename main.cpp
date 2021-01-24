@@ -73,6 +73,10 @@ Command getCommand (QString cmd)
     {
         return COMMAND_ADD_WORKORDER;
     }
+    else if ((cmd == "add-scheduled") || (cmd == "ADD-SCHEDULED"))
+    {
+        return COMMAND_ADD_SCHEDULED;
+    }
     else if ((cmd == "get-accounts") || (cmd == "GET-ACCOUNTS"))
     {
         return COMMAND_GET_ACCOUNTS;
@@ -196,6 +200,27 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
             QCoreApplication::translate("main", "date"));
     parser.addOption(wEndDateOption);
 
+    const QCommandLineOption sPayeeOption(QStringList() << "sp" << "scheduled-payee",
+            QCoreApplication::translate("main", "The <id> of the selected payee"),
+            QCoreApplication::translate("main", "id"));
+    parser.addOption(sPayeeOption);
+    const QCommandLineOption sAmountOption(QStringList() << "sa" << "scheduled-amount",
+            QCoreApplication::translate("main", "The <ampount> of scheduled payment"),
+            QCoreApplication::translate("main", "amount"));
+    parser.addOption(sAmountOption);
+    const QCommandLineOption sCategoryOption(QStringList() << "sc" << "scheduled-category",
+            QCoreApplication::translate("main", "The <id> of scheduled category"),
+            QCoreApplication::translate("main", "id"));
+    parser.addOption(sCategoryOption);
+    const QCommandLineOption sDeadlineOption(QStringList() << "sd" << "scheduled-deadline",
+            QCoreApplication::translate("main", "The <deadline> of scheduled payment, format is YYYY-MM-DD"),
+            QCoreApplication::translate("main", "date"));
+    parser.addOption(sDeadlineOption);
+    const QCommandLineOption sWorkorderOption(QStringList() << "sw" << "scheduled-workorder",
+            QCoreApplication::translate("main", "The workorder <id> to which to associate the scheduled payment"),
+            QCoreApplication::translate("main", "id"));
+    parser.addOption(sWorkorderOption);
+
     parser.addPositionalArgument("command", QCoreApplication::translate("main", "The command that must be executed."));
     parser.addPositionalArgument("database", QCoreApplication::translate("main", "The Pluto database in JSON format."));
 
@@ -203,6 +228,16 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
     {
         *errorMessage = parser.errorText();
         return CLI_PARSE_RESULT_ERROR;
+    }
+
+    if (parser.isSet(helpOption))
+    {
+        return CLI_PARSE_RESULT_HELP;
+    }
+
+    if (parser.isSet(versionOption))
+    {
+        return CLI_PARSE_RESULT_VERSION;
     }
 
     if (parser.isSet(replaceOption))
@@ -434,6 +469,85 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
     }
     // ---------------------------------------------------- TRANSACTION options
 
+    // SCHEDULED options ------------------------------------------------------
+    if (parser.isSet(sPayeeOption))
+    {
+        const QString p = parser.value(sPayeeOption);
+        bool conversionValue = false;
+        const qint32 pValue = p.toUInt(&conversionValue);
+        if ((pValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'sp' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->sPayee = (quint32)pValue;
+    }
+    else
+    {
+        config->sPayee = 0;
+    }
+
+    if (parser.isSet(sWorkorderOption))
+    {
+        const QString w = parser.value(sWorkorderOption);
+        bool conversionValue = false;
+        const qint32 wValue = w.toUInt(&conversionValue);
+        if ((wValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'sw' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->sWorkorder = (quint32)wValue;
+    }
+    else
+    {
+        config->sWorkorder = 0;
+    }
+
+    if (parser.isSet(sCategoryOption))
+    {
+        const QString c = parser.value(sCategoryOption);
+        bool conversionValue = false;
+        const qint32 cValue = c.toUInt(&conversionValue);
+        if ((cValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'sc' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->sCategory = (quint32)cValue;
+    }
+    else
+    {
+        config->sCategory = 0;
+    }
+
+    if (parser.isSet(sAmountOption))
+    {
+        const QString amount = parser.value(sAmountOption);
+        bool conversionValue = false;
+        const float amountValue = amount.toFloat(&conversionValue);
+        if ((amountValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'sa' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->sAmount = (quint32)amountValue;
+    }
+    else
+    {
+        config->sAmount = 0.0f;
+    }
+
+    if (parser.isSet(sDeadlineOption))
+    {
+        config->sDeadline = parser.value(sDeadlineOption);
+    }
+    else
+    {
+        config->sDeadline = QString::Null();
+    }
+    // ------------------------------------------------------ SCHEDULED options
+
     // ACCOUNT options --------------------------------------------------------
     if (parser.isSet(aNameOption))
     {
@@ -541,7 +655,7 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
     const QStringList positionalArguments = parser.positionalArguments();
     if (positionalArguments.isEmpty())
     {
-        *errorMessage = "Error: Argument 'command' and 'database' missing.";
+        *errorMessage = "Argument 'command' and 'database' missing.";
         return CLI_PARSE_RESULT_ERROR;
     }
 
@@ -555,16 +669,6 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
 
     // Save database file name
     config->database = positionalArguments.at(1);
-
-    if (parser.isSet(helpOption))
-    {
-        return CLI_PARSE_RESULT_HELP;
-    }
-
-    if (parser.isSet(versionOption))
-    {
-        return CLI_PARSE_RESULT_VERSION;
-    }
 
     return CLI_PARSE_RESULT_OK;
 }
