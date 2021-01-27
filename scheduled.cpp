@@ -57,6 +57,16 @@ quint32 Scheduled::id (void)
     return mId;
 }
 
+void Scheduled::setPaid (bool paid)
+{
+    mPaid = paid;
+}
+
+bool Scheduled::paid (void)
+{
+    return mPaid;
+}
+
 void Scheduled::setNote (QString note)
 {
     mNote = note;
@@ -65,6 +75,31 @@ void Scheduled::setNote (QString note)
 QString Scheduled::note (void)
 {
     return mNote;
+}
+
+float Scheduled::amount (void)
+{
+    return mAmount;
+}
+
+Payee Scheduled::payee (void)
+{
+    return mPayee;
+}
+
+Category Scheduled::category (void)
+{
+    return mCategory;
+}
+
+WorkOrder Scheduled::workorder (void)
+{
+    return mWorkOrder;
+}
+
+QDate Scheduled::deadline (void)
+{
+    return mDeadline;
 }
 
 void Scheduled::write (QJsonObject &json) const

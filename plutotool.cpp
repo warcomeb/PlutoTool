@@ -23,6 +23,8 @@
 
 #include "utils/wlog.h"
 
+#include "plutocliprint.h"
+
 #include <iostream>
 #include <string>
 #include <stdio.h>
@@ -545,6 +547,30 @@ void PlutoTool::executeCommand (void)
         log.log(QString("Save database..."),LOG_IMPORTANT_INFORMATION);
         save(&data);
         log.log(QString("Save database END!"),LOG_IMPORTANT_INFORMATION);
+    }
+    else if (mConfig.cmd == COMMAND_STATUS)
+    {
+        cout << "%%%%%%%%%% COMMAND STATUS %%%%%%%%%%" << endl;
+
+        log.log(QString("Check database file: open file..."),LOG_IMPORTANT_INFORMATION);
+        QFile data(mConfig.database);
+        if (openDatabaseFile(data,QIODevice::ReadOnly) == false) return; // FAIL!
+
+        // Read current database status...
+        log.log(QString("Read database..."),LOG_IMPORTANT_INFORMATION);
+        read(&data);
+        closeDatabaseFile(data);
+
+        QList<Scheduled> toBePay;
+        foreach (Scheduled s, mScheduled)
+        {
+            if (s.paid() == false)
+            {
+                toBePay.append(s);
+            }
+        }
+        PlutoCLIPrint print;
+        print.printScheduled(toBePay);
     }
     else if (mConfig.cmd == COMMAND_ADD_USER)
     {

@@ -46,6 +46,20 @@ public:
     void setNote (QString note);
     QString note (void);
 
+    void setPaid (bool paid);
+    bool paid (void);
+
+    //void setAmount (float amount);
+    float amount (void);
+
+    Payee payee (void);
+
+    QDate deadline (void);
+
+    Category category (void);
+
+    WorkOrder workorder (void);
+
     void write (QJsonObject &json) const;
     void read (const QJsonObject &json,
                QMap<quint32,Payee> payees,
