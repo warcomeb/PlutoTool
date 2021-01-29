@@ -1,6 +1,8 @@
 #include "database.h"
 #include "utils/wlog.h"
 #include "metadata.h"
+#include "config.h"
+#include "plutotoolreport.h"
 
 #include <QJsonObject>
 #include <QJsonDocument>
@@ -9,6 +11,92 @@
 Database::Database()
 {
 
+}
+
+bool Database::create (Config config)
+{
+    WLog& log = WLog::instance();
+
+    log.log(QString("Check database file: open file..."),LOG_IMPORTANT_INFORMATION);
+    QFile data(config.database);
+    if (openDatabaseFile(config,data,QIODevice::WriteOnly) == false) return false; // FAIL!
+
+    log.log(QString("Create first user..."),LOG_IMPORTANT_INFORMATION);
+    mUserNextId = 1;
+    if (!addUser(config))
+    {
+        log.log(QString(PLUTOTOOL_USER_FAIL_ADD_NEW_),LOG_VIP_INFORMATION);
+        return false;
+    }
+
+    log.log(QString("Create default categories..."),LOG_MEDIUM_INFORMATION);
+    mCategoryNextId = 1;
+    createDefaultCategory();
+
+    log.log(QString("Create default workorder..."),LOG_MEDIUM_INFORMATION);
+    mWorkOrderNextId = 1;
+    WorkOrder w = WorkOrder();
+    w.setId(mWorkOrderNextId++);
+    mWorkOrders.insert(w.id(),w);
+    log.log(QString("Work Order %1 (%2) has been added!").arg(w.name()).arg(w.code()),LOG_MEDIUM_INFORMATION);
+
+    log.log(QString("Create default account type..."),LOG_MEDIUM_INFORMATION);
+    mAccountTypeNextId = 1;
+    createDefaultAccountType();
+
+    mAccountNextId = 1;
+
+    log.log(QString("Create default payee type..."),LOG_MEDIUM_INFORMATION);
+    mPayeeTypeNextId = 1;
+    createDefaultPayeeType();
+
+    log.log(QString("Create default payee..."),LOG_MEDIUM_INFORMATION);
+    mPayeeNextId = 1;
+    Payee p = Payee(mPayeeTypes[1]);
+    p.setId(mPayeeNextId++);
+    mPayees.insert(p.id(),p);
+    log.log(QString("Payee %1 (%2) has been added!").arg(p.name()).arg(p.code()),LOG_MEDIUM_INFORMATION);
+
+    mTransactionNextId = 1;
+
+    mScheduledNextId = 1;
+
+    log.log(QString("Save database..."),LOG_IMPORTANT_INFORMATION);
+    save(&data);
+    log.log(QString("Save database END!"),LOG_IMPORTANT_INFORMATION);
+
+    return true;
+}
+
+bool Database::load (Config config)
+{
+    WLog& log = WLog::instance();
+
+    log.log(QString("Check database file: open file..."),LOG_IMPORTANT_INFORMATION);
+    QFile data(config.database);
+    if (openDatabaseFile(config,data,QIODevice::ReadOnly) == false) return false; // FAIL!
+
+    // Read current database status...
+    log.log(QString("Read database..."),LOG_IMPORTANT_INFORMATION);
+    read(&data);
+    closeDatabaseFile(data);
+
+    return true;
+}
+
+bool Database::store (Config config)
+{
+    WLog& log = WLog::instance();
+
+    // Save the new database....
+    log.log(QString("Save database..."),LOG_IMPORTANT_INFORMATION);
+    QFile data(config.database);
+    if (openDatabaseFile(config,data,QIODevice::WriteOnly) == false) return false; // FAIL!
+    save(&data);
+    closeDatabaseFile(data);
+    log.log(QString("Save database END!"),LOG_IMPORTANT_INFORMATION);
+
+    return true;
 }
 
 void Database::readUsers (const QJsonObject &json)
@@ -520,7 +608,7 @@ void Database::createDefaultCategory (void)
 }
 
 
-bool Database::openDatabaseFile (QFile& db, QIODevice::OpenMode flags, bool checkReplace)
+bool Database::openDatabaseFile (Config config, QFile& db, QIODevice::OpenMode flags, bool checkReplace)
 {
     WLog& log = WLog::instance();
     if (flags == QIODevice::ReadOnly)
@@ -535,7 +623,7 @@ bool Database::openDatabaseFile (QFile& db, QIODevice::OpenMode flags, bool chec
     {
         if (db.exists() && (checkReplace == true))
         {
-            if (mConfig.replace == false)
+            if (config.replace == false)
             {
                 log.log(QString(PLUTOTOOL_DATABASE_JUST_EXIST_),LOG_VIP_INFORMATION);
                 return false;
@@ -563,3 +651,313 @@ void Database::closeDatabaseFile (QFile& db)
     }
 }
 
+bool Database::addUser (Config config)
+{
+    WLog& log = WLog::instance();
+
+    if ((!config.uName.isNull()) && (!config.uSurname.isNull()))
+    {
+        User u(config.uName,config.uSurname,mUserNextId);
+        mUsers.insert(u.id(),u);
+        mUserNextId++;
+
+        log.log(QString("User %1 %2 (%3) has been added!").arg(u.name()).arg(u.surname()).arg(u.code()),LOG_MEDIUM_INFORMATION);
+        return true;
+    }
+    return false;
+}
+
+bool Database::addAccount (Config config)
+{
+    WLog& log = WLog::instance();
+
+    if ((!config.aName.isNull()) && (!config.aNumber.isNull()) && (config.aType > 0))
+    {
+        if (mAccountTypes.contains(config.aType))
+        {
+            Account a(config.aName,config.aNumber,mAccountTypes[config.aType],mAccountNextId,true);
+            mAccounts.insert(a.id(),a);
+            mAccountNextId++;
+
+            log.log(QString("Account %1 has been added!").arg(a.id()),LOG_MEDIUM_INFORMATION);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Database::addAccountType (Config config)
+{
+    WLog& log = WLog::instance();
+
+    if (!config.atName.isNull())
+    {
+        AccountType at(config.atName,mAccountTypeNextId);
+
+        if (!config.atDescription.isNull())
+        {
+            at.setDescription(config.atDescription);
+        }
+        mAccountTypes.insert(at.id(),at);
+        mAccountTypeNextId++;
+
+        log.log(QString("Account Type %1 has been added!").arg(at.id()),LOG_MEDIUM_INFORMATION);
+        return true;
+    }
+    return false;
+}
+
+bool Database::addPayee (Config config)
+{
+    WLog& log = WLog::instance();
+
+    if ((!config.pName.isNull()) && (config.pType > 0))
+    {
+        if (mPayeeTypes.contains(config.pType))
+        {
+            Payee p(config.pName,mPayeeTypes[config.pType],mPayeeNextId);
+            mPayees.insert(p.id(),p);
+            mPayeeNextId++;
+
+            log.log(QString("Payee %1 has been added!").arg(p.id()),LOG_MEDIUM_INFORMATION);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Database::addPayeeType (Config config)
+{
+    WLog& log = WLog::instance();
+
+    if (!config.ptName.isNull())
+    {
+        PayeeType pt(config.ptName,mPayeeTypeNextId);
+
+        if (!config.ptDescription.isNull())
+        {
+            pt.setDescription(config.ptDescription);
+        }
+        mPayeeTypes.insert(pt.id(),pt);
+        mPayeeTypeNextId++;
+
+        log.log(QString("Payee Type %1 has been added!").arg(pt.id()),LOG_MEDIUM_INFORMATION);
+        return true;
+    }
+    return false;
+}
+
+bool Database::addWorkOrder (Config config)
+{
+    WLog& log = WLog::instance();
+
+    if (!config.wName.isNull() && !config.wEnd.isNull())
+    {
+        QDate dStart;
+        QDate dEnd;
+
+        dEnd = QDate::fromString(config.wEnd,"yyyy-MM-dd");
+        if (!dEnd.isValid()) return false;
+
+        if (config.wStart.isNull())
+        {
+            dStart = QDate::currentDate();
+        }
+        else
+        {
+            dStart = QDate::fromString(config.wStart,"yyyy-MM-dd");
+            if (!dStart.isValid()) return false;
+        }
+
+        WorkOrder w(config.wName,dStart,dEnd,mWorkOrderNextId);
+        if (!config.wDescription.isNull())
+        {
+            w.setDescription(config.wDescription);
+        }
+        mWorkOrders.insert(w.id(),w);
+        mWorkOrderNextId++;
+
+        log.log(QString("Workorder %1 has been added!").arg(w.id()),LOG_MEDIUM_INFORMATION);
+        return true;
+    }
+    return false;
+}
+
+bool Database::addTransaction (Config config)
+{
+    WLog& log = WLog::instance();
+
+    // Check if all values are valid
+    if ((config.tAmount != 0.0f) &&
+        (config.tType != Transaction::TYPE_ERROR) &&
+        (((config.tType == Transaction::TYPE_INPUT) && (config.tAccountTo > 0)) ||
+         ((config.tType == Transaction::TYPE_OUTPUT) && (config.tAccountFrom > 0)) ||
+         ((config.tType == Transaction::TYPE_NEUTRAL) && (config.tAccountTo > 0) && (config.tAccountFrom > 0))) &&
+        /*(config.tPayee > 0) &&*/ (config.tType > 0) && /*(config.tWorkorder > 0) &&*/ (config.tCategory > 0))
+    {
+        Account   aTo;
+        Account   aFrom;
+        Payee     p;
+        WorkOrder w;
+        Category  c;
+        QDate     d;
+
+        if ((config.tType != Transaction::TYPE_INPUT)  &&
+            (config.tType != Transaction::TYPE_OUTPUT) &&
+            (config.tType != Transaction::TYPE_NEUTRAL))
+        {
+            return false;
+        }
+
+        if (config.tAccountTo > 0)
+        {
+            if (mAccounts.contains(config.tAccountTo))
+            {
+                aTo = mAccounts[config.tAccountTo];
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        if (config.tAccountFrom > 0)
+        {
+            if (mAccounts.contains(config.tAccountFrom))
+            {
+                aFrom = mAccounts[config.tAccountFrom];
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // Category
+        if (config.tCategory > 0)
+        {
+            if (mCategories.contains(config.tCategory))
+            {
+                c = mCategories[config.tCategory];
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        if (config.tDate.isNull())
+        {
+            d = QDate::currentDate();
+        }
+        else
+        {
+            d = QDate::fromString(config.tDate,"yyyy-MM-dd");
+            if (!d.isValid()) return false;
+        }
+
+        if (config.tPayee > 0)
+        {
+            if (mPayees.contains(config.tPayee))
+            {
+                p = mPayees[config.tPayee];
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            p = mPayees[1]; // Undefined
+        }
+
+        // WorkOrder
+        if (config.tWorkorder > 0)
+        {
+            if (mWorkOrders.contains(config.tWorkorder))
+            {
+                w = mWorkOrders[config.tWorkorder];
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            w = mWorkOrders[1]; // Undefined
+        }
+
+        // Create object!
+        Transaction t(aFrom,aTo,p,d,config.tAmount,c,(Transaction::Type)config.tType,w);
+        t.setId(mTransactionNextId);
+        mTransactions.insert(t.id(),t);
+        mTransactionNextId++;
+
+        log.log(QString("Transaction %1 has been added!").arg(t.id()),LOG_MEDIUM_INFORMATION);
+        return true;
+    }
+    return false;
+}
+
+bool Database::addScheduled (Config config)
+{
+    WLog& log = WLog::instance();
+
+    // Check if all values are valid
+    if ((config.sAmount != 0.0f) &&
+        (config.sPayee > 0) &&
+        (!config.sDeadline.isNull()) &&
+        (config.sCategory > 0))
+    {
+        Payee     p;
+        WorkOrder w;
+        Category  c;
+        QDate     d;
+
+        if (mCategories.contains(config.sCategory))
+        {
+            c = mCategories[config.sCategory];
+        }
+        else
+        {
+            return false;
+        }
+
+        d = QDate::fromString(config.sDeadline,"yyyy-MM-dd");
+        if (!d.isValid())
+        {
+            return false;
+        }
+
+        if (mPayees.contains(config.sPayee))
+        {
+            p = mPayees[config.sPayee];
+        }
+        else
+        {
+            return false;
+        }
+
+        // WorkOrder
+        if (mWorkOrders.contains(config.sWorkorder))
+        {
+            w = mWorkOrders[config.sWorkorder];
+        }
+        else
+        {
+            return false;
+        }
+
+        // Create object!
+        Scheduled s(p,d,config.sAmount,w,c);
+        s.setId(mScheduledNextId);
+        mScheduled.insert(s.id(),s);
+        mScheduledNextId++;
+
+        log.log(QString("Scheduled %1 has been added!").arg(s.id()),LOG_MEDIUM_INFORMATION);
+        return true;
+    }
+    return false;
+}

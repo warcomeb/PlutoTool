@@ -42,13 +42,32 @@ class Database
 public:
     Database();
 
+    bool create (Config config);
+    bool load (Config config);
+    bool store (Config config);
+
+    bool addUser (Config config);
+    bool addAccount (Config config);
+    bool addAccountType (Config config);
+    bool addScheduled (Config config);
+    bool addTransaction (Config config);
+    bool addWorkOrder (Config config);
+    bool addPayeeType (Config config);
+    bool addPayee (Config config);
+
+    QMap<quint32,Scheduled> scheduled (void)
+    {
+        return mScheduled;
+    };
+
+private:
+
     bool save (QFile *file);
     bool read (QFile* file);
 
-    bool openDatabaseFile (QFile& db, QIODevice::OpenMode flags, bool checkReplace = false);
+    bool openDatabaseFile (Config config, QFile& db, QIODevice::OpenMode flags, bool checkReplace = false);
     void closeDatabaseFile (QFile& db);
 
-private:
     void readUsers (const QJsonObject &json);
     void readCategories (const QJsonObject &json);
     void readAccountTypes (const QJsonObject &json);
