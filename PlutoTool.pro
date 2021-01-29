@@ -18,6 +18,7 @@ SOURCES += \
         account.cpp \
         accounttype.cpp \
         category.cpp \
+        database.cpp \
         main.cpp \
         payee.cpp \
         payeetype.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     accounttype.h \
     category.h \
     config.h \
+    database.h \
     metadata.h \
     payee.h \
     payeetype.h \
