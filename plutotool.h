@@ -37,6 +37,8 @@
 #include "category.h"
 #include "scheduled.h"
 
+#include "database.h"
+
 class PlutoTool
 {
 public:
@@ -45,73 +47,8 @@ public:
 private:
     void executeCommand (void);
 
-    bool save (QFile *file);
-    bool read (QFile* file);
-
-    bool openDatabaseFile (QFile& db, QIODevice::OpenMode flags, bool checkReplace = false);
-    void closeDatabaseFile (QFile& db);
-
-    void readUsers (const QJsonObject &json);
-    void readCategories (const QJsonObject &json);
-    void readAccountTypes (const QJsonObject &json);
-    void readAccounts (const QJsonObject &json);
-    void readPayeeTypes (const QJsonObject &json);
-    void readPayees (const QJsonObject &json);
-    void readWorkOrders (const QJsonObject &json);
-    void readTransactions (const QJsonObject &json);
-    void readScheduled (const QJsonObject &json);
-
-    void writeUsers (QJsonObject &json) const;
-    void writeCategories (QJsonObject &json) const;
-    void writeAccountTypes (QJsonObject &json) const;
-    void writeAccounts (QJsonObject &json) const;
-    void writePayeeTypes (QJsonObject &json) const;
-    void writePayees (QJsonObject &json) const;
-    void writeWorkOrders (QJsonObject &json) const;
-    void writeTransactions (QJsonObject &json) const;
-    void writeScheduled (QJsonObject &json) const;
-
-    bool createUser (quint32 id, User &u);
-    bool createTransaction (quint32 id, Transaction& t);
-    bool createAccount (quint32 id, Account& a);
-    bool createAccountType (quint32 id, AccountType& at);
-    bool createPayee (quint32 id, Payee& p);
-    bool createPayeeType (quint32 id, PayeeType& pt);
-    bool createWorkOrder (quint32 id, WorkOrder& w);
-    bool createScheduled (quint32 id, Scheduled& s);
-
-    void createDefaultAccountType (void);
-    void createDefaultPayeeType (void);
-    void createDefaultCategory (void);
-
-    Config                    mConfig;
-
-    QMap<quint32,User>        mUsers;
-    quint32                   mUserNextId;
-
-    QMap<quint32,Category>    mCategories;
-    quint32                   mCategoryNextId;
-
-    QMap<quint32,WorkOrder>   mWorkOrders;
-    quint32                   mWorkOrderNextId;
-
-    QMap<quint32,AccountType> mAccountTypes;
-    quint32                   mAccountTypeNextId;
-
-    QMap<quint32,Account>     mAccounts;
-    quint32                   mAccountNextId;
-
-    QMap<quint32,PayeeType>   mPayeeTypes;
-    quint32                   mPayeeTypeNextId;
-
-    QMap<quint32,Payee>       mPayees;
-    quint32                   mPayeeNextId;
-
-    QMap<quint32,Transaction> mTransactions;
-    quint32                   mTransactionNextId;
-
-    QMap<quint32,Scheduled>   mScheduled;
-    quint32                   mScheduledNextId;
+    Config   mConfig;
+    Database mDatabase;
 };
 
 #endif // PLUTOTOOL_H
