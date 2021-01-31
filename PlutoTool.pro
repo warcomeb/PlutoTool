@@ -18,8 +18,10 @@ SOURCES += \
         account.cpp \
         accounttype.cpp \
         category.cpp \
+        counts.cpp \
         database.cpp \
         main.cpp \
+        movement.cpp \
         payee.cpp \
         payeetype.cpp \
         plutocliprint.cpp \
@@ -41,8 +43,10 @@ HEADERS += \
     accounttype.h \
     category.h \
     config.h \
+    counts.h \
     database.h \
     metadata.h \
+    movement.h \
     payee.h \
     payeetype.h \
     plutocliprint.h \

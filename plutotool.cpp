@@ -20,6 +20,7 @@
 
 #include "plutotool.h"
 #include "metadata.h"
+#include "counts.h"
 
 #include "utils/wlog.h"
 
@@ -79,16 +80,7 @@ void PlutoTool::executeCommand (void)
         cout << "%%%%%%%%%% COMMAND STATUS %%%%%%%%%%" << endl;
 
         mDatabase.load(mConfig);
-
-        QList<Scheduled> toBePay;
-        QMap<quint32,Scheduled> scheduled = mDatabase.scheduled();
-        foreach (Scheduled s, scheduled)
-        {
-            if (s.paid() == false)
-            {
-                toBePay.append(s);
-            }
-        }
+        QList<Scheduled> toBePay = Counts::getScheduled(mDatabase);
         PlutoCLIPrint print;
         print.printScheduled(toBePay);
     }
