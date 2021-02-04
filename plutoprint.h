@@ -25,12 +25,15 @@
 #include <QtGlobal>
 
 #include "scheduled.h"
+#include "movement.h"
 
 class PlutoPrint
 {
 public:
 
     virtual void printScheduled (QList<Scheduled> s) = 0;
+
+    virtual void printMovements (QList<Movement> m) = 0;
 
 };
 #endif // PLUTOPRINT_H

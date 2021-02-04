@@ -31,6 +31,8 @@ public:
 
     void printScheduled (QList<Scheduled> s);
 
+    void printMovements (QList<Movement> m);
+
 private:
 
     const int SCHEDULED_ID_SIZE        = -6;

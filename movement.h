@@ -21,11 +21,32 @@
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
 
+#include <QDate>
+
+#include "account.h"
+#include "workorder.h"
+#include "category.h"
+#include "payee.h"
 
 class Movement
 {
 public:
-    Movement();
+    Movement ();
+    Movement (QDate     date,
+              Account   account,
+              float     amount,
+              WorkOrder workorder,
+              Payee     payee,
+              Category  category);
+
+private:
+
+    QDate     mDate;
+    Account   mAccount;
+    float     mAmount;
+    WorkOrder mWorkOrder;
+    Payee     mPayee;
+    Category  mCategory;
 };
 
 #endif // MOVEMENT_H

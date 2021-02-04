@@ -48,6 +48,15 @@ void PlutoCLIPrint::printScheduled (QList<Scheduled> s)
     out().flush();
 }
 
+void PlutoCLIPrint::printMovements (QList<Movement> m)
+{
+    // Print Element
+    foreach (Movement e, m)
+    {
+
+    }
+}
+
 QTextStream& PlutoCLIPrint::out (void)
 {
     static QTextStream ts( stdout );

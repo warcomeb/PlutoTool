@@ -55,6 +55,21 @@ public:
     void setId (quint32 id);
     quint32 id (void);
 
+    Payee payee (void);
+
+    QDate date (void);
+
+    Category category (void);
+
+    WorkOrder workorder (void);
+
+    Account accoutTo (void);
+    Account accoutFrom (void);
+
+    float amount (void);
+
+    Type type (void);
+
     void write (QJsonObject &json) const;
     void read (const QJsonObject &json,
                QMap<quint32,Account> accounts,

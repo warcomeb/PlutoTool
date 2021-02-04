@@ -65,6 +65,15 @@ quint32 Account::id (void) const
     return mId;
 }
 
+bool Account::isValid (void)
+{
+    if ((mId > 0) && (!mName.isNull()) && (!mName.isEmpty()))
+    {
+        return true;
+    }
+    return false;
+}
+
 void Account::write (QJsonObject &json) const
 {
     QJsonObject o;

@@ -22,5 +22,21 @@
 
 Movement::Movement()
 {
+    // Nothing to do...
+}
 
+Movement::Movement (QDate     date,
+                    Account   account,
+                    float     amount,
+                    WorkOrder workorder,
+                    Payee     payee,
+                    Category  category):
+    mDate(date),
+    mAccount(account),
+    mAmount(amount),
+    mWorkOrder(workorder),
+    mPayee(payee),
+    mCategory(category)
+{
+    // Nothing to do...
 }

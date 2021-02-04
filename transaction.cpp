@@ -62,6 +62,46 @@ quint32 Transaction::id (void)
     return mId;
 }
 
+Payee Transaction::payee (void)
+{
+    return mPayee;
+}
+
+QDate Transaction::date (void)
+{
+    return mDate;
+}
+
+Category Transaction::category (void)
+{
+    return mCategory;
+}
+
+WorkOrder Transaction::workorder (void)
+{
+    return mWorkOrder;
+}
+
+Account Transaction::accoutTo (void)
+{
+    return mAccountTo;
+}
+
+Account Transaction::accoutFrom (void)
+{
+    return mAccountFrom;
+}
+
+float Transaction::amount (void)
+{
+    return mAmount;
+}
+
+Transaction::Type Transaction::type (void)
+{
+    return mType;
+}
+
 void Transaction::write (QJsonObject &json) const
 {
     QJsonObject o;

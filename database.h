@@ -55,9 +55,48 @@ public:
     bool addPayeeType (Config config);
     bool addPayee (Config config);
 
+    QMap<quint32,Account> accounts (void)
+    {
+        return mAccounts;
+    };
+
+    bool isAccountExist (quint32 id)
+    {
+        if (mAccounts.contains(id))
+        {
+            return true;
+        }
+        return false;
+    };
+
+    Account& getAccount (quint32 id)
+    {
+        return mAccounts[id];
+    }
+
+    WorkOrder& getWorkOrder (quint32 id)
+    {
+        return mWorkOrders[id];
+    }
+
+    Payee& getPayee (quint32 id)
+    {
+        return mPayees[id];
+    }
+
+    Category& getCategory (quint32 id)
+    {
+        return mCategories[id];
+    }
+
     QMap<quint32,Scheduled> scheduled (void)
     {
         return mScheduled;
+    };
+
+    QMap<quint32,Transaction> transaction (void)
+    {
+        return mTransactions;
     };
 
 private:

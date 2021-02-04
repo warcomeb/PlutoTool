@@ -39,6 +39,8 @@ public:
 
     QString code (void);
 
+    bool isValid (void);
+
     void write (QJsonObject &json) const;
     void read (const QJsonObject &json, QMap<quint32,AccountType> types);
 
