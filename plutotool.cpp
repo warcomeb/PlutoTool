@@ -80,9 +80,22 @@ void PlutoTool::executeCommand (void)
         cout << "%%%%%%%%%% COMMAND STATUS %%%%%%%%%%" << endl;
 
         mDatabase.load(mConfig);
-        QList<Scheduled> toBePay = Counts::getScheduled(mDatabase);
         PlutoCLIPrint print;
-        print.printScheduled(toBePay);
+
+        if (mConfig.showUnpaidScheduled > 0)
+        {
+            QList<Scheduled> toBePay = Counts::getScheduled(mDatabase);
+            print.printScheduled(toBePay);
+        }
+
+        QList<Movement> mov = Counts::getMovements(mDatabase,
+                                                   QDate(),
+                                                   QDate(),
+                                                   mConfig.account,
+                                                   mConfig.workorder,
+                                                   mConfig.category,
+                                                   mConfig.payee);
+        print.printMovements(mov);
     }
     else if (mConfig.cmd == COMMAND_ADD_USER)
     {

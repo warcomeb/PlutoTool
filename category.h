@@ -34,6 +34,7 @@ public:
 
     QString name (void);
     QString subName (void);
+    QString completeName (void);
     QString description (void);
 
     void setId (quint32 id);

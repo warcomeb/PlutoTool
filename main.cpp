@@ -97,6 +97,26 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
             QCoreApplication::translate("main", "Replace the current database whether just exist"));
     parser.addOption(replaceOption);
 
+    const QCommandLineOption accountFilterOption(QStringList() << "a" << "account",
+            QCoreApplication::translate("main", "The <id> number of the account to filter the search"),
+            QCoreApplication::translate("main", "id"));
+    parser.addOption(accountFilterOption);
+    const QCommandLineOption payeeFilterOption(QStringList() << "p" << "payee",
+            QCoreApplication::translate("main", "The <id> number of the payee to filter the search"),
+            QCoreApplication::translate("main", "id"));
+    parser.addOption(payeeFilterOption);
+    const QCommandLineOption categoryFilterOption(QStringList() << "c" << "category",
+            QCoreApplication::translate("main", "The <id> number of the category to filter the search"),
+            QCoreApplication::translate("main", "id"));
+    parser.addOption(categoryFilterOption);
+    const QCommandLineOption workorderFilterOption(QStringList() << "w" << "workorder",
+            QCoreApplication::translate("main", "The <id> number of the workorder to filter the search"),
+            QCoreApplication::translate("main", "id"));
+    parser.addOption(workorderFilterOption);
+    const QCommandLineOption showUpaidScheduledFilterOption(QStringList() << "s" << "scheduled",
+            QCoreApplication::translate("main", "Show unpaid scheduled into STATUS command"));
+    parser.addOption(showUpaidScheduledFilterOption);
+
     const QCommandLineOption uNameOption(QStringList() << "un" << "user-name",
             QCoreApplication::translate("main", "The <name> of the user to be added"),
             QCoreApplication::translate("main", "name"));
@@ -655,6 +675,114 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
         config->wEnd = QString::Null();
     }
     // ----------------------------------------------------- WORKORDER options
+
+    // SEARCH options --------------------------------------------------------
+    if (parser.isSet(showUpaidScheduledFilterOption))
+    {
+        config->showUnpaidScheduled = 1;
+    }
+    else
+    {
+        config->showUnpaidScheduled = 0;
+    }
+
+    if (parser.isSet(accountFilterOption))
+    {
+        const QString a = parser.value(accountFilterOption);
+        bool conversionValue = false;
+        const qint32 aValue = a.toUInt(&conversionValue);
+        if ((aValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'a' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->account = (quint32)aValue;
+    }
+    else
+    {
+        config->account = 0;
+    }
+
+    if (parser.isSet(payeeFilterOption))
+    {
+        const QString p = parser.value(payeeFilterOption);
+        bool conversionValue = false;
+        const qint32 pValue = p.toUInt(&conversionValue);
+        if ((pValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'p' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->payee = (quint32)pValue;
+    }
+    else
+    {
+        config->payee = 0;
+    }
+
+    if (parser.isSet(workorderFilterOption))
+    {
+        const QString w = parser.value(workorderFilterOption);
+        bool conversionValue = false;
+        const qint32 wValue = w.toUInt(&conversionValue);
+        if ((wValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'w' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->workorder = (quint32)wValue;
+    }
+    else
+    {
+        config->workorder = 0;
+    }
+
+    if (parser.isSet(categoryFilterOption))
+    {
+        const QString c = parser.value(categoryFilterOption);
+        bool conversionValue = false;
+        const qint32 cValue = c.toUInt(&conversionValue);
+        if ((cValue < 1) || (conversionValue == false))
+        {
+            *errorMessage = "Error: Option 'c' is not valid.";
+            return CLI_PARSE_RESULT_ERROR;
+        }
+        config->category = (quint32)cValue;
+    }
+    else
+    {
+        config->category = 0;
+    }
+
+//    if (parser.isSet(tAmountOption))
+//    {
+//        const QString amount = parser.value(tAmountOption);
+//        bool conversionValue = false;
+//        const float amountValue = amount.toFloat(&conversionValue);
+//        if ((amountValue < 1) || (conversionValue == false))
+//        {
+//            *errorMessage = "Error: Option 'ta' is not valid.";
+//            return CLI_PARSE_RESULT_ERROR;
+//        }
+//        config->tAmount = (quint32)amountValue;
+//    }
+//    else
+//    {
+//        config->tAmount = 0.0f;
+//    }
+
+//    if (parser.isSet(tDateOption))
+//    {
+//        config->tDate = parser.value(tDateOption);
+//    }
+//    else
+//    {
+//        config->tDate = QString::Null();
+//    }
+    // --------------------------------------------------------- SEARCH options
+
+
+
 
     const QStringList positionalArguments = parser.positionalArguments();
     if (positionalArguments.isEmpty())

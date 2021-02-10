@@ -40,6 +40,13 @@ struct Config
 
     Command cmd;
 
+    // Filter parameters
+    quint32 account;
+    quint32 payee;
+    quint32 category;
+    quint32 workorder;
+    quint32 showUnpaidScheduled;
+
     // User parameters
     QString uName;
     QString uSurname;

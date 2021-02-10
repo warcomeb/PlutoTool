@@ -39,6 +39,13 @@ public:
               Payee     payee,
               Category  category);
 
+    Account   account (void);
+    float     amount (void);
+    Payee     payee (void);
+    Category  category (void);
+    WorkOrder workorder (void);
+    QDate     date (void);
+
 private:
 
     QDate     mDate;

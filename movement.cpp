@@ -40,3 +40,33 @@ Movement::Movement (QDate     date,
 {
     // Nothing to do...
 }
+
+Account Movement::account (void)
+{
+    return mAccount;
+}
+
+float Movement::amount (void)
+{
+    return mAmount;
+}
+
+Payee Movement::payee (void)
+{
+    return mPayee;
+}
+
+Category Movement::category (void)
+{
+    return mCategory;
+}
+
+WorkOrder Movement::workorder (void)
+{
+    return mWorkOrder;
+}
+
+QDate Movement::date (void)
+{
+    return mDate;
+}

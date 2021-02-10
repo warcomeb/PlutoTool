@@ -50,6 +50,11 @@ QString Category::subName (void)
     return mSubName;
 }
 
+QString Category::completeName (void)
+{
+    return QString(mName + "/" + mSubName);
+}
+
 QString Category::description (void)
 {
     return mDescription;
