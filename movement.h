@@ -44,7 +44,7 @@ public:
     Payee     payee (void);
     Category  category (void);
     WorkOrder workorder (void);
-    QDate     date (void);
+    QDate     date (void) const;
 
 private:
 

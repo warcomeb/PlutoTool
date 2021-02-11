@@ -44,6 +44,18 @@ public:
         return list;
     };
 
+    static bool compareMovements (const Movement& m1, const Movement& m2)
+    {
+        if (m1.date() < m2.date())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     static QList<Movement> getMovements (Database  db,
                                          QDate     start,
                                          QDate     end,
@@ -215,6 +227,7 @@ public:
             }
         }
 
+        std::sort(list.begin(),list.end(),Counts::compareMovements);
         return list;
     };
 };

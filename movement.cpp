@@ -66,7 +66,7 @@ WorkOrder Movement::workorder (void)
     return mWorkOrder;
 }
 
-QDate Movement::date (void)
+QDate Movement::date (void) const
 {
     return mDate;
 }
