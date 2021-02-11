@@ -33,6 +33,9 @@ public:
     Account (QString name, QString number, AccountType type, quint32 id, bool active);
 
     QString name (void);
+    QString number (void);
+    AccountType type (void);
+    bool active (void);
 
     void setId (quint32 id);
     quint32 id (void) const;

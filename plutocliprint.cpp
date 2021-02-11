@@ -102,6 +102,51 @@ void PlutoCLIPrint::printMovements (QList<Movement> m)
     }
 }
 
+void PlutoCLIPrint::printAccounts (QMap<quint32,Account> a)
+{
+    QString header = QString("%1 | %2 | %3 | %4 | %5 | %6 \r\n")
+                           .arg("Id  "     ,CLI_PRINT_ID_SIZE)
+                           .arg("Code"     ,CLI_PRINT_CODE_SIZE)
+                           .arg("Name"     ,CLI_PRINT_ACCOUNT_SIZE)
+                           .arg("Number"   ,CLI_PRINT_ACCOUNT_SIZE)
+                           .arg("Type"     ,CLI_PRINT_ACCOUNT_TYPE_SIZE)
+                           .arg("A");
+    int headerLen = header.length() - 2;
+    QString headerLine = QString("%1\r\n").arg("",headerLen,QChar('-'));
+
+    // Print table header
+    out() << headerLine;
+    out() << header;
+    out() << headerLine;
+
+    // Print Element
+    foreach (Account e, a)
+    {
+        out() << QString("%1 | %2 | %3 | %4 | %5 | %6\r\n")
+                    .arg(e.id()               ,CLI_PRINT_ID_SIZE)
+                    .arg(e.code()             ,CLI_PRINT_CODE_SIZE)
+                    .arg(e.name()             ,CLI_PRINT_ACCOUNT_SIZE)
+                    .arg(e.number()           ,CLI_PRINT_ACCOUNT_SIZE)
+                    .arg(e.type().name()      ,CLI_PRINT_ACCOUNT_TYPE_SIZE)
+                    .arg((e.active() == true) ? "Y" : "N");
+        out() << headerLine;
+    }
+}
+void PlutoCLIPrint::printPayees (QList<Payee> p)
+{
+
+}
+
+void PlutoCLIPrint::printCategories (QList<Category> c)
+{
+
+}
+
+void PlutoCLIPrint::printWorkOrders (QList<WorkOrder> w)
+{
+
+}
+
 QTextStream& PlutoCLIPrint::out (void)
 {
     static QTextStream ts( stdout );

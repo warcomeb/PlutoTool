@@ -54,6 +54,26 @@ QString Account::name (void)
     return mName;
 }
 
+QString Account::number (void)
+{
+    return mNumber;
+}
+
+AccountType Account::type (void)
+{
+    return mType;
+}
+
+bool Account::active (void)
+{
+    return mActive;
+}
+
+QString Account::code (void)
+{
+    return mCode;
+}
+
 void Account::setId (quint32 id)
 {
     mId = id;

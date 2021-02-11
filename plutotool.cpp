@@ -206,27 +206,9 @@ void PlutoTool::executeCommand (void)
     {
         cout << "%%%%%%%%%% COMMAND GET ACCOUNTS %%%%%%%%%%" << endl;
 
-#if 0
-        log.log(QString("Check database file: open file..."),LOG_IMPORTANT_INFORMATION);
-        QFile data(mConfig.database);
-        if (!data.exists())
-        {
-            log.log(QString("The database doesn't exist!"),LOG_VIP_INFORMATION);
-            return;
-        }
-
-        if (!data.open(QIODevice::ReadOnly))
-        {
-            //TODO: message
-            log.log(QString("FAIL open database file!"),LOG_VIP_INFORMATION);
-            return;
-        }
-
-        // Read current database status...
-        log.log(QString("Read database..."),LOG_IMPORTANT_INFORMATION);
-        read(&data);
-        // TODO
-#endif
+        mDatabase.load(mConfig);
+        PlutoCLIPrint print;
+        print.printAccounts(mDatabase.accounts());
     }
     else if (mConfig.cmd == COMMAND_ERROR)
     {
