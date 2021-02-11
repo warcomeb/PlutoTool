@@ -1,8 +1,28 @@
+/*
+ * This file is part of PlutoTool
+ *
+ * Authors:
+ *   Marco Giammarini <m.giammarini@warcomeb.it>
+ *
+ * PlutoTool is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * PlutoTool is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Nome-Programma.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #include "database.h"
 #include "utils/wlog.h"
 #include "metadata.h"
 #include "config.h"
 #include "plutotoolreport.h"
+#include "plutodefault.h"
 
 #include <QJsonObject>
 #include <QJsonDocument>
@@ -454,157 +474,51 @@ bool Database::save (QFile* file)
 void Database::createDefaultAccountType (void)
 {
     WLog& log = WLog::instance();
+    QList<QString> l = mDefault.accountType();
 
-    AccountType a = AccountType("Bank Account",mAccountTypeNextId++);
-    mAccountTypes.insert(a.id(),a);
-    log.log(QString("Account Type %1 has been added!").arg(a.name()),1);
-    a = AccountType("Wallet",mAccountTypeNextId++);
-    mAccountTypes.insert(a.id(),a);
-    log.log(QString("Account Type %1 has been added!").arg(a.name()),1);
-    a = AccountType("Credit Card",mAccountTypeNextId++);
-    mAccountTypes.insert(a.id(),a);
-    log.log(QString("Account Type %1 has been added!").arg(a.name()),1);
-    a = AccountType("Virtual Wallet",mAccountTypeNextId++);
-    mAccountTypes.insert(a.id(),a);
-    log.log(QString("Account Type %1 has been added!").arg(a.name()),1);
-    a = AccountType("Saving Account",mAccountTypeNextId++);
-    mAccountTypes.insert(a.id(),a);
-    log.log(QString("Account Type %1 has been added!").arg(a.name()),1);
+    AccountType a;
+    foreach (QString s, l)
+    {
+        a = AccountType(s,mAccountTypeNextId++);
+        mAccountTypes.insert(a.id(),a);
+            log.log(QString("Account Type <%1> has been added!").arg(a.name()),LOG_MEDIUM_INFORMATION);
+    }
 }
 
 void Database::createDefaultPayeeType (void)
 {
     WLog& log = WLog::instance();
+    QList<QString> l = mDefault.payeeType();
 
-    PayeeType p = PayeeType("Undefined",mPayeeTypeNextId++);
-    mPayeeTypes.insert(p.id(),p);
-    log.log(QString("Payee Type %1 has been added!").arg(p.name()),1);
-
-    p = PayeeType("People",mPayeeTypeNextId++);
-    mPayeeTypes.insert(p.id(),p);
-    log.log(QString("Payee Type %1 has been added!").arg(p.name()),1);
-
-    p = PayeeType("Bank",mPayeeTypeNextId++);
-    mPayeeTypes.insert(p.id(),p);
-    log.log(QString("Payee Type %1 has been added!").arg(p.name()),1);
-
-    p = PayeeType("Bar",mPayeeTypeNextId++);
-    mPayeeTypes.insert(p.id(),p);
-    log.log(QString("Payee Type %1 has been added!").arg(p.name()),1);
-
-    p = PayeeType("Shop",mPayeeTypeNextId++);
-    mPayeeTypes.insert(p.id(),p);
-    log.log(QString("Payee Type %1 has been added!").arg(p.name()),1);
-
-    p = PayeeType("Resturant",mPayeeTypeNextId++);
-    mPayeeTypes.insert(p.id(),p);
-    log.log(QString("Payee Type %1 has been added!").arg(p.name()),1);
-
-    p = PayeeType("Health",mPayeeTypeNextId++);
-    mPayeeTypes.insert(p.id(),p);
-    log.log(QString("Payee Type %1 has been added!").arg(p.name()),1);
-
-    p = PayeeType("Transport",mPayeeTypeNextId++);
-    mPayeeTypes.insert(p.id(),p);
-    log.log(QString("Payee Type %1 has been added!").arg(p.name()),1);
-
-    p = PayeeType("Utilities",mPayeeTypeNextId++);
-    mPayeeTypes.insert(p.id(),p);
-    log.log(QString("Payee Type %1 has been added!").arg(p.name()),1);
-
-    p = PayeeType("Mechanic",mPayeeTypeNextId++);
-    mPayeeTypes.insert(p.id(),p);
-    log.log(QString("Payee Type %1 has been added!").arg(p.name()),1);
+    PayeeType p;
+    foreach (QString s, l)
+    {
+        p = PayeeType(s,mPayeeTypeNextId++);
+        mPayeeTypes.insert(p.id(),p);
+        log.log(QString("Payee Type <%1> has been added!").arg(p.name()),LOG_MEDIUM_INFORMATION);
+    }
 }
 
 void Database::createDefaultCategory (void)
 {
     WLog& log = WLog::instance();
+    QMultiMap<QString,QString> l = mDefault.category();
 
-    Category c = Category("Undefined","Undefined",mCategoryNextId++);
+    Category c;
+
+    // Add Undefined as first Category:
+    c = Category("Undefined","Undefined",mCategoryNextId++);
     mCategories.insert(c.id(),c);
     log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
 
-    c = Category("Transfer","",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Income","Salary",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Income","Refunds",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Income","Gift",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Bills","Electricity",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Bills","Gas",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Bills","Internet",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Bills","Water",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Bills","Garbage",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Bills","PayTV",mCategoryNextId++); // Netflix, Disney+
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Home Needs","Domestic Worker",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    // ---------- Automobile
-    c = Category("Automobile","Parking",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Automobile","Maintenance",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Automobile","Fuel",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Automobile","Car Insurance",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Automobile","Highway",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Automobile","Car Tax",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Automobile","Car Buy",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Automobile","Car Rent",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
-
-    c = Category("Automobile","Penalty",mCategoryNextId++);
-    mCategories.insert(c.id(),c);
-    log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
+    QMapIterator<QString,QString> i(l);
+    while (i.hasNext())
+    {
+        i.next();
+        c = Category(i.key(),i.value(),mCategoryNextId++);
+        mCategories.insert(c.id(),c);
+        log.log(QString("Category <%1 - %2> has been added!").arg(c.name()).arg(c.subName()),LOG_MEDIUM_INFORMATION);
+    }
 }
 
 

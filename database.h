@@ -37,6 +37,8 @@
 #include "category.h"
 #include "scheduled.h"
 
+#include "plutodefault.h"
+
 class Database
 {
 public:
@@ -130,6 +132,8 @@ private:
     void createDefaultAccountType (void);
     void createDefaultPayeeType (void);
     void createDefaultCategory (void);
+
+    PlutoDefault              mDefault;
 
     QMap<quint32,User>        mUsers;
     quint32                   mUserNextId;

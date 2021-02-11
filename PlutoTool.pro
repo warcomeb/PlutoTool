@@ -25,6 +25,7 @@ SOURCES += \
         payee.cpp \
         payeetype.cpp \
         plutocliprint.cpp \
+        plutodefault.cpp \
         plutotool.cpp \
         plutotoolreport.cpp \
         scheduled.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
     payee.h \
     payeetype.h \
     plutocliprint.h \
+    plutodefault.h \
     plutoprint.h \
     plutotool.h \
     plutotoolreport.h \
