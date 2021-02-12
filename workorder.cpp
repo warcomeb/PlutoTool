@@ -76,6 +76,16 @@ QString WorkOrder::code (void)
     return mCode;
 }
 
+QDate WorkOrder::start (void)
+{
+    return mStart;
+}
+
+QDate WorkOrder::end (void)
+{
+    return mEnd;
+}
+
 void WorkOrder::setDescription (QString desc)
 {
     mDescription = desc;

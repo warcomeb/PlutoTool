@@ -210,6 +210,30 @@ void PlutoTool::executeCommand (void)
         PlutoCLIPrint print;
         print.printAccounts(mDatabase.accounts());
     }
+    else if (mConfig.cmd == COMMAND_GET_PAYEES)
+    {
+        cout << "%%%%%%%%%% COMMAND GET PAYEES %%%%%%%%%%" << endl;
+
+        mDatabase.load(mConfig);
+        PlutoCLIPrint print;
+        print.printPayees(mDatabase.payees());
+    }
+    else if (mConfig.cmd == COMMADN_GET_CATEGORIES)
+    {
+        cout << "%%%%%%%%%% COMMAND GET CATEGORIES %%%%%%%%%%" << endl;
+
+        mDatabase.load(mConfig);
+        PlutoCLIPrint print;
+        print.printCategories(mDatabase.categories());
+    }
+    else if (mConfig.cmd == COMMADN_GET_WORKORDERS)
+    {
+        cout << "%%%%%%%%%% COMMAND GET WORKORDERS %%%%%%%%%%" << endl;
+
+        mDatabase.load(mConfig);
+        PlutoCLIPrint print;
+        print.printWorkOrders(mDatabase.workorders());
+    }
     else if (mConfig.cmd == COMMAND_ERROR)
     {
         cout << "\r\nCommand NOT FOUND!" << endl;

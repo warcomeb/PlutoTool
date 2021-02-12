@@ -85,6 +85,18 @@ Command getCommand (QString cmd)
     {
         return COMMAND_GET_ACCOUNTS;
     }
+    else if ((cmd == "get-payees") || (cmd == "GET-PAYEES"))
+    {
+        return COMMAND_GET_PAYEES;
+    }
+    else if ((cmd == "get-categories") || (cmd == "GET-CATEGORIES"))
+    {
+        return COMMADN_GET_CATEGORIES;
+    }
+    else if ((cmd == "get-workorders") || (cmd == "GET-WORKORDERS"))
+    {
+        return COMMADN_GET_WORKORDERS;
+    }
     return COMMAND_ERROR;
 }
 

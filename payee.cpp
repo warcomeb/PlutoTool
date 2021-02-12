@@ -87,6 +87,11 @@ QString Payee::code (void)
     return mCode;
 }
 
+PayeeType Payee::type (void)
+{
+    return mType;
+}
+
 void Payee::write (QJsonObject &json) const
 {
     QJsonObject o;

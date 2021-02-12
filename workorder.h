@@ -40,6 +40,9 @@ public:
 
     QString code (void);
 
+    QDate start (void);
+    QDate end (void);
+
     void setDescription (QString desc);
 
     void write (QJsonObject &json) const;

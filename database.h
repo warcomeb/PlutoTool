@@ -76,15 +76,30 @@ public:
         return mAccounts[id];
     }
 
+    QMap<quint32,WorkOrder> workorders (void)
+    {
+        return mWorkOrders;
+    };
+
     WorkOrder& getWorkOrder (quint32 id)
     {
         return mWorkOrders[id];
     }
 
+    QMap<quint32,Payee> payees (void)
+    {
+        return mPayees;
+    };
+
     Payee& getPayee (quint32 id)
     {
         return mPayees[id];
     }
+
+    QMap<quint32,Category> categories (void)
+    {
+        return mCategories;
+    };
 
     Category& getCategory (quint32 id)
     {

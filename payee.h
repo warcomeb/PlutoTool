@@ -43,6 +43,8 @@ public:
 
     QString code (void);
 
+    PayeeType type (void);
+
     void write (QJsonObject &json) const;
     void read (const QJsonObject &json, QMap<quint32,PayeeType> types);
 

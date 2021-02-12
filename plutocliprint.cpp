@@ -132,19 +132,85 @@ void PlutoCLIPrint::printAccounts (QMap<quint32,Account> a)
         out() << headerLine;
     }
 }
-void PlutoCLIPrint::printPayees (QList<Payee> p)
+void PlutoCLIPrint::printPayees (QMap<quint32,Payee> p)
 {
+    QString header = QString("%1 | %2 | %3 | %4 \r\n")
+                           .arg("Id  "     ,CLI_PRINT_ID_SIZE)
+                           .arg("Code"     ,CLI_PRINT_CODE_SIZE)
+                           .arg("Name"     ,CLI_PRINT_PAYEE_SIZE)
+                           .arg("Type"     ,CLI_PRINT_PAYEE_TYPE_SIZE);
+    int headerLen = header.length() - 2;
+    QString headerLine = QString("%1\r\n").arg("",headerLen,QChar('-'));
 
+    // Print table header
+    out() << headerLine;
+    out() << header;
+    out() << headerLine;
+
+    // Print Element
+    foreach (Payee e, p)
+    {
+        out() << QString("%1 | %2 | %3 | %4 \r\n")
+                    .arg(e.id()               ,CLI_PRINT_ID_SIZE)
+                    .arg(e.code()             ,CLI_PRINT_CODE_SIZE)
+                    .arg(e.name()             ,CLI_PRINT_PAYEE_SIZE)
+                    .arg(e.type().name()      ,CLI_PRINT_PAYEE_TYPE_SIZE);
+        out() << headerLine;
+    }
 }
 
-void PlutoCLIPrint::printCategories (QList<Category> c)
+void PlutoCLIPrint::printCategories (QMap<quint32,Category> c)
 {
+    QString header = QString("%1 | %2 | %3 \r\n")
+                           .arg("Id  "     ,CLI_PRINT_ID_SIZE)
+                           .arg("Name"     ,CLI_PRINT_CATEGORY_SIZE)
+                           .arg("SubName"  ,CLI_PRINT_CATEGORY_SIZE);
+    int headerLen = header.length() - 2;
+    QString headerLine = QString("%1\r\n").arg("",headerLen,QChar('-'));
 
+    // Print table header
+    out() << headerLine;
+    out() << header;
+    out() << headerLine;
+
+    // Print Element
+    foreach (Category e, c)
+    {
+        out() << QString("%1 | %2 | %3 \r\n")
+                    .arg(e.id()      ,CLI_PRINT_ID_SIZE)
+                    .arg(e.name()    ,CLI_PRINT_CATEGORY_SIZE)
+                    .arg(e.subName() ,CLI_PRINT_CATEGORY_SIZE);
+        out() << headerLine;
+    }
 }
 
-void PlutoCLIPrint::printWorkOrders (QList<WorkOrder> w)
+void PlutoCLIPrint::printWorkOrders (QMap<quint32,WorkOrder> w)
 {
+    QString header = QString("%1 | %2 | %3 | %4 | %5 \r\n")
+                           .arg("Id  "     ,CLI_PRINT_ID_SIZE)
+                           .arg("Code"     ,CLI_PRINT_CODE_SIZE)
+                           .arg("Name"     ,CLI_PRINT_WORKORDER_SIZE)
+                           .arg("Start"    ,CLI_PRINT_DEADLINE_SIZE)
+                           .arg("End"      ,CLI_PRINT_DEADLINE_SIZE);
+    int headerLen = header.length() - 2;
+    QString headerLine = QString("%1\r\n").arg("",headerLen,QChar('-'));
 
+    // Print table header
+    out() << headerLine;
+    out() << header;
+    out() << headerLine;
+
+    // Print Element
+    foreach (WorkOrder e, w)
+    {
+        out() << QString("%1 | %2 | %3 | %4 | %5 \r\n")
+                    .arg(e.id()    ,CLI_PRINT_ID_SIZE)
+                    .arg(e.code()  ,CLI_PRINT_CODE_SIZE)
+                    .arg(e.name()  ,CLI_PRINT_WORKORDER_SIZE)
+                    .arg(e.start().toString("yyyy-MM-dd"))
+                    .arg(e.end().toString("yyyy-MM-dd"));
+        out() << headerLine;
+    }
 }
 
 QTextStream& PlutoCLIPrint::out (void)

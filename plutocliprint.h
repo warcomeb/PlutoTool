@@ -34,9 +34,9 @@ public:
     void printMovements (QList<Movement> m);
 
     void printAccounts (QMap<quint32, Account> a);
-    void printPayees (QList<Payee> p);
-    void printCategories (QList<Category> c);
-    void printWorkOrders (QList<WorkOrder> w);
+    void printPayees (QMap<quint32,Payee> p);
+    void printCategories (QMap<quint32,Category> c);
+    void printWorkOrders (QMap<quint32,WorkOrder> w);
 
 private:
 
@@ -44,10 +44,11 @@ private:
     const int CLI_PRINT_CODE_SIZE         = -10;
     const int CLI_PRINT_AMOUNT_SIZE       = 10;
     const int CLI_PRINT_PAYEE_SIZE        = -30;
+    const int CLI_PRINT_PAYEE_TYPE_SIZE   = -20;
     const int CLI_PRINT_ACCOUNT_SIZE      = -30;
     const int CLI_PRINT_ACCOUNT_TYPE_SIZE = -20;
     const int CLI_PRINT_DEADLINE_SIZE     = -10;
-    const int CLI_PRINT_WORKORDER_SIZE    = -15;
+    const int CLI_PRINT_WORKORDER_SIZE    = -25;
     const int CLI_PRINT_CATEGORY_SIZE     = -20;
     //const int CLI_PRINT_PAID_SIZE      = -1;
 
