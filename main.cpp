@@ -459,7 +459,7 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
             *errorMessage = "Error: Option 'ta' is not valid.";
             return CLI_PARSE_RESULT_ERROR;
         }
-        config->tAmount = (quint32)amountValue;
+        config->tAmount = amountValue;
     }
     else
     {

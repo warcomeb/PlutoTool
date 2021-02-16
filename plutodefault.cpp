@@ -38,7 +38,8 @@ PlutoDefault::PlutoDefault()
                << "Doctor"
                << "Transport"
                << "Utilities"
-               << "Mechanic";
+               << "Mechanic"
+               << "Camping";
 
     mCategory.insert("Transfer"     ,"-");
     // Income
@@ -77,4 +78,6 @@ PlutoDefault::PlutoDefault()
     mCategory.insert("Automobile"   ,"Penalty");
     // Entertainment
     mCategory.insert("Entertainment","Cinema");
+    // Travel
+    mCategory.insert("Travel"       ,"Accomodation");
 }

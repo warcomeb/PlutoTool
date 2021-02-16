@@ -26,13 +26,12 @@
 #define PROJECT_VERSION_MAJOR                         1
 #define PROJECT_VERSION_MINOR                         0
 #define PROJECT_VERSION_SUBMINOR                      0
-#define PROJECT_VERSION_PATCH                         0
 
 #define UTILITY_STRING(x)                             #x
 #define UTILITY_STRING1(x)                            UTILITY_STRING(x)
 
-#define PROJECT_VERSION_STRING1(x,y,z,p)              UTILITY_STRING1(x)"." UTILITY_STRING1(y) "." UTILITY_STRING1(z) "-" UTILITY_STRING1(p)
-#define PROJECT_VERSION                               PROJECT_VERSION_STRING1(PROJECT_VERSION_MAJOR,PROJECT_VERSION_MINOR,PROJECT_VERSION_SUBMINOR,PROJECT_VERSION_PATCH)
+#define PROJECT_VERSION_STRING1(x,y,z)                UTILITY_STRING1(x)"." UTILITY_STRING1(y) "." UTILITY_STRING1(z)
+#define PROJECT_VERSION                               PROJECT_VERSION_STRING1(PROJECT_VERSION_MAJOR,PROJECT_VERSION_MINOR,PROJECT_VERSION_SUBMINOR)
 
 
 //#define PROJECT_VERSION       "1.0.0.0"

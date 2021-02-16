@@ -48,17 +48,9 @@ private:
     const int CLI_PRINT_ACCOUNT_SIZE      = -30;
     const int CLI_PRINT_ACCOUNT_TYPE_SIZE = -20;
     const int CLI_PRINT_DEADLINE_SIZE     = -10;
-    const int CLI_PRINT_WORKORDER_SIZE    = -25;
+    const int CLI_PRINT_WORKORDER_SIZE    = -35;
     const int CLI_PRINT_CATEGORY_SIZE     = -20;
     //const int CLI_PRINT_PAID_SIZE      = -1;
-
-    QString mScheduledHeader;
-    QString mScheduledHeaderLine;
-    int     mScheduledHeaderLength;
-
-    QString mMovementsHeader;
-    QString mMovementsHeaderLine;
-    int     mMovementsHeaderLength;
 
     QTextStream& out (void);
 };
