@@ -97,6 +97,10 @@ public:
             }
         }
 
+        if (workorderId > 0) checkWorkOrder = true;
+        if (categoryId > 0)  checkCategory  = true;
+        if (payeeId > 0)     checkPayee     = true;
+
         QMap<quint32,Transaction> transaction = db.transaction();
         foreach (Transaction t, transaction)
         {
