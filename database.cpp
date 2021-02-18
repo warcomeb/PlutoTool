@@ -855,13 +855,20 @@ bool Database::addScheduled (Config config)
         }
 
         // WorkOrder
-        if (mWorkOrders.contains(config.sWorkorder))
+        if (config.sWorkorder > 0)
         {
-            w = mWorkOrders[config.sWorkorder];
+            if (mWorkOrders.contains(config.sWorkorder))
+            {
+                w = mWorkOrders[config.sWorkorder];
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {
-            return false;
+            w = mWorkOrders[1]; // Undefined
         }
 
         // Create object!

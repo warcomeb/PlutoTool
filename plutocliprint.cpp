@@ -55,12 +55,12 @@ void PlutoCLIPrint::printScheduled (QList<Scheduled> s)
     foreach (Scheduled e, s)
     {
         out() << QString("%1 | %2 | %3 | %4 | %5 | %6 | %7\r\n")
-                    .arg((int)e.id()          ,CLI_PRINT_ID_SIZE,10)
-                    .arg((double)e.amount()   ,CLI_PRINT_AMOUNT_SIZE,'f',2)
-                    .arg(e.payee().name()     ,CLI_PRINT_PAYEE_SIZE)
+                    .arg((int)e.id()                                                     ,CLI_PRINT_ID_SIZE,10)
+                    .arg((double)e.amount()                                              ,CLI_PRINT_AMOUNT_SIZE,'f',2)
+                    .arg(e.payee().name().mid(0,abs(CLI_PRINT_PAYEE_SIZE))               ,CLI_PRINT_PAYEE_SIZE)
                     .arg(e.deadline().toString("yyyy-MM-dd"))
-                    .arg(e.category().name()  ,CLI_PRINT_CATEGORY_SIZE)
-                    .arg(e.workorder().name() ,CLI_PRINT_WORKORDER_SIZE)
+                    .arg(e.category().completeName().mid(0,abs(CLI_PRINT_CATEGORY_SIZE)) ,CLI_PRINT_CATEGORY_SIZE)
+                    .arg(e.workorder().name().mid(0,abs(CLI_PRINT_WORKORDER_SIZE))       ,CLI_PRINT_WORKORDER_SIZE)
                     .arg((e.paid() == true) ? "Y" : "N");
         out() << headerLine;
     }

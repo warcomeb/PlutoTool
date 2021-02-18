@@ -567,7 +567,7 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
             *errorMessage = "Error: Option 'sa' is not valid.";
             return CLI_PARSE_RESULT_ERROR;
         }
-        config->sAmount = (quint32)amountValue;
+        config->sAmount = amountValue;
     }
     else
     {
