@@ -87,6 +87,8 @@ void PlutoCLIPrint::printMovements (QList<Movement> m)
     out() << header;
     out() << headerLine;
 
+    float total = 0.0f;
+
     // Print Element
     foreach (Movement e, m)
     {
@@ -97,8 +99,15 @@ void PlutoCLIPrint::printMovements (QList<Movement> m)
                     .arg(e.payee().name().mid(0,abs(CLI_PRINT_PAYEE_SIZE))              ,CLI_PRINT_PAYEE_SIZE)
                     .arg(e.category().completeName().mid(0,abs(CLI_PRINT_CATEGORY_SIZE)),CLI_PRINT_CATEGORY_SIZE)
                     .arg(e.workorder().name().mid(0,abs(CLI_PRINT_WORKORDER_SIZE))      ,CLI_PRINT_WORKORDER_SIZE);
+        total += (float)e.amount();
         out() << headerLine;
     }
+    // Print total
+    out() << headerLine;
+    out() << QString("%1 | %2 |\r\n")
+                .arg("Total"       ,CLI_PRINT_DEADLINE_SIZE)
+                .arg((double)total ,CLI_PRINT_AMOUNT_SIZE,'f',2);
+    out() << headerLine;
 }
 
 void PlutoCLIPrint::printAccounts (QMap<quint32,Account> a)
