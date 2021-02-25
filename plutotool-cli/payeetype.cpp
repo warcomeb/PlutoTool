@@ -38,7 +38,7 @@ PayeeType::PayeeType (QString name, quint32 id):
     setId(id);
 }
 
-QString PayeeType::name (void)
+QString PayeeType::name (void) const
 {
     return mName;
 }

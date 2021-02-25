@@ -66,7 +66,7 @@ void Payee::defaultParams (void)
     mNote = QString("-");
 }
 
-QString Payee::name (void)
+QString Payee::name (void) const
 {
     return mName;
 }
@@ -87,7 +87,7 @@ QString Payee::code (void)
     return mCode;
 }
 
-PayeeType Payee::type (void)
+PayeeType Payee::type (void) const
 {
     return mType;
 }

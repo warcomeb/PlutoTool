@@ -47,7 +47,7 @@ PlutoTool::PlutoTool (Config config):
     WLog& log = WLog::instance();
     // FIXME
     //log.setVerboseLevel(config.verboseLevel);
-    log.setVerboseLevel(2);
+    log.setVerboseLevel(0);
 
     executeCommand();
 }
@@ -204,35 +204,35 @@ void PlutoTool::executeCommand (void)
     }
     else if (mConfig.cmd == COMMAND_GET_ACCOUNTS)
     {
-        cout << "%%%%%%%%%% COMMAND GET ACCOUNTS %%%%%%%%%%" << endl;
+        //cout << "%%%%%%%%%% COMMAND GET ACCOUNTS %%%%%%%%%%" << endl;
 
         mDatabase.load(mConfig);
         PlutoCLIPrint print;
-        print.printAccounts(mDatabase.accounts());
+        print.printAccounts(mDatabase.accounts(),mConfig.noFormat);
     }
     else if (mConfig.cmd == COMMAND_GET_PAYEES)
     {
-        cout << "%%%%%%%%%% COMMAND GET PAYEES %%%%%%%%%%" << endl;
+        //cout << "%%%%%%%%%% COMMAND GET PAYEES %%%%%%%%%%" << endl;
 
         mDatabase.load(mConfig);
         PlutoCLIPrint print;
-        print.printPayees(mDatabase.payees());
+        print.printPayees(mDatabase.payees(),mConfig.noFormat);
     }
     else if (mConfig.cmd == COMMADN_GET_CATEGORIES)
     {
-        cout << "%%%%%%%%%% COMMAND GET CATEGORIES %%%%%%%%%%" << endl;
+        //cout << "%%%%%%%%%% COMMAND GET CATEGORIES %%%%%%%%%%" << endl;
 
         mDatabase.load(mConfig);
         PlutoCLIPrint print;
-        print.printCategories(mDatabase.categories());
+        print.printCategories(mDatabase.categories(),mConfig.noFormat);
     }
     else if (mConfig.cmd == COMMADN_GET_WORKORDERS)
     {
-        cout << "%%%%%%%%%% COMMAND GET WORKORDERS %%%%%%%%%%" << endl;
+        //cout << "%%%%%%%%%% COMMAND GET WORKORDERS %%%%%%%%%%" << endl;
 
         mDatabase.load(mConfig);
         PlutoCLIPrint print;
-        print.printWorkOrders(mDatabase.workorders());
+        print.printWorkOrders(mDatabase.workorders(),mConfig.noFormat);
     }
     else if (mConfig.cmd == COMMAND_ERROR)
     {

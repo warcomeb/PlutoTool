@@ -108,6 +108,9 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
     const QCommandLineOption replaceOption(QStringList() << "r" << "replace",
             QCoreApplication::translate("main", "Replace the current database whether just exist"));
     parser.addOption(replaceOption);
+    const QCommandLineOption noFormatOption(QStringList() << "z" << "no-format",
+            QCoreApplication::translate("main", "Don't use formar for CLI print table"));
+    parser.addOption(noFormatOption);
 
     const QCommandLineOption accountFilterOption(QStringList() << "a" << "account",
             QCoreApplication::translate("main", "The <id> number of the account to filter the search"),
@@ -283,6 +286,15 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
     else
     {
         config->replace = false;
+    }
+
+    if (parser.isSet(noFormatOption))
+    {
+        config->noFormat = true;
+    }
+    else
+    {
+        config->noFormat = false;
     }
 
     // USER options -----------------------------------------------------------

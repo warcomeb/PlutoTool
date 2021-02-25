@@ -33,10 +33,10 @@ public:
 
     void printMovements (QList<Movement> m);
 
-    void printAccounts (QMap<quint32, Account> a);
-    void printPayees (QMap<quint32,Payee> p);
-    void printCategories (QMap<quint32,Category> c);
-    void printWorkOrders (QMap<quint32,WorkOrder> w);
+    void printAccounts (QMap<quint32, Account> a, bool format);
+    void printPayees (QMap<quint32,Payee> p, bool format);
+    void printCategories (QMap<quint32,Category> c, bool format);
+    void printWorkOrders (QMap<quint32,WorkOrder> w, bool format);
 
 private:
 

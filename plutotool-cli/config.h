@@ -38,6 +38,8 @@ struct Config
     QString database;
     bool replace;
 
+    bool noFormat;
+
     Command cmd;
 
     // Filter parameters

@@ -35,10 +35,10 @@ public:
 
     virtual void printMovements (QList<Movement> m) = 0;
 
-    virtual void printAccounts (QMap<quint32, Account> a) = 0;
-    virtual void printPayees (QMap<quint32,Payee> p) = 0;
-    virtual void printCategories (QMap<quint32,Category> c) = 0;
-    virtual void printWorkOrders (QMap<quint32,WorkOrder> w) = 0;
+    virtual void printAccounts (QMap<quint32, Account> a, bool format) = 0;
+    virtual void printPayees (QMap<quint32,Payee> p, bool format) = 0;
+    virtual void printCategories (QMap<quint32,Category> c, bool format) = 0;
+    virtual void printWorkOrders (QMap<quint32,WorkOrder> w, bool format) = 0;
 
 };
 #endif // PLUTOPRINT_H

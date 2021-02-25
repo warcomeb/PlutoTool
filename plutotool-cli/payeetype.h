@@ -32,7 +32,7 @@ public:
     PayeeType (QString name);
     PayeeType (QString name, quint32 id);
 
-    QString name (void);
+    QString name (void) const;
 
     QString description (void);
     void setDescription (QString desc);

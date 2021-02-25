@@ -36,14 +36,14 @@ public:
 
     void defaultParams (void);
 
-    QString name (void);
+    QString name (void) const;
 
     void setId (quint32 id);
     quint32 id (void) const;
 
     QString code (void);
 
-    PayeeType type (void);
+    PayeeType type (void) const;
 
     void write (QJsonObject &json) const;
     void read (const QJsonObject &json, QMap<quint32,PayeeType> types);

@@ -110,9 +110,15 @@ void PlutoCLIPrint::printMovements (QList<Movement> m)
     out() << headerLine;
 }
 
-void PlutoCLIPrint::printAccounts (QMap<quint32,Account> a)
+void PlutoCLIPrint::printAccounts (QMap<quint32,Account> a, bool format)
 {
-    QString header = QString("%1 | %2 | %3 | %4 | %5 | %6 \r\n")
+    QString headerFormat = "%1 | %2 | %3 | %4 | %5 | %6 \r\n";
+    if (format == true)
+    {
+        headerFormat = "%1;%2;%3;%4;%5;%6\r\n";
+    }
+
+    QString header = QString(headerFormat)
                            .arg("Id  "     ,CLI_PRINT_ID_SIZE)
                            .arg("Code"     ,CLI_PRINT_CODE_SIZE)
                            .arg("Name"     ,CLI_PRINT_ACCOUNT_SIZE)
@@ -123,26 +129,32 @@ void PlutoCLIPrint::printAccounts (QMap<quint32,Account> a)
     QString headerLine = QString("%1\r\n").arg("",headerLen,QChar('-'));
 
     // Print table header
-    out() << headerLine;
+    if (!format) out() << headerLine;
     out() << header;
-    out() << headerLine;
+    if (!format) out() << headerLine;
 
     // Print Element
     foreach (Account e, a)
     {
-        out() << QString("%1 | %2 | %3 | %4 | %5 | %6\r\n")
+        out() << QString(headerFormat)
                     .arg(e.id()                                                 ,CLI_PRINT_ID_SIZE)
                     .arg(e.code()                                               ,CLI_PRINT_CODE_SIZE)
                     .arg(e.name().mid(0,abs(CLI_PRINT_ACCOUNT_SIZE))            ,CLI_PRINT_ACCOUNT_SIZE)
                     .arg(e.number().mid(0,abs(CLI_PRINT_ACCOUNT_SIZE))          ,CLI_PRINT_ACCOUNT_SIZE)
                     .arg(e.type().name().mid(0,abs(CLI_PRINT_ACCOUNT_TYPE_SIZE)),CLI_PRINT_ACCOUNT_TYPE_SIZE)
                     .arg((e.active() == true) ? "Y" : "N");
-        out() << headerLine;
+        if (!format) out() << headerLine;
     }
 }
-void PlutoCLIPrint::printPayees (QMap<quint32,Payee> p)
+void PlutoCLIPrint::printPayees (QMap<quint32,Payee> p, bool format)
 {
-    QString header = QString("%1 | %2 | %3 | %4 \r\n")
+    QString headerFormat = "%1 | %2 | %3 | %4 \r\n";
+    if (format == true)
+    {
+        headerFormat = "%1;%2;%3;%4\r\n";
+    }
+
+    QString header = QString(headerFormat)
                            .arg("Id  "     ,CLI_PRINT_ID_SIZE)
                            .arg("Code"     ,CLI_PRINT_CODE_SIZE)
                            .arg("Name"     ,CLI_PRINT_PAYEE_SIZE)
@@ -151,25 +163,31 @@ void PlutoCLIPrint::printPayees (QMap<quint32,Payee> p)
     QString headerLine = QString("%1\r\n").arg("",headerLen,QChar('-'));
 
     // Print table header
-    out() << headerLine;
+    if (!format) out() << headerLine;
     out() << header;
-    out() << headerLine;
+    if (!format) out() << headerLine;
 
     // Print Element
     foreach (Payee e, p)
     {
-        out() << QString("%1 | %2 | %3 | %4 \r\n")
+        out() << QString(headerFormat)
                     .arg(e.id()                                               ,CLI_PRINT_ID_SIZE)
                     .arg(e.code()                                             ,CLI_PRINT_CODE_SIZE)
                     .arg(e.name().mid(0,abs(CLI_PRINT_PAYEE_SIZE))            ,CLI_PRINT_PAYEE_SIZE)
                     .arg(e.type().name().mid(0,abs(CLI_PRINT_PAYEE_TYPE_SIZE)),CLI_PRINT_PAYEE_TYPE_SIZE);
-        out() << headerLine;
+        if (!format) out() << headerLine;
     }
 }
 
-void PlutoCLIPrint::printCategories (QMap<quint32,Category> c)
+void PlutoCLIPrint::printCategories (QMap<quint32,Category> c, bool format)
 {
-    QString header = QString("%1 | %2 | %3 \r\n")
+    QString headerFormat = "%1 | %2 | %3 \r\n";
+    if (format == true)
+    {
+        headerFormat = "%1;%2;%3\r\n";
+    }
+
+    QString header = QString(headerFormat)
                            .arg("Id  "     ,CLI_PRINT_ID_SIZE)
                            .arg("Name"     ,CLI_PRINT_CATEGORY_SIZE)
                            .arg("SubName"  ,CLI_PRINT_CATEGORY_SIZE);
@@ -177,24 +195,30 @@ void PlutoCLIPrint::printCategories (QMap<quint32,Category> c)
     QString headerLine = QString("%1\r\n").arg("",headerLen,QChar('-'));
 
     // Print table header
-    out() << headerLine;
+    if (!format) out() << headerLine;
     out() << header;
-    out() << headerLine;
+    if (!format) out() << headerLine;
 
     // Print Element
     foreach (Category e, c)
     {
-        out() << QString("%1 | %2 | %3 \r\n")
+        out() << QString(headerFormat)
                     .arg(e.id()                                         ,CLI_PRINT_ID_SIZE)
                     .arg(e.name().mid(0,abs(CLI_PRINT_CATEGORY_SIZE))   ,CLI_PRINT_CATEGORY_SIZE)
                     .arg(e.subName().mid(0,abs(CLI_PRINT_CATEGORY_SIZE)),CLI_PRINT_CATEGORY_SIZE);
-        out() << headerLine;
+        if (!format) out() << headerLine;
     }
 }
 
-void PlutoCLIPrint::printWorkOrders (QMap<quint32,WorkOrder> w)
+void PlutoCLIPrint::printWorkOrders (QMap<quint32,WorkOrder> w, bool format)
 {
-    QString header = QString("%1 | %2 | %3 | %4 | %5 \r\n")
+    QString headerFormat = "%1 | %2 | %3 | %4 | %5 \r\n";
+    if (format == true)
+    {
+        headerFormat = "%1;%2;%3;%4;%5\r\n";
+    }
+
+    QString header = QString(headerFormat)
                            .arg("Id  "     ,CLI_PRINT_ID_SIZE)
                            .arg("Code"     ,CLI_PRINT_CODE_SIZE)
                            .arg("Name"     ,CLI_PRINT_WORKORDER_SIZE)
@@ -204,20 +228,20 @@ void PlutoCLIPrint::printWorkOrders (QMap<quint32,WorkOrder> w)
     QString headerLine = QString("%1\r\n").arg("",headerLen,QChar('-'));
 
     // Print table header
-    out() << headerLine;
+    if (!format) out() << headerLine;
     out() << header;
-    out() << headerLine;
+    if (!format) out() << headerLine;
 
     // Print Element
     foreach (WorkOrder e, w)
     {
-        out() << QString("%1 | %2 | %3 | %4 | %5 \r\n")
+        out() << QString(headerFormat)
                     .arg(e.id()                                       ,CLI_PRINT_ID_SIZE)
                     .arg(e.code()                                     ,CLI_PRINT_CODE_SIZE)
                     .arg(e.name().mid(0,abs(CLI_PRINT_WORKORDER_SIZE)),CLI_PRINT_WORKORDER_SIZE)
                     .arg(e.start().toString("yyyy-MM-dd"))
                     .arg(e.end().toString("yyyy-MM-dd"));
-        out() << headerLine;
+        if (!format) out() << headerLine;
     }
 }
 
