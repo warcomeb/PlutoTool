@@ -42,6 +42,8 @@ struct Config
 
     Command cmd;
 
+    QString description;
+
     // Filter parameters
     quint32 account;
     quint32 payee;

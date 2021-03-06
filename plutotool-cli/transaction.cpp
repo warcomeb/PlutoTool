@@ -102,6 +102,16 @@ Transaction::Type Transaction::type (void)
     return mType;
 }
 
+void Transaction::setNote(QString note)
+{
+    mNote = note;
+}
+
+QString Transaction::note()
+{
+    return mNote;
+}
+
 void Transaction::write (QJsonObject &json) const
 {
     QJsonObject o;

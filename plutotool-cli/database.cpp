@@ -806,6 +806,7 @@ bool Database::addTransaction (Config config)
         // Create object!
         Transaction t(aFrom,aTo,p,d,config.tAmount,c,(Transaction::Type)config.tType,w);
         t.setId(mTransactionNextId);
+        t.setNote(config.description);
         mTransactions.insert(t.id(),t);
         mTransactionNextId++;
 

@@ -70,6 +70,9 @@ public:
 
     Type type (void);
 
+    void setNote (QString note);
+    QString note (void);
+
     void write (QJsonObject &json) const;
     void read (const QJsonObject &json,
                QMap<quint32,Account> accounts,

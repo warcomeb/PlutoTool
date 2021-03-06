@@ -116,21 +116,25 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
             QCoreApplication::translate("main", "The <id> number of the account to filter the search"),
             QCoreApplication::translate("main", "id"));
     parser.addOption(accountFilterOption);
-    const QCommandLineOption payeeFilterOption(QStringList() << "p" << "payee",
-            QCoreApplication::translate("main", "The <id> number of the payee to filter the search"),
-            QCoreApplication::translate("main", "id"));
-    parser.addOption(payeeFilterOption);
     const QCommandLineOption categoryFilterOption(QStringList() << "c" << "category",
             QCoreApplication::translate("main", "The <id> number of the category to filter the search"),
             QCoreApplication::translate("main", "id"));
     parser.addOption(categoryFilterOption);
+    const QCommandLineOption descriptionOption(QStringList() << "d" << "description",
+            QCoreApplication::translate("main", "The <description> of a transaction"),
+            QCoreApplication::translate("main", "description"));
+    parser.addOption(descriptionOption);
+    const QCommandLineOption payeeFilterOption(QStringList() << "p" << "payee",
+            QCoreApplication::translate("main", "The <id> number of the payee to filter the search"),
+            QCoreApplication::translate("main", "id"));
+    parser.addOption(payeeFilterOption);
+    const QCommandLineOption showUpaidScheduledFilterOption(QStringList() << "s" << "scheduled",
+            QCoreApplication::translate("main", "Show unpaid scheduled into STATUS command"));
+    parser.addOption(showUpaidScheduledFilterOption);
     const QCommandLineOption workorderFilterOption(QStringList() << "w" << "workorder",
             QCoreApplication::translate("main", "The <id> number of the workorder to filter the search"),
             QCoreApplication::translate("main", "id"));
     parser.addOption(workorderFilterOption);
-    const QCommandLineOption showUpaidScheduledFilterOption(QStringList() << "s" << "scheduled",
-            QCoreApplication::translate("main", "Show unpaid scheduled into STATUS command"));
-    parser.addOption(showUpaidScheduledFilterOption);
 
     const QCommandLineOption uNameOption(QStringList() << "un" << "user-name",
             QCoreApplication::translate("main", "The <name> of the user to be added"),
@@ -296,6 +300,17 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
     {
         config->noFormat = false;
     }
+
+    // GENERAL options --------------------------------------------------------
+    if (parser.isSet(descriptionOption))
+    {
+        config->description = parser.value(descriptionOption);
+    }
+    else
+    {
+        config->description = QString::Null();
+    }
+    // -------------------------------------------------------- GENERAL options
 
     // USER options -----------------------------------------------------------
     if (parser.isSet(uNameOption))
