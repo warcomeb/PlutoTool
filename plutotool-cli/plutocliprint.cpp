@@ -148,16 +148,18 @@ void PlutoCLIPrint::printAccounts (QMap<quint32,Account> a, bool format)
 }
 void PlutoCLIPrint::printPayees (QMap<quint32,Payee> p, bool format)
 {
-    QString headerFormat = "%1 | %2 | %3 | %4 \r\n";
+    QString headerFormat = "%1 | %2 | %3 | %4 | %5 \r\n";
     if (format == true)
     {
-        headerFormat = "%1;%2;%3;%4\r\n";
+        out() << ";PayeeTable \r\n";
+        headerFormat = "%1;%2;%3;%4;%5\r\n";
     }
 
-    QString header = QString(headerFormat)
+    QString header = QString(";"+ headerFormat)
                            .arg("Id  "     ,CLI_PRINT_ID_SIZE)
                            .arg("Code"     ,CLI_PRINT_CODE_SIZE)
                            .arg("Name"     ,CLI_PRINT_PAYEE_SIZE)
+                           .arg("TypeId"   ,CLI_PRINT_ID_SIZE)
                            .arg("Type"     ,CLI_PRINT_PAYEE_TYPE_SIZE);
     int headerLen = header.length() - 2;
     QString headerLine = QString("%1\r\n").arg("",headerLen,QChar('-'));
@@ -174,6 +176,7 @@ void PlutoCLIPrint::printPayees (QMap<quint32,Payee> p, bool format)
                     .arg(e.id()                                               ,CLI_PRINT_ID_SIZE)
                     .arg(e.code()                                             ,CLI_PRINT_CODE_SIZE)
                     .arg(e.name().mid(0,abs(CLI_PRINT_PAYEE_SIZE))            ,CLI_PRINT_PAYEE_SIZE)
+                    .arg(e.type().id()                                        ,CLI_PRINT_ID_SIZE)
                     .arg(e.type().name().mid(0,abs(CLI_PRINT_PAYEE_TYPE_SIZE)),CLI_PRINT_PAYEE_TYPE_SIZE);
         if (!format) out() << headerLine;
     }

@@ -1,6 +1,7 @@
 TEMPLATE = subdirs
 
-SUBDIRS += plutotool-cli
+SUBDIRS += plutotool-cli \
+           plutotool-gui
 
 
 DISTFILES += \
