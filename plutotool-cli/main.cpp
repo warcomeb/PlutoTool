@@ -481,9 +481,9 @@ CLIParseResult parseCommandLine (QCommandLineParser &parser, Config *config, QSt
         const QString amount = parser.value(tAmountOption);
         bool conversionValue = false;
         const float amountValue = amount.toFloat(&conversionValue);
-        if ((amountValue < 1) || (conversionValue == false))
+        if (/*(amountValue < 1) || */(amountValue == 0) || (conversionValue == false))
         {
-            *errorMessage = "Error: Option 'ta' is not valid.";
+            *errorMessage = "Option 'ta' is not valid.";
             return CLI_PARSE_RESULT_ERROR;
         }
         config->tAmount = amountValue;
