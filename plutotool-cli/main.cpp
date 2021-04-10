@@ -97,6 +97,10 @@ Command getCommand (QString cmd)
     {
         return COMMADN_GET_WORKORDERS;
     }
+    else if ((cmd == "get-transactions") || (cmd == "GET-TRANSACTIONS"))
+    {
+        return COMMADN_GET_TRANSACTIONS;
+    }
     return COMMAND_ERROR;
 }
 

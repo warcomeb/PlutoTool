@@ -234,6 +234,12 @@ void PlutoTool::executeCommand (void)
         PlutoCLIPrint print;
         print.printWorkOrders(mDatabase.workorders(),mConfig.noFormat);
     }
+    else if (mConfig.cmd == COMMADN_GET_TRANSACTIONS)
+    {
+        mDatabase.load(mConfig);
+        PlutoCLIPrint print;
+        print.printTransactions(mDatabase.transaction(),mConfig.noFormat);
+    }
     else if (mConfig.cmd == COMMAND_ERROR)
     {
         cout << "\r\nCommand NOT FOUND!" << endl;

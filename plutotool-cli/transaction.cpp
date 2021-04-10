@@ -102,14 +102,19 @@ Transaction::Type Transaction::type (void)
     return mType;
 }
 
-void Transaction::setNote(QString note)
+void Transaction::setNote (QString note)
 {
     mNote = note;
 }
 
-QString Transaction::note()
+QString Transaction::note (void)
 {
     return mNote;
+}
+
+bool Transaction::checked (void)
+{
+    return mChecked;
 }
 
 void Transaction::write (QJsonObject &json) const

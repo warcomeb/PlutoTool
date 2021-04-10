@@ -73,6 +73,8 @@ public:
     void setNote (QString note);
     QString note (void);
 
+    bool checked (void);
+
     void write (QJsonObject &json) const;
     void read (const QJsonObject &json,
                QMap<quint32,Account> accounts,

@@ -39,6 +39,7 @@ public:
     virtual void printPayees (QMap<quint32,Payee> p, bool format) = 0;
     virtual void printCategories (QMap<quint32,Category> c, bool format) = 0;
     virtual void printWorkOrders (QMap<quint32,WorkOrder> w, bool format) = 0;
+    virtual void printTransactions (QMap<quint32,Transaction> t, bool format) = 0;
 
 };
 #endif // PLUTOPRINT_H

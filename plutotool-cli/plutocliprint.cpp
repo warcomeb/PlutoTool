@@ -248,6 +248,69 @@ void PlutoCLIPrint::printWorkOrders (QMap<quint32,WorkOrder> w, bool format)
     }
 }
 
+void PlutoCLIPrint::printTransactions (QMap<quint32,Transaction> t, bool format)
+{
+    QString headerFormat = "%1 | %2 | %3 | %4 | %5 | %6 | %7 | %8 | %9\r\n";
+    if (format == true)
+    {
+        out() << ";Transactions Table \r\n";
+        headerFormat = "%1;%2;%3;%4;%5;%6;%7;%8;%9\r\n";
+    }
+
+    QString header;
+    if (format == true)
+    {
+        header = QString(headerFormat)
+                    .arg("Id")
+                    .arg("Date")
+                    .arg("Amount")
+                    .arg("From")
+                    .arg("To")
+                    .arg("Payee")
+                    .arg("Category")
+                    .arg("WorkOrder")
+                    .arg("C");
+    }
+    else
+    {
+        header = QString(headerFormat)
+                           .arg("Id"       ,CLI_PRINT_ID_SIZE)
+                           .arg("Date"     ,CLI_PRINT_DEADLINE_SIZE)
+                           .arg("Amount"   ,CLI_PRINT_AMOUNT_SIZE)
+                           .arg("From"     ,CLI_PRINT_ACCOUNT_SIZE)
+                           .arg("To"       ,CLI_PRINT_ACCOUNT_SIZE)
+                           .arg("Payee"    ,CLI_PRINT_PAYEE_SIZE)
+                           .arg("Category" ,CLI_PRINT_CATEGORY_SIZE)
+                           .arg("WorkOrder",CLI_PRINT_WORKORDER_SIZE)
+                           .arg("C"        ,1);
+    }
+
+    int headerLen = header.length() - 2;
+    QString headerLine = QString("%1\r\n").arg("",headerLen,QChar('-'));
+
+    // Print table header
+    if (!format) out() << headerLine;
+    out() << header;
+    if (!format) out() << headerLine;
+
+    // Print Element
+    foreach (Transaction e, t)
+    {
+        // FIXME: add print without format to use with GUI!
+        out() << QString(headerFormat)
+                    .arg(e.id()                                                          ,CLI_PRINT_ID_SIZE)
+                    .arg(e.date().toString("yyyy-MM-dd")                                 ,CLI_PRINT_DEADLINE_SIZE)
+                    .arg((double)e.amount()                                              ,CLI_PRINT_AMOUNT_SIZE,'f',2)
+                    .arg(e.accoutFrom().name().mid(0,abs(CLI_PRINT_ACCOUNT_SIZE))        ,CLI_PRINT_ACCOUNT_SIZE)
+                    .arg(e.accoutTo().name().mid(0,abs(CLI_PRINT_ACCOUNT_SIZE))          ,CLI_PRINT_ACCOUNT_SIZE)
+                    .arg(e.payee().name().mid(0,abs(CLI_PRINT_PAYEE_SIZE))               ,CLI_PRINT_PAYEE_SIZE)
+                    .arg(e.category().completeName().mid(0,abs(CLI_PRINT_CATEGORY_SIZE)) ,CLI_PRINT_CATEGORY_SIZE)
+                    .arg(e.workorder().name().mid(0,abs(CLI_PRINT_WORKORDER_SIZE))       ,CLI_PRINT_WORKORDER_SIZE)
+                    .arg(e.checked() == true ? "Y" : "N");
+        if (!format) out() << headerLine;
+    }
+}
+
 QTextStream& PlutoCLIPrint::out (void)
 {
     static QTextStream ts( stdout );

@@ -37,6 +37,7 @@ public:
     void printPayees (QMap<quint32,Payee> p, bool format);
     void printCategories (QMap<quint32,Category> c, bool format);
     void printWorkOrders (QMap<quint32,WorkOrder> w, bool format);
+    void printTransactions (QMap<quint32,Transaction> t, bool format);
 
 private:
 
