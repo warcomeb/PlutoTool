@@ -106,8 +106,9 @@ void PlutoCLIPrint::printScheduled (QList<Scheduled> s, bool noFormat)
 
 void PlutoCLIPrint::printMovements (QList<Movement> m, bool noFormat)
 {
-    QString headerFormat = "%1 | %2 | %3 | %4 | %5 | %6 \r\n";
     out() << "\r\n";
+
+    QString headerFormat = "%1 | %2 | %3 | %4 | %5 | %6 \r\n";
     if (noFormat == true)
     {
         out() << ";MovementsTable \r\n";
@@ -186,6 +187,8 @@ void PlutoCLIPrint::printMovements (QList<Movement> m, bool noFormat)
 
 void PlutoCLIPrint::printAccounts (QMap<quint32,Account> a, bool noFormat)
 {
+    out() << "\r\n";
+
     QString headerFormat = "%1 | %2 | %3 | %4 | %5 | %6 \r\n";
     if (noFormat == true)
     {
@@ -249,8 +252,11 @@ void PlutoCLIPrint::printAccounts (QMap<quint32,Account> a, bool noFormat)
         }
     }
 }
+
 void PlutoCLIPrint::printPayees (QMap<quint32,Payee> p, bool noFormat)
 {
+    out() << "\r\n";
+
     QString headerFormat = "%1 | %2 | %3 | %4 | %5 \r\n";
     if (noFormat == true)
     {
@@ -313,6 +319,8 @@ void PlutoCLIPrint::printPayees (QMap<quint32,Payee> p, bool noFormat)
 
 void PlutoCLIPrint::printCategories (QMap<quint32,Category> c, bool noFormat)
 {
+    out() << "\r\n";
+
     QString headerFormat = "%1 | %2 | %3 \r\n";
     if (noFormat == true)
     {
@@ -367,6 +375,8 @@ void PlutoCLIPrint::printCategories (QMap<quint32,Category> c, bool noFormat)
 
 void PlutoCLIPrint::printWorkOrders (QMap<quint32,WorkOrder> w, bool noFormat)
 {
+    out() << "\r\n";
+
     QString headerFormat = "%1 | %2 | %3 | %4 | %5 \r\n";
     if (noFormat == true)
     {
@@ -377,7 +387,7 @@ void PlutoCLIPrint::printWorkOrders (QMap<quint32,WorkOrder> w, bool noFormat)
     QString header;
     if (noFormat == true)
     {
-        header = QString(";"+ headerFormat)
+        header = QString(";" + headerFormat)
                     .arg("Id")
                     .arg("Code")
                     .arg("Name")
@@ -429,6 +439,8 @@ void PlutoCLIPrint::printWorkOrders (QMap<quint32,WorkOrder> w, bool noFormat)
 
 void PlutoCLIPrint::printTransactions (QMap<quint32,Transaction> t, bool noFormat)
 {
+    out() << "\r\n";
+
     QString headerFormat = "%1 | %2 | %3 | %4 | %5 | %6 | %7 | %8 | %9\r\n";
     if (noFormat == true)
     {
@@ -439,7 +451,7 @@ void PlutoCLIPrint::printTransactions (QMap<quint32,Transaction> t, bool noForma
     QString header;
     if (noFormat == false)
     {
-        header = QString(";"+ headerFormat)
+        header = QString(headerFormat)
                            .arg("Id"       ,CLI_PRINT_ID_SIZE)
                            .arg("Date"     ,CLI_PRINT_DEADLINE_SIZE)
                            .arg("Amount"   ,CLI_PRINT_AMOUNT_SIZE)
@@ -452,7 +464,7 @@ void PlutoCLIPrint::printTransactions (QMap<quint32,Transaction> t, bool noForma
     }
     else
     {
-        header = QString(headerFormat)
+        header = QString(";"+ headerFormat)
                     .arg("Id")
                     .arg("Date")
                     .arg("Amount")
