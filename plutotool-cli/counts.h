@@ -52,7 +52,14 @@ public:
         }
         else
         {
-            return false;
+            if ((m1.date() == m2.date()) && (m1.amount() == -(m2.amount())))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 
@@ -216,11 +223,11 @@ public:
                     }
                     else
                     {
-                        m = Movement(t.date(),t.accoutTo(),amount,workorder,payee,category);
+                        float nAmount = amount * (-1);
+                        m = Movement(t.date(),t.accoutFrom(),nAmount,workorder,payee,category);
                         list.append(m);
 
-                        amount *= -1;
-                        m = Movement(t.date(),t.accoutFrom(),amount,workorder,payee,category);
+                        m = Movement(t.date(),t.accoutTo(),amount,workorder,payee,category);
                         list.append(m);
                     }
                     break;

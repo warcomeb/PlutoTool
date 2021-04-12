@@ -46,7 +46,7 @@ Account Movement::account (void)
     return mAccount;
 }
 
-float Movement::amount (void)
+float Movement::amount (void) const
 {
     return mAmount;
 }

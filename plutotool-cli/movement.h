@@ -40,7 +40,7 @@ public:
               Category  category);
 
     Account   account (void);
-    float     amount (void);
+    float     amount (void) const;
     Payee     payee (void);
     Category  category (void);
     WorkOrder workorder (void);
