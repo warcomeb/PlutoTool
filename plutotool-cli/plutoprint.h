@@ -33,13 +33,13 @@ public:
 
     virtual void printScheduled (QList<Scheduled> s) = 0;
 
-    virtual void printMovements (QList<Movement> m) = 0;
+    virtual void printMovements (QList<Movement> m, bool noFormat) = 0;
 
-    virtual void printAccounts (QMap<quint32, Account> a, bool format) = 0;
-    virtual void printPayees (QMap<quint32,Payee> p, bool format) = 0;
-    virtual void printCategories (QMap<quint32,Category> c, bool format) = 0;
-    virtual void printWorkOrders (QMap<quint32,WorkOrder> w, bool format) = 0;
-    virtual void printTransactions (QMap<quint32,Transaction> t, bool format) = 0;
+    virtual void printAccounts (QMap<quint32, Account> a, bool noFormat) = 0;
+    virtual void printPayees (QMap<quint32,Payee> p, bool noFormat) = 0;
+    virtual void printCategories (QMap<quint32,Category> c, bool noFormat) = 0;
+    virtual void printWorkOrders (QMap<quint32,WorkOrder> w, bool noFormat) = 0;
+    virtual void printTransactions (QMap<quint32,Transaction> t, bool noFormat) = 0;
 
 };
 #endif // PLUTOPRINT_H

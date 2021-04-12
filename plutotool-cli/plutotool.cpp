@@ -95,7 +95,7 @@ void PlutoTool::executeCommand (void)
                                                    mConfig.workorder,
                                                    mConfig.category,
                                                    mConfig.payee);
-        print.printMovements(mov);
+        print.printMovements(mov,mConfig.noFormat);
     }
     else if (mConfig.cmd == COMMAND_ADD_USER)
     {

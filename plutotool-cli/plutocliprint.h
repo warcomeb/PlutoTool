@@ -31,13 +31,13 @@ public:
 
     void printScheduled (QList<Scheduled> s);
 
-    void printMovements (QList<Movement> m);
+    void printMovements (QList<Movement> m, bool noFormat);
 
-    void printAccounts (QMap<quint32, Account> a, bool format);
-    void printPayees (QMap<quint32,Payee> p, bool format);
-    void printCategories (QMap<quint32,Category> c, bool format);
-    void printWorkOrders (QMap<quint32,WorkOrder> w, bool format);
-    void printTransactions (QMap<quint32,Transaction> t, bool format);
+    void printAccounts (QMap<quint32, Account> a, bool noFormat);
+    void printPayees (QMap<quint32,Payee> p, bool noFormat);
+    void printCategories (QMap<quint32,Category> c, bool noFormat);
+    void printWorkOrders (QMap<quint32,WorkOrder> w, bool noFormat);
+    void printTransactions (QMap<quint32,Transaction> t, bool noFormat);
 
 private:
 
@@ -51,7 +51,12 @@ private:
     const int CLI_PRINT_DEADLINE_SIZE     = -10;
     const int CLI_PRINT_WORKORDER_SIZE    = -35;
     const int CLI_PRINT_CATEGORY_SIZE     = -20;
-    //const int CLI_PRINT_PAID_SIZE      = -1;
+
+
+    const int CLI_PRINT_PAYEE_STRICT_SIZE      = -20;
+    const int CLI_PRINT_ACCOUNT_STRICT_SIZE    = -20;
+    const int CLI_PRINT_WORKORDER_STRICT_SIZE  = -20;
+    const int CLI_PRINT_CATEGORY_STRICT_SIZE   = -20;
 
     QTextStream& out (void);
 };
