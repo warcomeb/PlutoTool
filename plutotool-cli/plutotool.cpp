@@ -85,7 +85,7 @@ void PlutoTool::executeCommand (void)
         if (mConfig.showUnpaidScheduled > 0)
         {
             QList<Scheduled> toBePay = Counts::getScheduled(mDatabase);
-            print.printScheduled(toBePay);
+            print.printScheduled(toBePay,mConfig.noFormat);
         }
 
         QList<Movement> mov = Counts::getMovements(mDatabase,

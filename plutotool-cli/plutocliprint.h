@@ -29,7 +29,7 @@ public:
     PlutoCLIPrint ();
     ~PlutoCLIPrint ();
 
-    void printScheduled (QList<Scheduled> s);
+    void printScheduled (QList<Scheduled> s, bool noFormat);
 
     void printMovements (QList<Movement> m, bool noFormat);
 

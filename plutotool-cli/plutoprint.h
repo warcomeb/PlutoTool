@@ -31,7 +31,7 @@ class PlutoPrint
 {
 public:
 
-    virtual void printScheduled (QList<Scheduled> s) = 0;
+    virtual void printScheduled (QList<Scheduled> s, bool noFormat) = 0;
 
     virtual void printMovements (QList<Movement> m, bool noFormat) = 0;
 

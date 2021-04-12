@@ -31,11 +31,31 @@ PlutoCLIPrint::~PlutoCLIPrint ()
 
 }
 
-void PlutoCLIPrint::printScheduled (QList<Scheduled> s)
+void PlutoCLIPrint::printScheduled (QList<Scheduled> s, bool noFormat)
 {
     out() << "\r\n";
+    QString headerFormat = "%1 | %2 | %3 | %4 | %5 | %6 | %7 \r\n";
+    if (noFormat == true)
+    {
+        out() << ";ScheduledTable \r\n";
+        headerFormat = "%1;%2;%3;%4;%5;%6;%7\r\n";
+    }
 
-    QString header = QString("%1 | %2 | %3 | %4 | %5 | %6 | %7 \r\n")
+    QString header;
+    if (noFormat == true)
+    {
+        header = QString(";" + headerFormat)
+                         .arg("Id")
+                         .arg("Amount")
+                         .arg("Payee")
+                         .arg("Deadline")
+                         .arg("Category")
+                         .arg("WorkOrder")
+                         .arg("P");
+    }
+    else
+    {
+        header = QString(headerFormat)
                          .arg("Id"       ,CLI_PRINT_ID_SIZE)
                          .arg("Amount"   ,CLI_PRINT_AMOUNT_SIZE)
                          .arg("Payee"    ,CLI_PRINT_PAYEE_SIZE)
@@ -43,26 +63,42 @@ void PlutoCLIPrint::printScheduled (QList<Scheduled> s)
                          .arg("Category" ,CLI_PRINT_CATEGORY_SIZE)
                          .arg("WorkOrder",CLI_PRINT_WORKORDER_SIZE)
                          .arg("P");
+    }
+
     int headerLen = header.length() - 2;
     QString headerLine = QString("%1\r\n").arg("",headerLen,QChar('-'));
 
     // Print table header
-    out() << headerLine;
+    if (!noFormat) out() << headerLine;
     out() << header;
-    out() << headerLine;
+    if (!noFormat) out() << headerLine;
 
     // Print Element
     foreach (Scheduled e, s)
     {
-        out() << QString("%1 | %2 | %3 | %4 | %5 | %6 | %7\r\n")
-                    .arg((int)e.id()                                                     ,CLI_PRINT_ID_SIZE,10)
-                    .arg((double)e.amount()                                              ,CLI_PRINT_AMOUNT_SIZE,'f',2)
-                    .arg(e.payee().name().mid(0,abs(CLI_PRINT_PAYEE_SIZE))               ,CLI_PRINT_PAYEE_SIZE)
-                    .arg(e.deadline().toString("yyyy-MM-dd"))
-                    .arg(e.category().completeName().mid(0,abs(CLI_PRINT_CATEGORY_SIZE)) ,CLI_PRINT_CATEGORY_SIZE)
-                    .arg(e.workorder().name().mid(0,abs(CLI_PRINT_WORKORDER_SIZE))       ,CLI_PRINT_WORKORDER_SIZE)
-                    .arg((e.paid() == true) ? "Y" : "N");
-        out() << headerLine;
+        if (noFormat == false)
+        {
+            out() << QString(headerFormat)
+                        .arg((int)e.id()                                                     ,CLI_PRINT_ID_SIZE,10)
+                        .arg((double)e.amount()                                              ,CLI_PRINT_AMOUNT_SIZE,'f',2)
+                        .arg(e.payee().name().mid(0,abs(CLI_PRINT_PAYEE_SIZE))               ,CLI_PRINT_PAYEE_SIZE)
+                        .arg(e.deadline().toString("yyyy-MM-dd"))
+                        .arg(e.category().completeName().mid(0,abs(CLI_PRINT_CATEGORY_SIZE)) ,CLI_PRINT_CATEGORY_SIZE)
+                        .arg(e.workorder().name().mid(0,abs(CLI_PRINT_WORKORDER_SIZE))       ,CLI_PRINT_WORKORDER_SIZE)
+                        .arg((e.paid() == true) ? "Y" : "N");
+            out() << headerLine;
+        }
+        else
+        {
+            out() << QString(headerFormat)
+                        .arg((int)e.id())
+                        .arg((double)e.amount(),0,'f',2)
+                        .arg(e.payee().name())
+                        .arg(e.deadline().toString("yyyy-MM-dd"))
+                        .arg(e.category().completeName())
+                        .arg(e.workorder().name())
+                        .arg((e.paid() == true) ? "Y" : "N");
+        }
     }
 
     out().flush();
@@ -71,6 +107,7 @@ void PlutoCLIPrint::printScheduled (QList<Scheduled> s)
 void PlutoCLIPrint::printMovements (QList<Movement> m, bool noFormat)
 {
     QString headerFormat = "%1 | %2 | %3 | %4 | %5 | %6 \r\n";
+    out() << "\r\n";
     if (noFormat == true)
     {
         out() << ";MovementsTable \r\n";
@@ -103,7 +140,6 @@ void PlutoCLIPrint::printMovements (QList<Movement> m, bool noFormat)
     QString headerLine = QString("%1\r\n").arg("",headerLen,QChar('-'));
 
     // Print table header
-    out() << "\r\n";
     if (!noFormat) out() << headerLine;
     out() << header;
     if (!noFormat) out() << headerLine;
