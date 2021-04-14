@@ -4,6 +4,10 @@
 
 #include "payeemodel.h"
 #include "payeelist.h"
+
+//#include "categorymodel.h"
+#include "categorylist.h"
+
 #include "process.h"
 
 #include "tableparser.h"
@@ -25,12 +29,14 @@ int main(int argc, char *argv[])
     qmlRegisterType<ConfigFile,1>("ConfigFile", 1, 0, "ConfigFile");
 
     PayeeList lPayeeList;
+    CategoryList lCategoryList;
 
     TableParser lTableParser;
     lTableParser.setPayeeList(&lPayeeList);
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty(QStringLiteral("lPayeeList"), &lPayeeList);
+    engine.rootContext()->setContextProperty(QStringLiteral("lCategoryList"), &lCategoryList);
     engine.rootContext()->setContextProperty(QStringLiteral("lTableParser"), &lTableParser);
 
     //ProcessStarter starter;

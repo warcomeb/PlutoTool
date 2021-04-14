@@ -17,10 +17,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        categorylist.cpp \
         configfile.cpp \
         main.cpp \
         ../plutotool-cli/payeetype.cpp \
         ../plutotool-cli/payee.cpp \
+        ../plutotool-cli/category.cpp \
         payeelist.cpp \
         payeemodel.cpp \
         tableparser.cpp
@@ -41,6 +43,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     ../plutotool-cli/payeetype.h \
     ../plutotool-cli/payee.h \
+    ../plutotool-cli/category.h \
+    categorylist.h \
     configfile.h \
     payeelist.h \
     payeemodel.h \

@@ -51,24 +51,39 @@ ApplicationWindow {
             spacing: 1
 
             MenuButton {
-                id: buttonPayee
+                id: buttonStatus
 
-                text: "Payee"
+                text: "Status"
 
                 onClicked: {
-                    process.start(myFile.cliToolPath, [ "-z", "get-payees", myFile.databasePath])
-                    payeeView.visible = true
+                    process.start(myFile.cliToolPath, [ "-z", "status", myFile.databasePath])
+//                    statusView.visible = true
+                    categoryView.visible = false
+                    payeeView.visible = false
                 }
             }
 
             MenuButton {
-                id: categoryPayee
+                id: buttonPayee
+
+                text: "Payees"
+
+                onClicked: {
+//                    process.start(myFile.cliToolPath, [ "-z", "get-payees", myFile.databasePath])
+                    payeeView.visible = true
+                    categoryView.visible = false
+                }
+            }
+
+            MenuButton {
+                id: buttonCategory
 
                 text: "Category"
 
                 onClicked: {
-                    process.start(myFile.cliToolPath, [ "-z", "get-categories", myFile.databasePath])
-                    payeeView.visible = true
+//                    process.start(myFile.cliToolPath, [ "-z", "get-categories", myFile.databasePath])
+                    payeeView.visible = false
+                    categoryView.visible = true
                 }
             }
         }
@@ -80,12 +95,25 @@ ApplicationWindow {
         anchors.left: commands.right
         anchors.top: commands.top
 
-        title: "Payee"
+        title: "Payees"
+    }
+
+    Category {
+        id: categoryView
+        width: parent.width - commands.width
+        anchors.left: commands.right
+        anchors.top: commands.top
+
+        title: "Categories"
     }
 
     Component.onCompleted: {
+        console.log("main.qml > onCompleted: Read INI file");
         myFile.read()
-        console.log("onCompleted: Read INI file");
+        console.log("main.qml > onCompleted: Complete read INI file");
+        console.log("main.qml > onCompleted: Read all database...");
+        process.start(myFile.cliToolPath, [ "-z", "get-payees", myFile.databasePath])
+        process.start(myFile.cliToolPath, [ "-z", "get-categories", myFile.databasePath])
     }
 
     Component.onDestruction: {

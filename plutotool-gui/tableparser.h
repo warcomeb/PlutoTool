@@ -5,6 +5,7 @@
 #include <QByteArray>
 
 #include "payeelist.h"
+#include "categorylist.h"
 
 class TableParser : public QObject
 {
@@ -15,6 +16,7 @@ public:
     virtual ~TableParser() = default;
 
     void setPayeeList (PayeeList* list);
+    void setCategoryList (CategoryList* list);
 
 public slots:
     void parse (QByteArray data);
@@ -22,8 +24,10 @@ public slots:
 private:
 
     void parsePayee (QByteArray data);
+    void parseCategories (QByteArray data);
 
     PayeeList* mPayeeList;
+    CategoryList* mCategoryList;
 };
 
 #endif // TABLEPARSER_H

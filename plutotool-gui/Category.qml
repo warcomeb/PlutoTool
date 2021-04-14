@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.3
 import PlutoTool 1.0
 
 Rectangle {
-    id: payeePage
+    id: categoryPage
 
     height: parent.height
 
@@ -19,18 +19,17 @@ Rectangle {
 
     ColumnLayout {
 
-        id: payeePageInt
+        id: categoryPageInt
 
         width: parent.width - mRight - mLeft
         height: parent.height
 
         RowLayout {
-            id: payeeHeader
+            id: categoryHeader
 
-            Layout.alignment:  Qt.AlignLeft |  Qt.AlignRight |  Qt.AlignTop
-//            anchors.top: parent.top
-//            anchors.right: parent.right
-//            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.left: parent.left
 
             width: parent.width
 
@@ -38,7 +37,7 @@ Rectangle {
             spacing: 3
 
             Text {
-                id: payeeTitle
+                id: categoryTitle
                 height: 40
                 Layout.fillWidth: true
                 verticalAlignment: Text.AlignBottom
@@ -47,7 +46,7 @@ Rectangle {
             }
 
             Rectangle {
-                id: payeeNewButton
+                id: categoryNewButton
                 height: 40
                 width: 40
                 color: "#999999"
@@ -68,10 +67,9 @@ Rectangle {
 
             height: parent.height
 
-//            Layout.alignment:  Qt.AlignLeft |  Qt.AlignRight |  Qt.AlignTop
-            anchors.top: payeeHeader.bottom
-            anchors.right: payeeHeader.right
-            anchors.left: payeeHeader.left
+            anchors.top: categoryHeader.bottom
+            anchors.right: categoryHeader.right
+            anchors.left: categoryHeader.left
 
             anchors.topMargin: 10
             clip: true
@@ -79,9 +77,9 @@ Rectangle {
             property var columnWidths: [50, (parent.width - 200), 150]
             columnWidthProvider: function (column) { return columnWidths[column] }
 
-            model: PayeeModel {
-                list: lPayeeList
-            }
+//            model: CategoryModel {
+//                list: lCategoryList
+//            }
 
             delegate: Rectangle {
                 implicitWidth: 200
@@ -103,19 +101,20 @@ Rectangle {
 
     }
     Component.onCompleted: {
-        console.log("Width");
-        console.log("PAGE: " + payeePage.width);
-        console.log("PAGEINT: " + payeePageInt.width);
-        console.log("HEADER: " + payeeHeader.width);
-        console.log("TITLE: " + payeeTitle.width);
-        console.log("BUT: " + payeeNewButton.width);
-        console.log("Height");
-        console.log("PAGE: " + payeePage.height);
-        console.log("PAGEINT: " + payeePageInt.height);
-        console.log("HEADER: " + payeeHeader.height);
-        console.log("X-Y");
-        console.log("PAGE: " + payeePage.x + " - " + payeePage.y);
-        console.log("PAGEINT: " + payeePageInt.x + " - " + payeePageInt.y);
-        console.log("HEADER: " + payeeHeader.x + " - " + payeeHeader.y);
+        console.log("Category.qml > onCompleted");
+//        console.log("Width");
+//        console.log("PAGE: " + payeePage.width);
+//        console.log("PAGEINT: " + payeePageInt.width);
+//        console.log("HEADER: " + payeeHeader.width);
+//        console.log("TITLE: " + payeeTitle.width);
+//        console.log("BUT: " + payeeNewButton.width);
+//        console.log("Height");
+//        console.log("PAGE: " + payeePage.height);
+//        console.log("PAGEINT: " + payeePageInt.height);
+//        console.log("HEADER: " + payeeHeader.height);
+//        console.log("X-Y");
+//        console.log("PAGE: " + payeePage.x + " - " + payeePage.y);
+//        console.log("PAGEINT: " + payeePageInt.x + " - " + payeePageInt.y);
+//        console.log("HEADER: " + payeeHeader.x + " - " + payeeHeader.y);
     }
 }
