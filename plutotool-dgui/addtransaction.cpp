@@ -1,14 +1,16 @@
 #include "addtransaction.h"
 #include "ui_addtransaction.h"
+#include "ui_mainwindow.h"
 
-AddTransaction::AddTransaction(AddTransaction::OpenMode mode, Database *db, QWidget *parent) :
+#include <QMessageBox>
+
+AddTransaction::AddTransaction(AddTransaction::OpenMode mode, Database *db, Ui::MainWindow* main, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddTransaction),
-    mDatabase(db)
+    mDatabase(db),
+    mMain(main)
 {
     ui->setupUi(this);
-
-
 
     if (mode == AddTransaction::OpenMode::ADD)
     {
@@ -140,14 +142,22 @@ void AddTransaction::on_buttonBox_accepted()
         if (mDatabase->addTransaction(c) == true)
         {
             qDebug() << "AddTransaction::on_buttonBox_accepted() - Added";
+            mMain->statusbar->showMessage("Transaction correctly added!",2000);
         }
         else
         {
             qDebug() << "AddTransaction::on_buttonBox_accepted() - Fail";
+            QMessageBox::critical(this, tr("Add Transaction Fail"),
+                                        tr("The transaction has not been added!"),
+                                        QMessageBox::Ok);
         }
     }
     else
     {
-
+        qDebug() << "AddTransaction::on_buttonBox_accepted() - Fail, amount < 0";
+        qDebug() << "AddTransaction::on_buttonBox_accepted() - Fail";
+        QMessageBox::critical(this, tr("Add Transaction Fail"),
+                                    tr("The transaction has not been added (amount is 0)!"),
+                                    QMessageBox::Ok);
     }
 }

@@ -95,7 +95,7 @@ void MainWindow::on_actionAddTransaction_triggered()
 {
     if (mDatabase.isValid())
     {
-        AddTransaction *addTransaction = new AddTransaction(AddTransaction::OpenMode::ADD,&mDatabase); //use a pointer and then create the object and allocate memory with new
+        AddTransaction *addTransaction = new AddTransaction(AddTransaction::OpenMode::ADD,&mDatabase,ui); //use a pointer and then create the object and allocate memory with new
         addTransaction->show();
     }
     else

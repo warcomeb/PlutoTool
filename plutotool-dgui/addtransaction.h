@@ -4,9 +4,11 @@
 #include <QDialog>
 
 #include "database.h"
+#include "mainwindow.h"
 
 namespace Ui {
 class AddTransaction;
+class MainWindow;
 }
 
 class AddTransaction : public QDialog
@@ -22,7 +24,7 @@ public:
         VIEW
     } OpenMode;
 
-    explicit AddTransaction(OpenMode mode, Database* db, QWidget *parent = nullptr);
+    explicit AddTransaction(OpenMode mode, Database* db, Ui::MainWindow* main, QWidget *parent = nullptr);
     ~AddTransaction();
 
 private slots:
@@ -41,6 +43,7 @@ private:
 
     Ui::AddTransaction *ui;
     Database* mDatabase;
+    Ui::MainWindow* mMain;
 };
 
 #endif // ADDTRANSACTION_H
