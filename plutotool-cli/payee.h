@@ -48,6 +48,31 @@ public:
     void write (QJsonObject &json) const;
     void read (const QJsonObject &json, QMap<quint32,PayeeType> types);
 
+    static bool compare (const Payee& p1, const Payee& p2)
+    {
+        if (p1.name() < p2.name())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    static QList<Payee> map2list (QMap<quint32,Payee> m)
+    {
+        QList<Payee> l;
+
+        for (auto k : m.keys())
+        {
+            l.append(m[k]);
+        }
+
+        std::sort(l.begin(),l.end(),compare);
+        return l;
+    }
+
 private:
     quint32    mId;
     QString    mCode;

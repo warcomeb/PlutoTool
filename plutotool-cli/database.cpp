@@ -30,7 +30,7 @@
 
 Database::Database()
 {
-
+    mIsValid = false;
 }
 
 bool Database::create (Config config)
@@ -91,6 +91,7 @@ bool Database::create (Config config)
 bool Database::load (Config config)
 {
     WLog& log = WLog::instance();
+    mIsValid = false;
 
     log.log(QString("Check database file: open file..."),LOG_IMPORTANT_INFORMATION);
     QFile data(config.database);
@@ -101,6 +102,7 @@ bool Database::load (Config config)
     read(&data);
     closeDatabaseFile(data);
 
+    mIsValid = true;
     return true;
 }
 
@@ -882,4 +884,9 @@ bool Database::addScheduled (Config config)
         return true;
     }
     return false;
+}
+
+bool Database::isValid (void)
+{
+    return mIsValid;
 }

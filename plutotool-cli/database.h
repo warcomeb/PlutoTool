@@ -44,6 +44,8 @@ class Database
 public:
     Database();
 
+    bool isValid (void);
+
     bool create (Config config);
     bool load (Config config);
     bool store (Config config);
@@ -176,6 +178,8 @@ private:
 
     QMap<quint32,Scheduled>   mScheduled;
     quint32                   mScheduledNextId;
+
+    bool                      mIsValid;
 };
 
 #endif // DATABASE_H

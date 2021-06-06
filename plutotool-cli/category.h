@@ -32,9 +32,9 @@ public:
     Category (QString name, QString subName);
     Category (QString name, QString subName, quint32 id);
 
-    QString name (void);
-    QString subName (void);
-    QString completeName (void);
+    QString name (void) const;
+    QString subName (void) const;
+    QString completeName (void) const;
     QString description (void);
 
     void setId (quint32 id);
@@ -44,6 +44,43 @@ public:
     void read (const QJsonObject &json);
 
     QString toString (void);
+
+    static bool compare (const Category& c1, const Category& c2)
+    {
+        if (c1.name() < c2.name())
+        {
+            return true;
+        }
+        else if (c1.name() > c2.name())
+        {
+            return false;
+        }
+        else
+        {
+            if (c1.subName() < c2. subName())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    static QList<Category> map2list (QMap<quint32,Category> m)
+    {
+        QList<Category> l;
+
+        for (auto k : m.keys())
+        {
+          l.append(m[k]);
+        }
+
+        std::sort(l.begin(),l.end(),compare);
+        return l;
+    }
 
 private:
     quint32 mId;

@@ -33,7 +33,7 @@ public:
 //    WorkOrder (QString name, QDate start, QDate end);
     WorkOrder (QString name, QDate start, QDate end, quint32 id);
 
-    QString name (void);
+    QString name (void) const;
 
     void setId (quint32 id);
     quint32 id (void) const;
@@ -47,6 +47,31 @@ public:
 
     void write (QJsonObject &json) const;
     void read (const QJsonObject &json);
+
+    static bool compare (const WorkOrder& w1, const WorkOrder& w2)
+    {
+        if (w1.name() < w2.name())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    static QList<WorkOrder> map2list (QMap<quint32,WorkOrder> m)
+    {
+        QList<WorkOrder> l;
+
+        for (auto k : m.keys())
+        {
+            l.append(m[k]);
+        }
+
+        std::sort(l.begin(),l.end(),compare);
+        return l;
+    }
 
 private:
     quint32 mId;

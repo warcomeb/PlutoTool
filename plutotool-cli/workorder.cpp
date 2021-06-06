@@ -55,7 +55,7 @@ WorkOrder::WorkOrder (QString name, QDate start, QDate end, quint32 id):
     setId(id);
 }
 
-QString WorkOrder::name (void)
+QString WorkOrder::name (void) const
 {
     return mName;
 }

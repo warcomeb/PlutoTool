@@ -49,12 +49,12 @@ Account::Account (QString name, QString number, AccountType type, quint32 id, bo
     setId(id);
 }
 
-QString Account::name (void)
+QString Account::name (void) const
 {
     return mName;
 }
 
-QString Account::number (void)
+QString Account::number (void) const
 {
     return mNumber;
 }

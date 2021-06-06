@@ -32,8 +32,8 @@ public:
     Account (QString name, QString number, AccountType type, bool active);
     Account (QString name, QString number, AccountType type, quint32 id, bool active);
 
-    QString name (void);
-    QString number (void);
+    QString name (void) const;
+    QString number (void) const;
     AccountType type (void);
     bool active (void);
 
@@ -46,6 +46,43 @@ public:
 
     void write (QJsonObject &json) const;
     void read (const QJsonObject &json, QMap<quint32,AccountType> types);
+
+    static bool compare (const Account& a1, const Account& a2)
+    {
+        if (a1.name() < a2.name())
+        {
+            return true;
+        }
+        else if (a1.name() > a2.name())
+        {
+            return false;
+        }
+        else
+        {
+            if (a1.number() < a2. number())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    static QList<Account> map2list (QMap<quint32,Account> m)
+    {
+        QList<Account> l;
+
+        for (auto k : m.keys())
+        {
+            l.append(m[k]);
+        }
+
+        std::sort(l.begin(),l.end(),compare);
+        return l;
+    }
 
 private:
     quint32     mId;

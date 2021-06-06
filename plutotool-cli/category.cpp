@@ -40,17 +40,17 @@ Category::Category (QString name, QString subName, quint32 id):
     setId(id);
 }
 
-QString Category::name (void)
+QString Category::name (void) const
 {
     return mName;
 }
 
-QString Category::subName (void)
+QString Category::subName (void) const
 {
     return mSubName;
 }
 
-QString Category::completeName (void)
+QString Category::completeName (void) const
 {
     return QString(mName + "/" + mSubName);
 }
