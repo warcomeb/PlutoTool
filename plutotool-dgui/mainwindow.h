@@ -22,11 +22,20 @@ private slots:
 
     void on_actionAddTransaction_triggered();
 
-private:
     void updateTables (void);
+    void updateSearchFields (void);
+
+    void handleTransactionSearchButton();
+
+private:
     void updatePayeesTable (void);
     void updateAccountsTable (void);
 
+    void fillCategories (void);
+    void fillAccounts (void);
+    void fillWorkOrders (void);
+    void fillPayees (void);
+    void fillTypes (void);
 
     Ui::MainWindow *ui;
 

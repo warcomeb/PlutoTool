@@ -50,6 +50,10 @@ struct Config
     quint32 payee;
     quint32 category;
     quint32 workorder;
+    QString dateStart;
+    QString dateEnd;
+    float   amountMin;
+    float   amountMax;
     quint32 showUnpaidScheduled;
 
     // User parameters
