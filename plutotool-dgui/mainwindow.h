@@ -19,6 +19,7 @@ public:
 
 private slots:
     void on_actionOpen_triggered();
+    void on_actionSave_triggered();
 
     void on_actionAddTransaction_triggered();
 
@@ -40,5 +41,7 @@ private:
     Ui::MainWindow *ui;
 
     Database mDatabase;
+    QString mDatabaseFileName;
+    bool mIsDatabaseOpen;
 };
 #endif // MAINWINDOW_H

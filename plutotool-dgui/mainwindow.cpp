@@ -10,6 +10,8 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , mDatabaseFileName("")
+    , mIsDatabaseOpen(false)
 {
     ui->setupUi(this);
 
@@ -28,16 +30,19 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionOpen_triggered()
 {
     // Chose file...
-//    QString fileName = QFileDialog::getOpenFileName(this,
+//    mDatabaseFileName = QFileDialog::getOpenFileName(this,
 //        tr("Open Database"), "/home", tr("Database Files (*.json)"));
+    mDatabaseFileName = "/Users/warcomeb/Projects/WARCOMEB/home-balance/GIAMMATEAM_BCK.json";
+
+    if (mDatabaseFileName.isEmpty()) return;
 
     Config c = {
-        .database = "/Users/warcomeb/Projects/WARCOMEB/home-balance/GIAMMATEAM_BCK.json",
-//        .database = fileName,
+        .database = mDatabaseFileName,
         .replace = false
     };
     if (mDatabase.load(c))
     {
+        mIsDatabaseOpen = true;
         ui->statusbar->showMessage("Database correctly opened!",2000);
         // FIXME: update all tables...
         updateTables();
@@ -45,8 +50,36 @@ void MainWindow::on_actionOpen_triggered()
     }
     else
     {
+        mIsDatabaseOpen = false;
         ui->statusbar->showMessage("Fail open database.",2000);
     }
+}
+
+
+void MainWindow::on_actionSave_triggered()
+{
+    qDebug() << "MainWindow::on_actionSave_triggered()";
+    if (mIsDatabaseOpen == true)
+    {
+        Config c = {
+            .database = "/Users/warcomeb/Projects/WARCOMEB/home-balance/GIAMMATEAM_BCK.json",
+    //        .database = fileName,
+            .replace = false
+        };
+        if (mDatabase.store(c))
+        {
+            ui->statusbar->showMessage("Database correctly saved!",2000);
+        }
+        else
+        {
+            ui->statusbar->showMessage("Fail save database.",2000);
+        }
+    }
+    else
+    {
+        ui->statusbar->showMessage("No opened database to save.",2000);
+    }
+
 }
 
 void MainWindow::updateTables (void)
@@ -94,13 +127,13 @@ void MainWindow::handleTransactionSearchButton (void)
                                                c.payee);
     qDebug() << "MainWindow::handleTransactionSearchButton() - Found: " << mov.size();
 
-    // TODO: Clear rows and total!
+    // Clear rows and total!
+    ui->movementsTableWidget->setRowCount(0);
+    ui->totalTextEdit->setPlainText(tr("€ %1").arg(0.0f,0,'f',2));
 
     if (mov.size() == 0)
     {
         ui->statusbar->showMessage("No transactions founds",2000);
-
-        // TODO!
         return;
     }
     ui->statusbar->showMessage("Found " + QString::number(mov.size()) + " transactions.",2000);
@@ -134,7 +167,7 @@ void MainWindow::handleTransactionSearchButton (void)
     }
     ui->movementsTableWidget->resizeColumnsToContents();
 
-    ui->totalTextEdit->setPlainText(tr("%1").arg(total,0,'f',2));
+    ui->totalTextEdit->setPlainText(tr("€ %1").arg(total,0,'f',2));
 }
 
 void MainWindow::updatePayeesTable (void)
